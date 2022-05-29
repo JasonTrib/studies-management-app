@@ -21,27 +21,20 @@ async function main() {
     await upsertProfiles();
     await upsertRegistrars();
     await upsertProfessors();
-    await upsertCourses();
     await upsertStudents();
+    await upsertCourses();
     await upsertCourseAnnouncements();
     await upsertStudentCourses();
   } else {
-    await prisma.courseAnnouncement.deleteMany({});
-    await prisma.studentCourse.deleteMany({});
-    await prisma.course.deleteMany({});
-    await prisma.student.deleteMany({});
-    await prisma.professor.deleteMany({});
-    await prisma.registrar.deleteMany({});
-    await prisma.profile.deleteMany({});
-    await prisma.password.deleteMany({});
     await prisma.user.deleteMany({});
+    await prisma.course.deleteMany({});
 
     await createUsers();
     await createProfiles();
     await createRegistrars();
     await createProfessors();
-    await createCourses();
     await createStudents();
+    await createCourses();
     await createCourseAnnouncements();
     await createStudentCourses();
   }
