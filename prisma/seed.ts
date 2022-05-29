@@ -89,6 +89,7 @@ async function upsertProfiles() {
         name: profiles[i].name,
         surname: profiles[i].surname,
         email: profiles[i].email,
+        user_id: profiles[i].userId,
       },
     });
   }
@@ -106,7 +107,6 @@ async function upsertRegistrars() {
         title: registrars[i].title,
         department: registrars[i].department,
         user_id: registrars[i].userId,
-        profile_id: registrars[i].profileId,
       },
     });
   }
@@ -124,7 +124,45 @@ async function upsertProfessors() {
         title: professors[i].title,
         department: professors[i].department,
         user_id: professors[i].userId,
-        profile_id: professors[i].profileId,
+      },
+    });
+  }
+}
+
+async function upsertStudents() {
+  for (let i = 0; i < students.length; i++) {
+    await prisma.student.upsert({
+      where: {
+        id: students[i].id,
+      },
+      update: {},
+      create: {
+        id: students[i].id,
+        department: students[i].department,
+        enrollment_year: students[i].enrollment_year,
+        studies_status: students[i].studies_status,
+        user_id: students[i].userId,
+      },
+    });
+  }
+}
+
+async function upsertStudentCourses() {
+  for (let i = 0; i < studentCourses.length; i++) {
+    await prisma.studentCourse.upsert({
+      where: {
+        student_id_course_id: {
+          student_id: studentCourses[i].studentId,
+          course_id: studentCourses[i].courseId,
+        },
+      },
+      update: {},
+      create: {
+        student_id: studentCourses[i].studentId,
+        course_id: studentCourses[i].courseId,
+        grade: studentCourses[i].grade,
+        is_enrolled: studentCourses[i].isEnrolled,
+        is_following: studentCourses[i].isFollowing,
       },
     });
   }
@@ -150,25 +188,6 @@ async function upsertCourses() {
   }
 }
 
-async function upsertStudents() {
-  for (let i = 0; i < students.length; i++) {
-    await prisma.student.upsert({
-      where: {
-        id: students[i].id,
-      },
-      update: {},
-      create: {
-        id: students[i].id,
-        department: students[i].department,
-        enrollment_year: students[i].enrollment_year,
-        studies_status: students[i].studies_status,
-        user_id: students[i].userId,
-        profile_id: students[i].profileId,
-      },
-    });
-  }
-}
-
 async function upsertCourseAnnouncements() {
   for (let i = 0; i < courseAnnouncements.length; i++) {
     await prisma.courseAnnouncement.upsert({
@@ -181,27 +200,6 @@ async function upsertCourseAnnouncements() {
         title: courseAnnouncements[i].title,
         body: courseAnnouncements[i].body,
         course_id: courseAnnouncements[i].courseId,
-      },
-    });
-  }
-}
-
-async function upsertStudentCourses() {
-  for (let i = 0; i < studentCourses.length; i++) {
-    await prisma.studentCourse.upsert({
-      where: {
-        student_id_course_id: {
-          student_id: studentCourses[i].studentId,
-          course_id: studentCourses[i].courseId,
-        },
-      },
-      update: {},
-      create: {
-        student_id: studentCourses[i].studentId,
-        course_id: studentCourses[i].courseId,
-        grade: studentCourses[i].grade,
-        is_enrolled: studentCourses[i].isEnrolled,
-        is_following: studentCourses[i].isFollowing,
       },
     });
   }
@@ -232,6 +230,7 @@ async function createProfiles() {
         name: profiles[i].name,
         surname: profiles[i].surname,
         email: profiles[i].email,
+        user_id: profiles[i].userId,
       },
     });
   }
@@ -245,7 +244,6 @@ async function createRegistrars() {
         title: registrars[i].title,
         department: registrars[i].department,
         user_id: registrars[i].userId,
-        profile_id: registrars[i].profileId,
       },
     });
   }
@@ -259,7 +257,34 @@ async function createProfessors() {
         title: professors[i].title,
         department: professors[i].department,
         user_id: professors[i].userId,
-        profile_id: professors[i].profileId,
+      },
+    });
+  }
+}
+
+async function createStudents() {
+  for (let i = 0; i < students.length; i++) {
+    await prisma.student.create({
+      data: {
+        id: students[i].id,
+        department: students[i].department,
+        enrollment_year: students[i].enrollment_year,
+        studies_status: students[i].studies_status,
+        user_id: students[i].userId,
+      },
+    });
+  }
+}
+
+async function createStudentCourses() {
+  for (let i = 0; i < studentCourses.length; i++) {
+    await prisma.studentCourse.create({
+      data: {
+        student_id: studentCourses[i].studentId,
+        course_id: studentCourses[i].courseId,
+        grade: studentCourses[i].grade,
+        is_enrolled: studentCourses[i].isEnrolled,
+        is_following: studentCourses[i].isFollowing,
       },
     });
   }
@@ -281,21 +306,6 @@ async function createCourses() {
   }
 }
 
-async function createStudents() {
-  for (let i = 0; i < students.length; i++) {
-    await prisma.student.create({
-      data: {
-        id: students[i].id,
-        department: students[i].department,
-        enrollment_year: students[i].enrollment_year,
-        studies_status: students[i].studies_status,
-        user_id: students[i].userId,
-        profile_id: students[i].profileId,
-      },
-    });
-  }
-}
-
 async function createCourseAnnouncements() {
   for (let i = 0; i < courseAnnouncements.length; i++) {
     await prisma.courseAnnouncement.create({
@@ -304,20 +314,6 @@ async function createCourseAnnouncements() {
         title: courseAnnouncements[i].title,
         body: courseAnnouncements[i].body,
         course_id: courseAnnouncements[i].courseId,
-      },
-    });
-  }
-}
-
-async function createStudentCourses() {
-  for (let i = 0; i < studentCourses.length; i++) {
-    await prisma.studentCourse.create({
-      data: {
-        student_id: studentCourses[i].studentId,
-        course_id: studentCourses[i].courseId,
-        grade: studentCourses[i].grade,
-        is_enrolled: studentCourses[i].isEnrolled,
-        is_following: studentCourses[i].isFollowing,
       },
     });
   }

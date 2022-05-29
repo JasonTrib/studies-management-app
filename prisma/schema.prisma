@@ -9,20 +9,23 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   role       Role
-  username   String    @unique
-  password   Password?
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  username   String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
+  password  Password?
+  profile   Profile?
   registrar Registrar?
   professor Professor?
   student   Student?
 }
 
 model Password {
-  hash String
+  hash       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   user_id Int  @unique
   user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -30,58 +33,51 @@ model Password {
 
 model Profile {
   id         Int      @id @default(autoincrement())
-  name       String
-  surname    String
-  email      String   @unique
+  email      String?  @unique
+  name       String?
+  surname    String?
   gender     Gender?
   phone      String?
   info       String?
   avatar     String?
+  is_public  Boolean  @default(true)
+  created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  registrar Registrar?
-  professor Professor?
-  student   Student?
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
 }
 
 model Registrar {
   id         Int        @id @default(autoincrement())
-  title      String?
-  email      String?    @unique
-  phone      String?
-  info       String?
-  avatar     String?
+  title      String
   department Department
 
-  user_id    Int     @unique
-  profile_id Int     @unique
-  user       User    @relation(fields: [user_id], references: [id])
-  profile    Profile @relation(fields: [profile_id], references: [id])
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
 }
 
 model Professor {
   id         Int        @id @default(autoincrement())
-  title      String?
+  title      String
   department Department
 
-  user_id    Int      @unique
-  profile_id Int      @unique
-  user       User     @relation(fields: [user_id], references: [id])
-  profile    Profile  @relation(fields: [profile_id], references: [id])
-  courses    Course[]
+  courses Course[]
+
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
 }
 
 model Student {
   id              Int           @id @default(autoincrement())
-  studies_status  StudiesStatus @default(UNDERGRADUATE)
   department      Department
   enrollment_year Int
+  studies_status  StudiesStatus @default(UNDERGRADUATE)
 
-  user_id        Int             @unique
-  profile_id     Int             @unique
-  user           User            @relation(fields: [user_id], references: [id])
-  profile        Profile         @relation(fields: [profile_id], references: [id])
   studentCourses StudentCourse[]
+
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
 }
 
 model StudentCourse {
@@ -99,7 +95,7 @@ model StudentCourse {
 model Course {
   id              Int      @id @default(autoincrement())
   title           String   @unique
-  description     String?  @db.VarChar(255)
+  description     String?  @db.VarChar(2000)
   semester        String
   department      String
   is_elective     Boolean
@@ -108,16 +104,17 @@ model Course {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  professor_id        Int?
-  professor           Professor?           @relation(fields: [professor_id], references: [id])
   studentCourses      StudentCourse[]
   courseAnnouncements CourseAnnouncement[]
+
+  professor_id Int?
+  professor    Professor? @relation(fields: [professor_id], references: [id])
 }
 
 model CourseAnnouncement {
   id         Int      @id @default(autoincrement())
   title      String
-  body       String?
+  body       String?  @db.VarChar(2000)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -126,7 +123,7 @@ model CourseAnnouncement {
 }
 
 enum Role {
-  ADMIN
+  SUPERADMIN
   REGISTRAR
   PROFESSOR
   STUDENT

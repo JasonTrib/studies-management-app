@@ -5,7 +5,7 @@ export const users: {
   username: User["username"];
   role: Role;
 }[] = [
-  { id: 1, username: "jason", role: "ADMIN" },
+  { id: 1, username: "jason", role: "SUPERADMIN" },
   { id: 2, username: "celine", role: "REGISTRAR" },
   { id: 3, username: "natalie", role: "REGISTRAR" },
   { id: 4, username: "melvin", role: "PROFESSOR" },
