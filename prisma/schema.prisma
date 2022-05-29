@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_DEV")
+  // url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  role       Role
+  username   String    @unique
+  password   Password?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  registrar Registrar?
+  professor Professor?
+  student   Student?
+}
+
+model Password {
+  hash String
+
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Profile {
+  id         Int      @id @default(autoincrement())
+  name       String
+  surname    String
+  email      String   @unique
+  gender     Gender?
+  phone      String?
+  info       String?
+  avatar     String?
+  updated_at DateTime @updatedAt
+
+  registrar Registrar?
+  professor Professor?
+  student   Student?
+}
+
+model Registrar {
+  id         Int        @id @default(autoincrement())
+  title      String?
+  email      String?    @unique
+  phone      String?
+  info       String?
+  avatar     String?
+  department Department
+
+  user_id    Int     @unique
+  profile_id Int     @unique
+  user       User    @relation(fields: [user_id], references: [id])
+  profile    Profile @relation(fields: [profile_id], references: [id])
+}
+
+model Professor {
+  id         Int        @id @default(autoincrement())
+  title      String?
+  department Department
+
+  user_id    Int      @unique
+  profile_id Int      @unique
+  user       User     @relation(fields: [user_id], references: [id])
+  profile    Profile  @relation(fields: [profile_id], references: [id])
+  courses    Course[]
+}
+
+model Student {
+  id              Int           @id @default(autoincrement())
+  studies_status  StudiesStatus @default(UNDERGRADUATE)
+  department      Department
+  enrollment_year Int
+
+  user_id        Int             @unique
+  profile_id     Int             @unique
+  user           User            @relation(fields: [user_id], references: [id])
+  profile        Profile         @relation(fields: [profile_id], references: [id])
+  studentCourses StudentCourse[]
+}
+
+model StudentCourse {
+  student_id   Int
+  course_id    Int
+  grade        Float?
+  is_enrolled  Boolean
+  is_following Boolean
+
+  student Student @relation(fields: [student_id], references: [id])
+  course  Course  @relation(fields: [course_id], references: [id])
+  @@id([student_id, course_id])
+}
+
+model Course {
+  id              Int      @id @default(autoincrement())
+  title           String   @unique
+  description     String?  @db.VarChar(255)
+  semester        String
+  department      String
+  is_elective     Boolean
+  is_postgraduate Boolean
+  is_public       Boolean  @default(false)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  professor_id        Int?
+  professor           Professor?           @relation(fields: [professor_id], references: [id])
+  studentCourses      StudentCourse[]
+  courseAnnouncements CourseAnnouncement[]
+}
+
+model CourseAnnouncement {
+  id         Int      @id @default(autoincrement())
+  title      String
+  body       String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  course_id Int
+  course    Course @relation(fields: [course_id], references: [id])
+}
+
+enum Role {
+  ADMIN
+  REGISTRAR
+  PROFESSOR
+  STUDENT
+}
+
+enum Gender {
+  M
+  F
+}
+
+enum Department {
+  IT
+  GEO
+}
+
+enum StudiesStatus {
+  UNDERGRADUATE
+  POSTGRADUATE
+  ALUM
+}
