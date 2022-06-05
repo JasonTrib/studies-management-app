@@ -1,4 +1,9 @@
+import type { LoaderFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  return null;
+};
 
 export default function Index() {
   return (

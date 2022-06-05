@@ -2,14 +2,16 @@ import type { Profile } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { Student } from "~/models/student.server";
-import { getStudentProfile } from "~/models/student.server";
+import type { Student } from "~/DAO/studentDAO.server";
+import { getStudentProfile } from "~/DAO/studentDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {
   student:
     | (Student & {
-        profile: Profile | null;
+        user: {
+          profile: Profile | null;
+        };
       })
     | null;
 };
@@ -20,13 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const studentRaw = await getStudentProfile(id);
-  // modify student object: remove student.user, chain student.profile
-  const { user, ...rest } = { ...studentRaw };
-  const student = {
-    ...rest,
-    profile: studentRaw?.user.profile,
-  } as LoaderData["student"];
+  const student = await getStudentProfile(id);
 
   if (!student) {
     throw new Response("Not Found", { status: 404 });
@@ -52,7 +48,7 @@ const StudentDetailsPage = () => {
             <h2>StudentDetailsPage</h2>
             <p>student id: {student?.id}</p>
             <p>student department: {student?.department}</p>
-            <p>student name: {student?.profile?.name}</p>
+            <p>student name: {student?.user.profile?.name}</p>
           </div>
         </div>
       </div>

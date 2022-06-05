@@ -1,9 +1,8 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { Course } from "~/models/course.server";
-import { getCourse } from "~/models/course.server";
+import type { Course } from "~/DAO/courseDAO.server";
+import { getCourse } from "~/DAO/courseDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {

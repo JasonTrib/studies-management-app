@@ -1,4 +1,8 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,6 +12,14 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import styles from "~/styles/index.css";
+import {
+  logUserDAO,
+  logCourseDAO,
+  logAnnouncementDAO,
+  logStudentDAO,
+  logProfessorDAO,
+  logURegistrarDAO,
+} from "./debug/logDAO.server";
 export { CatchBoundary } from "~/components/CatchBoundary";
 
 export const meta: MetaFunction = () => ({
@@ -18,6 +30,17 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
+};
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  // logUserDAO();
+  // logCourseDAO();
+  // logAnnouncementDAO();
+  // logStudentDAO();
+  // logProfessorDAO();
+  // logURegistrarDAO();
+
+  return null;
 };
 
 export default function App() {

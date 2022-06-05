@@ -2,8 +2,8 @@ import type { Profile } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { Professor } from "~/models/professor.server";
-import { getProfessorProfile } from "~/models/professor.server";
+import type { Professor } from "~/DAO/professorDAO.server";
+import { getProfessorProfile } from "~/DAO/professorDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {

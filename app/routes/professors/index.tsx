@@ -1,8 +1,8 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { Professor } from "~/models/professor.server";
-import { getAllProfessors } from "~/models/professor.server";
+import type { Professor } from "~/DAO/professorDAO.server";
+import { getAllProfessors } from "~/DAO/professorDAO.server";
 
 type LoaderData = {
   professors: Professor[];
