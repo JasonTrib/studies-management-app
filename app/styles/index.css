@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  height: 100vh;
+}
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "sidebar content";
+
+  height: 800px;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: aliceblue;
+}
+
+.content {
+  grid-area: content;
+  background-color: rgb(210, 236, 202);
+}
+
+.appbar {
+  height: 100px;
+  background-color: rgb(244, 240, 255);
+}
+
+h1 {
+  margin: 0;
+}
