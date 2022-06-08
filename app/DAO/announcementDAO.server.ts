@@ -1,18 +1,20 @@
 import { prisma } from "~/db.server";
-import type { Course, CourseAnnouncement } from "@prisma/client";
+import type { Announcement, Course } from "@prisma/client";
 export type { Course } from "@prisma/client";
 
 export function getAllAnnoucements() {
-  return prisma.courseAnnouncement.findMany({});
+  return prisma.announcement.findMany({});
 }
 
-export function getAnnoucements(department: Course["department"]) {
+export function getAnnoucements(depId: Course["dep_id"]) {
   return prisma.course.findMany({
-    where: { department },
+    where: {
+      dep_id: depId,
+    },
     select: {
       id: true,
       title: true,
-      courseAnnouncements: true,
+      announcements: true,
     },
   });
 }
@@ -21,13 +23,13 @@ export function getCourseAnnoucements(id: Course["id"]) {
   return prisma.course.findUnique({
     where: { id },
     select: {
-      courseAnnouncements: true,
+      announcements: true,
     },
   });
 }
 
-export function getCourseAnnoucement(id: CourseAnnouncement["id"]) {
-  return prisma.courseAnnouncement.findUnique({
+export function getCourseAnnoucement(id: Announcement["id"]) {
+  return prisma.announcement.findUnique({
     where: { id },
   });
 }

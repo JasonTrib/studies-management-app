@@ -1,13 +1,16 @@
+import { PrismaClient } from "@prisma/client";
+import { departments } from "./seedData/departments";
 import { users } from "./seedData/users";
 import { profiles } from "./seedData/profiles";
 import { registrars } from "./seedData/registrars";
 import { professors } from "./seedData/professors";
 import { students } from "./seedData/students";
-import { studentCourses } from "./seedData/studentCourses";
 import { courses } from "./seedData/courses";
-import { courseAnnouncements } from "./seedData/courseAnnouncements";
+import { announcements } from "./seedData/announcements";
+import { professorCourses } from "./seedData/professorCourses";
+import { studentCourses } from "./seedData/studentCourses";
+import { userAnnouncements } from "./seedData/userAnnnouncements";
 
-import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const UPSERT = false;
@@ -17,26 +20,31 @@ async function main() {
     throw "[ABORTED] Attempted to seed outside of development environment!";
 
   if (UPSERT) {
+    await upsertDepartments();
     await upsertUsers();
     await upsertProfiles();
     await upsertRegistrars();
     await upsertProfessors();
     await upsertStudents();
     await upsertCourses();
-    await upsertCourseAnnouncements();
+    await upsertAnnouncements();
+    await upsertProfessorCourses();
     await upsertStudentCourses();
+    await upsertUserAnnouncements();
   } else {
-    await prisma.user.deleteMany({});
-    await prisma.course.deleteMany({});
+    await prisma.department.deleteMany({});
 
+    await createDepartments();
     await createUsers();
     await createProfiles();
     await createRegistrars();
     await createProfessors();
     await createStudents();
     await createCourses();
-    await createCourseAnnouncements();
+    await createAnnouncements();
+    await createProfessorCourses();
     await createStudentCourses();
+    await createUserAnnouncements();
   }
 }
 
@@ -58,6 +66,7 @@ async function upsertUsers() {
       update: {},
       create: {
         id: users[i].id,
+        dep_id: users[i].depId,
         role: users[i].role,
         username: users[i].username,
         password: {
@@ -88,6 +97,21 @@ async function upsertProfiles() {
   }
 }
 
+async function upsertDepartments() {
+  for (let i = 0; i < departments.length; i++) {
+    await prisma.department.upsert({
+      where: {
+        title_id: departments[i].titleId,
+      },
+      update: {},
+      create: {
+        title_id: departments[i].titleId,
+        full_title: departments[i].fullTitle,
+      },
+    });
+  }
+}
+
 async function upsertRegistrars() {
   for (let i = 0; i < registrars.length; i++) {
     await prisma.registrar.upsert({
@@ -98,7 +122,6 @@ async function upsertRegistrars() {
       create: {
         id: registrars[i].id,
         title: registrars[i].title,
-        department: registrars[i].department,
         user_id: registrars[i].userId,
       },
     });
@@ -115,7 +138,6 @@ async function upsertProfessors() {
       create: {
         id: professors[i].id,
         title: professors[i].title,
-        department: professors[i].department,
         user_id: professors[i].userId,
       },
     });
@@ -131,7 +153,6 @@ async function upsertStudents() {
       update: {},
       create: {
         id: students[i].id,
-        department: students[i].department,
         enrollment_year: students[i].enrollment_year,
         studies_status: students[i].studies_status,
         user_id: students[i].userId,
@@ -161,6 +182,26 @@ async function upsertStudentCourses() {
   }
 }
 
+async function upsertProfessorCourses() {
+  for (let i = 0; i < professorCourses.length; i++) {
+    await prisma.professorCourse.upsert({
+      where: {
+        prof_id_course_id: {
+          prof_id: professorCourses[i].profId,
+          course_id: professorCourses[i].courseId,
+        },
+      },
+      update: {},
+      create: {
+        prof_id: professorCourses[i].profId,
+        course_id: professorCourses[i].courseId,
+        is_lecturing: professorCourses[i].isEnrolled,
+        is_following: professorCourses[i].isFollowing,
+      },
+    });
+  }
+}
+
 async function upsertCourses() {
   for (let i = 0; i < courses.length; i++) {
     await prisma.course.upsert({
@@ -170,29 +211,48 @@ async function upsertCourses() {
       update: {},
       create: {
         id: courses[i].id,
+        dep_id: courses[i].depId,
         title: courses[i].title,
         semester: courses[i].semester,
-        department: courses[i].department,
         is_elective: courses[i].isElective,
         is_postgraduate: courses[i].isPostgraduate,
-        professor_id: courses[i].professorId,
       },
     });
   }
 }
 
-async function upsertCourseAnnouncements() {
-  for (let i = 0; i < courseAnnouncements.length; i++) {
-    await prisma.courseAnnouncement.upsert({
+async function upsertAnnouncements() {
+  for (let i = 0; i < announcements.length; i++) {
+    await prisma.announcement.upsert({
       where: {
-        id: courseAnnouncements[i].id,
+        id: announcements[i].id,
       },
       update: {},
       create: {
-        id: courseAnnouncements[i].id,
-        title: courseAnnouncements[i].title,
-        body: courseAnnouncements[i].body,
-        course_id: courseAnnouncements[i].courseId,
+        id: announcements[i].id,
+        title: announcements[i].title,
+        body: announcements[i].body,
+        course_id: announcements[i].courseId,
+      },
+    });
+  }
+}
+
+async function upsertUserAnnouncements() {
+  for (let i = 0; i < userAnnouncements.length; i++) {
+    await prisma.userAnnouncement.upsert({
+      where: {
+        user_id_announcement_id: {
+          user_id: userAnnouncements[i].userId,
+          announcement_id: userAnnouncements[i].annId,
+        },
+      },
+      update: {},
+      create: {
+        user_id: userAnnouncements[i].userId,
+        announcement_id: userAnnouncements[i].annId,
+        has_posted: userAnnouncements[i].hasPosted,
+        has_seen: userAnnouncements[i].hasSeen,
       },
     });
   }
@@ -203,6 +263,7 @@ async function createUsers() {
     await prisma.user.create({
       data: {
         id: users[i].id,
+        dep_id: users[i].depId,
         role: users[i].role,
         username: users[i].username,
         password: {
@@ -229,13 +290,23 @@ async function createProfiles() {
   }
 }
 
+async function createDepartments() {
+  for (let i = 0; i < departments.length; i++) {
+    await prisma.department.create({
+      data: {
+        title_id: departments[i].titleId,
+        full_title: departments[i].fullTitle,
+      },
+    });
+  }
+}
+
 async function createRegistrars() {
   for (let i = 0; i < registrars.length; i++) {
     await prisma.registrar.create({
       data: {
         id: registrars[i].id,
         title: registrars[i].title,
-        department: registrars[i].department,
         user_id: registrars[i].userId,
       },
     });
@@ -248,7 +319,6 @@ async function createProfessors() {
       data: {
         id: professors[i].id,
         title: professors[i].title,
-        department: professors[i].department,
         user_id: professors[i].userId,
       },
     });
@@ -260,7 +330,6 @@ async function createStudents() {
     await prisma.student.create({
       data: {
         id: students[i].id,
-        department: students[i].department,
         enrollment_year: students[i].enrollment_year,
         studies_status: students[i].studies_status,
         user_id: students[i].userId,
@@ -283,30 +352,55 @@ async function createStudentCourses() {
   }
 }
 
-async function createCourses() {
-  for (let i = 0; i < courses.length; i++) {
-    await prisma.course.create({
+async function createProfessorCourses() {
+  for (let i = 0; i < professorCourses.length; i++) {
+    await prisma.professorCourse.create({
       data: {
-        id: courses[i].id,
-        title: courses[i].title,
-        semester: courses[i].semester,
-        department: courses[i].department,
-        is_elective: courses[i].isElective,
-        is_postgraduate: courses[i].isPostgraduate,
-        professor_id: courses[i].professorId,
+        prof_id: professorCourses[i].profId,
+        course_id: professorCourses[i].courseId,
+        is_lecturing: professorCourses[i].isEnrolled,
+        is_following: professorCourses[i].isFollowing,
       },
     });
   }
 }
 
-async function createCourseAnnouncements() {
-  for (let i = 0; i < courseAnnouncements.length; i++) {
-    await prisma.courseAnnouncement.create({
+async function createCourses() {
+  for (let i = 0; i < courses.length; i++) {
+    await prisma.course.create({
       data: {
-        id: courseAnnouncements[i].id,
-        title: courseAnnouncements[i].title,
-        body: courseAnnouncements[i].body,
-        course_id: courseAnnouncements[i].courseId,
+        id: courses[i].id,
+        dep_id: courses[i].depId,
+        title: courses[i].title,
+        semester: courses[i].semester,
+        is_elective: courses[i].isElective,
+        is_postgraduate: courses[i].isPostgraduate,
+      },
+    });
+  }
+}
+
+async function createAnnouncements() {
+  for (let i = 0; i < announcements.length; i++) {
+    await prisma.announcement.create({
+      data: {
+        id: announcements[i].id,
+        title: announcements[i].title,
+        body: announcements[i].body,
+        course_id: announcements[i].courseId,
+      },
+    });
+  }
+}
+
+async function createUserAnnouncements() {
+  for (let i = 0; i < userAnnouncements.length; i++) {
+    await prisma.userAnnouncement.create({
+      data: {
+        user_id: userAnnouncements[i].userId,
+        announcement_id: userAnnouncements[i].annId,
+        has_posted: userAnnouncements[i].hasPosted,
+        has_seen: userAnnouncements[i].hasSeen,
       },
     });
   }

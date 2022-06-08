@@ -6,9 +6,11 @@ export function getAllCourses() {
   return prisma.course.findMany({});
 }
 
-export function getCourses(department: Course["department"]) {
+export function getCourses(depId: Course["dep_id"]) {
   return prisma.course.findMany({
-    where: { department },
+    where: {
+      dep_id: depId,
+    },
   });
 }
 

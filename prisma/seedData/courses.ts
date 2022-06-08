@@ -4,7 +4,7 @@ export const courses: {
   id: Course["id"];
   title: Course["title"];
   semester: Course["semester"];
-  department: Course["department"];
+  depId: Course["dep_id"];
   isElective: Course["is_elective"];
   isPostgraduate: Course["is_postgraduate"];
   professorId: Professor["id"];
@@ -13,7 +13,7 @@ export const courses: {
     id: 1,
     title: "Meteorology - Climatology",
     semester: "1",
-    department: "GEO",
+    depId: "GEO",
     isElective: false,
     isPostgraduate: false,
     professorId: 1,
@@ -22,7 +22,7 @@ export const courses: {
     id: 2,
     title: "Object Oriented Programming",
     semester: "3",
-    department: "IT",
+    depId: "IT",
     isElective: false,
     isPostgraduate: false,
     professorId: 2,
@@ -31,7 +31,7 @@ export const courses: {
     id: 3,
     title: "Data Structures",
     semester: "3",
-    department: "IT",
+    depId: "IT",
     isElective: false,
     isPostgraduate: false,
     professorId: 2,
@@ -40,7 +40,7 @@ export const courses: {
     id: 4,
     title: "Cloud Services",
     semester: "1",
-    department: "IT",
+    depId: "IT",
     isElective: true,
     isPostgraduate: true,
     professorId: 2,
@@ -49,7 +49,7 @@ export const courses: {
     id: 5,
     title: "Signals and Systems",
     semester: "5",
-    department: "IT",
+    depId: "IT",
     isElective: false,
     isPostgraduate: false,
     professorId: 3,
@@ -58,7 +58,7 @@ export const courses: {
     id: 6,
     title: "Discrete Mathematics",
     semester: "2",
-    department: "IT",
+    depId: "IT",
     isElective: false,
     isPostgraduate: false,
     professorId: 3,
@@ -67,7 +67,7 @@ export const courses: {
     id: 7,
     title: "Cryptography",
     semester: "4",
-    department: "IT",
+    depId: "IT",
     isElective: true,
     isPostgraduate: false,
     professorId: 3,
@@ -76,7 +76,7 @@ export const courses: {
     id: 8,
     title: "Data Bases",
     semester: "2",
-    department: "IT",
+    depId: "IT",
     isElective: false,
     isPostgraduate: false,
     professorId: 4,

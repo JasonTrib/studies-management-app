@@ -1,10 +1,10 @@
-import type { CourseAnnouncement } from "@prisma/client";
+import type { Announcement } from "@prisma/client";
 
-export const courseAnnouncements: {
-  id: CourseAnnouncement["id"];
-  body: CourseAnnouncement["body"];
-  title: CourseAnnouncement["title"];
-  courseId: CourseAnnouncement["course_id"];
+export const announcements: {
+  id: Announcement["id"];
+  body: Announcement["body"];
+  title: Announcement["title"];
+  courseId: Announcement["course_id"];
 }[] = [
   {
     id: 1,

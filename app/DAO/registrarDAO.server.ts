@@ -1,14 +1,18 @@
 import { prisma } from "~/db.server";
-import type { Registrar, User } from "@prisma/client";
+import type { Department, Registrar, User } from "@prisma/client";
 export type { Registrar } from "@prisma/client";
 
 export function getAllRegistrars() {
   return prisma.registrar.findMany({});
 }
 
-export function getRegistrars(department: Registrar["department"]) {
+export function getRegistrars(depId: Department["title_id"]) {
   return prisma.registrar.findMany({
-    where: { department },
+    where: {
+      user: {
+        dep_id: depId,
+      },
+    },
   });
 }
 
@@ -18,10 +22,12 @@ export function getRegistrar(id: Registrar["id"]) {
   });
 }
 
-export function getRegistrarsProfiles(department: Registrar["department"]) {
+export function getRegistrarsProfiles(depId: Department["title_id"]) {
   return prisma.registrar.findMany({
     where: {
-      department: department,
+      user: {
+        dep_id: depId,
+      },
     },
     include: {
       user: {
