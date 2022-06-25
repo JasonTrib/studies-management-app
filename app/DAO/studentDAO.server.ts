@@ -1,7 +1,7 @@
 import { prisma } from "~/db.server";
 import type { Course, Department, Student, User } from "@prisma/client";
 import { users } from "prisma/seedData/users";
-export type { Student } from "@prisma/client";
+export type { Student as StudentModelT } from "@prisma/client";
 
 export function getAllStudents() {
   return prisma.student.findMany({});
@@ -49,6 +49,7 @@ export function getStudentProfile(userId: User["id"]) {
       user: {
         select: {
           profile: true,
+          dep_id: true,
         },
       },
     },

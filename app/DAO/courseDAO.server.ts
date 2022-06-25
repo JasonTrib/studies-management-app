@@ -1,6 +1,6 @@
 import { prisma } from "~/db.server";
 import type { Course } from "@prisma/client";
-export type { Course } from "@prisma/client";
+export type { Course as CourseModelT } from "@prisma/client";
 
 export function getAllCourses() {
   return prisma.course.findMany({});

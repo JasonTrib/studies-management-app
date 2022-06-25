@@ -1,42 +1,33 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { getDepartments } from "~/DAO/departmentDAO";
+import type { DepartmentModelT } from "~/DAO/departmentDAO";
+import AppSkeleton from "~/components/AppSkeleton";
 
 type LoaderData = {
-  departments: [{ name: "IT" }, { name: "GEO" }];
+  departments: DepartmentModelT[];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  //   const departments = await getDepartments();
-  const departments = [{ name: "IT" }, { name: "GEO" }];
+  const departments = await getDepartments();
   return json({ departments });
 };
 
 const DepartmentIndexPage = () => {
   const { departments } = useLoaderData() as LoaderData;
   return (
-    <>
-      <div className="appbar">
-        <h1>Welcome to Remix</h1>
-        <Link to="/">Home</Link>
+    <AppSkeleton>
+      <div>DepartmentIndexPage</div>
+      <div>
+        <h2>list of departments</h2>
+        {departments.map((x) => (
+          <li key={x.title_id}>
+            <Link to={`/departments/${x.title_id}`}>{x.full_title}</Link>
+          </li>
+        ))}
       </div>
-      <div className="container">
-        <div className="sidebar">
-          <Link to="/departments/IT">IT</Link>
-        </div>
-        <div className="content">
-          <div>DepartmentIndexPage</div>
-          <div>
-            <h2>list of departments</h2>
-            {departments.map((x) => (
-              <li key={x.name}>
-                <Link to={`/departments/${x.name}`}>{x.name}</Link>
-              </li>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
+    </AppSkeleton>
   );
 };
 

@@ -1,14 +1,14 @@
 import type { LoaderFunction } from "@remix-run/node";
 import type { ProfileModelT } from "~/DAO/userDAO.server";
-import type { StudentModelT } from "~/DAO/studentDAO.server";
+import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AppSkeleton from "~/components/AppSkeleton";
-import { getStudentProfile } from "~/DAO/studentDAO.server";
+import { getProfessorProfile } from "~/DAO/professorDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {
-  student: StudentModelT & {
+  professor: ProfessorModelT & {
     user: {
       profile: ProfileModelT | null;
       dep_id: string;
@@ -17,32 +17,32 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const id = paramToInt(params.studentId);
+  const id = paramToInt(params.profId);
   if (id == null) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const student = await getStudentProfile(id);
+  const professor = await getProfessorProfile(id);
 
-  if (!student) {
+  if (!professor) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return json({ student });
+  return json({ professor });
 };
 
-const StudentDetailsPage = () => {
-  const { student } = useLoaderData() as LoaderData;
+const ProfessorDetailsPage = () => {
+  const { professor } = useLoaderData() as LoaderData;
   return (
     <AppSkeleton>
       <div>
-        <h2>StudentDetailsPage</h2>
-        <p>student id: {student.id}</p>
-        <p>student department: {student.user.dep_id}</p>
-        <p>student name: {student.user.profile?.name}</p>
+        <h2>ProfessorDetailsPage</h2>
+        <p>professor id: {professor.id}</p>
+        <p>professor department: {professor.user.dep_id}</p>
+        <p>professor name: {professor.user.profile?.name}</p>
       </div>
     </AppSkeleton>
   );
 };
 
-export default StudentDetailsPage;
+export default ProfessorDetailsPage;

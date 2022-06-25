@@ -1,6 +1,6 @@
 import { prisma } from "~/db.server";
 import type { Course, Department, Professor, User } from "@prisma/client";
-export type { Professor } from "@prisma/client";
+export type { Professor as ProfessorModelT } from "@prisma/client";
 
 export function getAllProfessors() {
   return prisma.professor.findMany({});
@@ -49,6 +49,7 @@ export function getProfessorProfile(userId: User["id"]) {
       user: {
         select: {
           profile: true,
+          dep_id: true,
         },
       },
     },

@@ -1,6 +1,7 @@
 import { prisma } from "~/db.server";
 import type { User } from "@prisma/client";
-export type { Student } from "@prisma/client";
+export type { User as UserModelT } from "@prisma/client";
+export type { Profile as ProfileModelT } from "@prisma/client";
 
 export function getAllUsers() {
   return prisma.user.findMany({});
