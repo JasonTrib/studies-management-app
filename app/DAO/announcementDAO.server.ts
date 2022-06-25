@@ -3,7 +3,15 @@ import type { Announcement, Course, User } from "@prisma/client";
 export type { Announcement as AnnouncementModelT } from "@prisma/client";
 
 export function getAllAnnoucements() {
-  return prisma.announcement.findMany({});
+  return prisma.announcement.findMany({
+    include: {
+      course: {
+        select: {
+          title: true,
+        },
+      },
+    },
+  });
 }
 
 export function getAnnoucements(depId: Course["dep_id"]) {

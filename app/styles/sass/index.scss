@@ -12,6 +12,7 @@
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas: "sidebar content";
+
   height: 800px;
 }
 
@@ -34,9 +35,11 @@
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas: "main-feed side-feed";
-}
-.page-content .main-feed {
-  padding: 12px;
-}
 
-/*# sourceMappingURL=index.css.map */
+  .main-feed {
+    padding: 12px;
+  }
+
+  .side-feed {
+  }
+}

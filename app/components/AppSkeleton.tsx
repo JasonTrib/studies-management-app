@@ -30,7 +30,10 @@ const AppSkeleton: FC = ({ children }) => {
               <Link to="/announcements">Announcements</Link>
             </div>
           </div>
-          <div className="content">{children}</div>
+          <div className="page-content">
+            <div className="main-feed">{children}</div>
+            <div className="side-feed"></div>
+          </div>
         </div>
       </div>
     </div>

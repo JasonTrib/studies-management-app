@@ -1,18 +1,24 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import Announcement from "~/components/Announcement";
+import { useLoaderData } from "@remix-run/react";
+import AnnouncementsContainer, {
+  links as AnnouncementsContainerLinks,
+} from "~/components/AnnouncementsContainer";
 import AppSkeleton from "~/components/AppSkeleton";
+import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAllAnnoucements } from "~/DAO/announcementDAO.server";
-import { links as AnnouncementLinks } from "~/components/Announcement";
+import type { CourseModelT } from "~/DAO/courseDAO.server";
 
-type LoaderData = {
-  announcements: AnnouncementModelT[];
+export type LoaderData = {
+  announcements: (AnnouncementModelT & {
+    course: {
+      title: CourseModelT["title"];
+    };
+  })[];
 };
 
 export const links: LinksFunction = () => {
-  return [...AnnouncementLinks()];
+  return [...AnnouncementsContainerLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -22,15 +28,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const AnnouncementIndexPage = () => {
   const { announcements } = useLoaderData() as LoaderData;
+
   return (
     <AppSkeleton>
-      <div>AnnouncementIndexPage</div>
-      <div>
-        <h2>list of announcements</h2>
-        {announcements.map((x) => (
-          <Announcement key={x.id} id={x.id} title={x.title} body={x.body} date={x.updated_at} />
-        ))}
-      </div>
+      <AnnouncementsContainer data={announcements} />
     </AppSkeleton>
   );
 };
