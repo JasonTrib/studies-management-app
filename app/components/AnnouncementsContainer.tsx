@@ -3,6 +3,7 @@ import type { FC } from "react";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import styles from "~/styles/announcements.css";
+import { formatDate } from "~/utils/dateUtils";
 import Announcement from "./Announcement";
 
 type AnnouncementsContainerT = {
@@ -30,7 +31,7 @@ const AnnouncementsContainer: FC<AnnouncementsContainerT> = ({ data }) => {
             id={x.id}
             title={x.title}
             body={x.body}
-            date={x.updated_at}
+            date={formatDate(new Date(x.updated_at))}
             course={x.course.title}
           />
         ))}

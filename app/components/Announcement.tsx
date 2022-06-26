@@ -8,7 +8,7 @@ type AnnouncementT = {
   title: AnnouncementModelT["title"];
   body: AnnouncementModelT["body"];
   course: CourseModelT["title"];
-  date: AnnouncementModelT["updated_at"];
+  date: string;
 };
 
 const Announcement: FC<AnnouncementT> = ({ id, title, body, course, date }) => {
