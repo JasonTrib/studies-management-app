@@ -2,14 +2,14 @@ import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/nod
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import styles from "~/styles/global.css";
 import stylesIndex from "~/styles/index.css";
-import {
-  logUserDAO,
-  logCourseDAO,
-  logAnnouncementDAO,
-  logStudentDAO,
-  logProfessorDAO,
-  logURegistrarDAO,
-} from "./debug/logDAO.server";
+// import {
+//   logUserDAO,
+//   logCourseDAO,
+//   logAnnouncementDAO,
+//   logStudentDAO,
+//   logProfessorDAO,
+//   logURegistrarDAO,
+// } from "./debug/logDAO.server";
 export { CatchBoundary } from "~/components/CatchBoundary";
 
 export const meta: MetaFunction = () => ({

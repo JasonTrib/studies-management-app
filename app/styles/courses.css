@@ -1,0 +1,81 @@
+.courses-list-container {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
+  margin-bottom: 16px;
+}
+.courses-list-container .heading {
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1254901961);
+  margin-bottom: 1px;
+  padding: 8px 12px;
+  color: var(--color-text-light);
+}
+.courses-list-container .content {
+  padding: 0 12px 8px;
+}
+.courses-list-container .content .courses-list-item {
+  background-color: white;
+  padding-bottom: 0;
+  padding: 8px 4px;
+  margin-bottom: 1px;
+  box-shadow: 0px 1px 0 rgba(0, 0, 0, 0.1254901961);
+  cursor: default;
+}
+.courses-list-container .content .courses-list-item:last-child {
+  box-shadow: none;
+}
+.courses-list-container .content .courses-list-item:hover {
+  background-color: rgba(0, 0, 255, 0.05);
+}
+.courses-list-container .content .courses-list-item .title {
+  color: var(--color-text-cyan);
+  font-size: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.courses-list-container .content .courses-list-item .professors {
+  color: var(--color-text-light);
+  font-size: 13px;
+}
+.courses-list-container .content .courses-list-item .semester {
+  color: var(--color-text-lighter);
+  font-size: 11px;
+  font-style: italic;
+  vertical-align: text-bottom;
+}
+
+.course-container {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
+  margin-bottom: 16px;
+}
+.course-container .heading {
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1254901961);
+  margin-bottom: 1px;
+  padding: 8px 20px;
+}
+.course-container .heading .title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+.course-container .content {
+  padding: 12px 20px;
+}
+.course-container .content .body {
+  color: var(--color-text-dark);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.course-container .content .meta-data {
+  color: var(--color-text-light);
+  font-size: 13px;
+}
+.course-container .content .meta-data .semester {
+  color: var(--color-text-lighter);
+  font-style: italic;
+}
+
+/*# sourceMappingURL=courses.css.map */

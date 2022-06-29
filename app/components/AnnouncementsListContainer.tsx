@@ -4,7 +4,7 @@ import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import styles from "~/styles/announcements.css";
 import { formatDate } from "~/utils/dateUtils";
-import Announcement from "./Announcement";
+import Announcement from "./AnnouncementsListItem";
 
 type AnnouncementsContainerT = {
   data: (AnnouncementModelT & {
@@ -20,7 +20,7 @@ export const links: LinksFunction = () => {
 
 const AnnouncementsContainer: FC<AnnouncementsContainerT> = ({ data }) => {
   return (
-    <div className="announcements-container">
+    <div className="announcements-list-container">
       <div className="heading">
         <h2>Announcements</h2>
       </div>

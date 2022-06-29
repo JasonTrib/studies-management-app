@@ -1,9 +1,10 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import Announcement, { links as AnnouncementLinks } from "~/components/Announcement";
 import AppSkeleton from "~/components/AppSkeleton";
-import { getCourseAnnoucement } from "~/DAO/announcementDAO.server";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
+import { getCourseAnnoucement } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
@@ -11,6 +12,10 @@ type LoaderData = {
   announcement: AnnouncementModelT & {
     course: CourseModelT;
   };
+};
+
+export const links: LinksFunction = () => {
+  return [...AnnouncementLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -30,13 +35,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const AnnouncementDetailsPage = () => {
   const { announcement } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
-      <div>
-        <h2>AnnouncementDetailsPage</h2>
-        <p>course: {announcement.course.title}</p>
-        <p>title: {announcement.title}</p>
-        <p>body: {announcement.body}</p>
-      </div>
+    <AppSkeleton wide>
+      <>
+        <div className="content-heading link">
+          <Link to={`/courses/${announcement.course.id}`}>{announcement.course.title}</Link>
+        </div>
+        <Announcement data={announcement} />
+      </>
     </AppSkeleton>
   );
 };

@@ -1,4 +1,4 @@
-.announcements-list-container {
+.courses-list-container {
   display: block;
   background-color: white;
   box-shadow: 0 0 12px #0000000f;
@@ -14,10 +14,10 @@
   .content {
     padding: 0 12px 8px;
 
-    .announcements-list-item {
+    .courses-list-item {
       background-color: white;
       padding-bottom: 0;
-      padding: 10px 4px;
+      padding: 8px 4px;
       margin-bottom: 1px;
       box-shadow: 0px 1px 0 #00000020;
       cursor: default;
@@ -33,46 +33,27 @@
       .title {
         color: var(--color-text-cyan);
         font-size: 16px;
-        margin-bottom: 4px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
       }
 
-      .body {
-        color: var(--color-text-dark);
+      .professors {
+        color: var(--color-text-light);
         font-size: 13px;
-        margin-bottom: 4px;
-
-        $lines: 3;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: $lines;
-        line-clamp: $lines;
-        -webkit-box-orient: vertical;
       }
 
-      .metadata {
+      .semester {
+        color: var(--color-text-lighter);
         font-size: 11px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-
-        .date {
-          color: var(--color-text-light);
-          font-style: italic;
-        }
-
-        .course {
-          color: var(--color-text-lighter);
-        }
+        font-style: italic;
+        vertical-align: text-bottom;
       }
     }
   }
 }
 
-.announcement-container {
+.course-container {
   display: block;
   background-color: white;
   box-shadow: 0 0 12px #0000000f;
@@ -99,9 +80,14 @@
       margin-bottom: 8px;
     }
 
-    .date {
+    .meta-data {
       color: var(--color-text-light);
       font-size: 13px;
+
+      .semester {
+        color: var(--color-text-lighter);
+        font-style: italic;
+      }
     }
   }
 }

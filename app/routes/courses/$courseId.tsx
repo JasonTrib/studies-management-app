@@ -1,13 +1,18 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AppSkeleton from "~/components/AppSkeleton";
+import Course, { links as CourseLinks } from "~/components/Course";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getCourse } from "~/DAO/courseDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {
   course: CourseModelT;
+};
+
+export const links: LinksFunction = () => {
+  return [...CourseLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -26,12 +31,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const CourseDetailsPage = () => {
   const { course } = useLoaderData() as LoaderData;
+
+  course.description =
+    "Database management courses introduce students to languages, applications and programming used for the" +
+    "design and maintenance of business databases. One of the basic skills covered in database management courses" +
+    "is the use of Structured Query Language (SQL), the most common database manipulation language.";
+
   return (
-    <AppSkeleton>
-      <div>
-        <h2>CourseDetailsPage</h2>
-        <span>courseId: {course.title}</span>
-      </div>
+    <AppSkeleton wide>
+      <>
+        <div className="content-heading link">
+          <Link to={`/courses`}>My courses</Link>
+        </div>
+        <Course data={course} />
+      </>
     </AppSkeleton>
   );
 };

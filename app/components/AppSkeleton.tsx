@@ -1,7 +1,25 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
+import { useEffect, useState } from "react";
 
-const AppSkeleton: FC = ({ children }) => {
+type AppSkeletonT = {
+  wide?: boolean;
+  children?: JSX.Element[] | JSX.Element;
+};
+
+const AppSkeleton: FC<AppSkeletonT> = ({ wide, children }) => {
+  const [offspring, setOffsping] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    if (children) {
+      if (!Array.isArray(children)) {
+        setOffsping([children]);
+      } else {
+        setOffsping(children);
+      }
+    }
+  }, [children, offspring]);
+
   return (
     <div>
       <div className="app-container">
@@ -31,8 +49,14 @@ const AppSkeleton: FC = ({ children }) => {
             </div>
           </div>
           <div className="page-content">
-            <div className="main-feed">{children}</div>
-            <div className="side-feed"></div>
+            {wide ? (
+              <div className="wide-content-feed">{offspring[0]}</div>
+            ) : (
+              <div className="content-feed">
+                <div className="main-feed">{offspring[0]}</div>
+                <div className="side-feed">{offspring[1]}</div>
+              </div>
+            )}
           </div>
         </div>
       </div>

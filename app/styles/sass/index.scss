@@ -1,6 +1,5 @@
 .app-container {
   width: 1200px;
-  font-family: "arial";
   line-height: "1.4";
   margin: 0 auto;
 }
@@ -27,19 +26,37 @@
 }
 
 .page-content {
-  grid-area: "page-content";
   background-color: var(--color-bg-lightest);
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  grid-template-rows: 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas: "main-feed side-feed";
 
-  .main-feed {
+  .content-feed {
+    grid-area: "content-feed";
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas: "main-feed side-feed";
+    justify-content: space-between;
+
+    .main-feed {
+      grid-area: "main-feed";
+      padding: 12px;
+    }
+
+    .side-feed {
+      grid-area: "side-feed";
+      padding: 12px;
+    }
+  }
+
+  .wide-content-feed {
     padding: 12px;
   }
+}
 
-  .side-feed {
-  }
+.content-heading {
+  color: var(--color-text-cyan);
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 700;
 }

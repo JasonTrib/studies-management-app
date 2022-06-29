@@ -1,26 +1,26 @@
-import { Link } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/node";
 import type { FC } from "react";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
+import styles from "~/styles/announcements.css";
+import { formatDate } from "~/utils/dateUtils";
 
 type AnnouncementT = {
-  id: AnnouncementModelT["id"];
-  title: AnnouncementModelT["title"];
-  body: AnnouncementModelT["body"];
-  course: CourseModelT["title"];
-  date: string;
+  data: AnnouncementModelT;
 };
 
-const Announcement: FC<AnnouncementT> = ({ id, title, body, course, date }) => {
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }];
+};
+
+const Announcement: FC<AnnouncementT> = ({ data }) => {
   return (
     <div className="announcement-container">
-      <div className="title">
-        <Link to={`/announcements/${id}`}>{title}</Link>
+      <div className="heading">
+        <div className="title">{data.title}</div>
       </div>
-      <div className="body">{body}</div>
-      <div className="metadata">
-        <span className="date">{date}</span>
-        <span className="course">{course}</span>
+      <div className="content">
+        <div className="body">{data.body}</div>
+        <div className="date">{formatDate(new Date(data.updated_at))}</div>
       </div>
     </div>
   );

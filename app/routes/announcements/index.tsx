@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsContainer, {
   links as AnnouncementsContainerLinks,
-} from "~/components/AnnouncementsContainer";
+} from "~/components/AnnouncementsListContainer";
 import AppSkeleton from "~/components/AppSkeleton";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAllAnnoucements } from "~/DAO/announcementDAO.server";
