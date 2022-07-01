@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import Announcement, { links as AnnouncementLinks } from "~/components/Announcement";
 import AppLayout from "~/components/AppLayout";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getCourseAnnoucement } from "~/DAO/announcementDAO.server";
+import { getAnnoucement } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const announcement = await getCourseAnnoucement(id);
+  const announcement = await getAnnoucement(id);
   if (!announcement) {
     throw new Response("Not Found", { status: 404 });
   }

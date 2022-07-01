@@ -1,5 +1,5 @@
 import { prisma } from "~/db.server";
-import type { User } from "@prisma/client";
+import type { Department, User } from "@prisma/client";
 export type { User as UserModelT } from "@prisma/client";
 export type { Profile as ProfileModelT } from "@prisma/client";
 
@@ -33,14 +33,13 @@ export function getUserAnnouncements(userId: User["id"]) {
   });
 }
 
-export function getUserAnnouncementsPosted(userId: User["id"]) {
-  return prisma.userAnnouncement.findMany({
+export function getProfessors(depId: Department["title_id"]) {
+  return prisma.user.findMany({
     where: {
-      user_id: userId,
-      has_posted: true,
+      dep_id: depId,
     },
-    include: {
-      announcement: true,
+    select: {
+      professor: true,
     },
   });
 }

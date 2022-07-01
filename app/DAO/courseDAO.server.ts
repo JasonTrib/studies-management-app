@@ -19,3 +19,25 @@ export function getCourse(id: Course["id"]) {
     where: { id },
   });
 }
+
+export function getCourseAnnoucements(depId: Course["dep_id"]) {
+  return prisma.course.findMany({
+    where: {
+      dep_id: depId,
+    },
+    select: {
+      id: true,
+      title: true,
+      announcements: true,
+    },
+  });
+}
+
+export function getCourseAnnoucement(id: Course["id"]) {
+  return prisma.course.findUnique({
+    where: { id },
+    select: {
+      announcements: true,
+    },
+  });
+}

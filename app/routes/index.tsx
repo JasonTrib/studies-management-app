@@ -11,11 +11,11 @@ import CoursesListContainer, {
   links as CoursesListContainerLinks,
 } from "~/components/CoursesListContainer";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getAnnouncementsFollowed } from "~/DAO/announcementDAO.server";
+import { getAnnouncementsFollowed } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getAllCourses } from "~/DAO/courseDAO.server";
+import { getStudentCourses } from "~/DAO/studentCourseDAO.server";
 import type { StudentCourseT } from "~/DAO/studentDAO.server";
-import { getStudentCourses } from "~/DAO/studentDAO.server";
 
 export type LoaderData = {
   announcements: (AnnouncementModelT & {

@@ -22,7 +22,7 @@ export function getRegistrar(id: Registrar["id"]) {
   });
 }
 
-export function getRegistrarsProfiles(depId: Department["title_id"]) {
+export function getRegistrarsProfile(depId: Department["title_id"]) {
   return prisma.registrar.findMany({
     where: {
       user: {

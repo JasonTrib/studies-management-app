@@ -1,44 +1,49 @@
-import { getDepartments, getDepartment } from "~/DAO/departmentDAO";
+import { getDepartments, getDepartment } from "~/DAO/departmentDAO.server";
 import {
-  getAllAnnoucements,
-  getAnnoucements,
+  getProfessorCoursesAnnouncements,
+  getProfessorCourseAnnouncements,
+  getProfessorCourses,
+  getProfessorCoursesFollowed,
+} from "~/DAO/professorCourseDAO.server";
+import {
+  getStudentCoursesAnnouncements,
+  getStudentCourseAnnouncements,
+  getStudentCourses,
+  getStudentCoursesFollowed,
+} from "~/DAO/studentCourseDAO.server";
+import { getUserAnnouncementsPosted } from "~/DAO/userAnnouncementDAO.server";
+import { getAllAnnoucements } from "../DAO/announcementDAO.server";
+import {
+  getAllCourses,
+  getCourses,
+  getCourse,
   getCourseAnnoucements,
   getCourseAnnoucement,
-} from "../DAO/announcementDAO.server";
-import { getAllCourses, getCourses, getCourse } from "../DAO/courseDAO.server";
+} from "../DAO/courseDAO.server";
 import {
   getAllProfessors,
-  getProfessors,
   getProfessor,
-  getProfessorsProfiles,
+  getProfessorsProfile,
   getProfessorProfile,
-  getProfessorCourses,
-  getProfessorFollowedCourses,
-  getProfessorAnnouncements,
-  getProfessorCourseAnnouncements,
 } from "../DAO/professorDAO.server";
 import {
   getAllRegistrars,
   getRegistrars,
   getRegistrar,
-  getRegistrarsProfiles,
+  getRegistrarsProfile,
   getRegistrarProfile,
 } from "../DAO/registrarDAO.server";
 import {
   getAllStudents,
   getStudents,
   getStudent,
-  getStudentsProfiles,
+  getStudentsProfile,
   getStudentProfile,
-  getStudentCourses,
-  getStudentFollowedCourses,
-  getStudentAnnouncements,
-  getStudentCourseAnnouncements,
 } from "../DAO/studentDAO.server";
 import {
   getAllUsers,
+  getProfessors,
   getUserAnnouncements,
-  getUserAnnouncementsPosted,
   getUserPassword,
 } from "../DAO/userDAO.server";
 
@@ -83,14 +88,11 @@ export const logCourseDAO = async () => {
 
 export const logAnnouncementDAO = async () => {
   const allAnnouncements = await getAllAnnoucements();
-  const announcements = await getAnnoucements("IT");
-  const courseAnnouncements = await getCourseAnnoucements(1);
+  const courseAnnouncements = await getCourseAnnoucements("IT");
   const courseAnnouncement = await getCourseAnnoucement(3);
 
   console.log("~~~~~~~ allAnnouncements ~~~~~~~");
   console.log(allAnnouncements);
-  console.log("~~~~~~~ announcements ~~~~~~~");
-  console.log(announcements);
   console.log("~~~~~~~ courseAnnouncements ~~~~~~~");
   console.log(courseAnnouncements);
   console.log("~~~~~~~ courseAnnouncement ~~~~~~~");
@@ -101,11 +103,11 @@ export const logStudentDAO = async () => {
   const allStudents = await getAllStudents();
   const students = await getStudents("IT");
   const student = await getStudent(2);
-  const studentsProfiles = await getStudentsProfiles("IT");
+  const studentsProfiles = await getStudentsProfile("IT");
   const studentProfile = await getStudentProfile(3);
   const studentCourses = await getStudentCourses(5);
-  const studentFollowedCourses = await getStudentFollowedCourses(1);
-  const studentAnnouncements = await getStudentAnnouncements(4);
+  const studentFollowedCourses = await getStudentCoursesFollowed(1);
+  const studentAnnouncements = await getStudentCoursesAnnouncements(4);
   const studentCourseAnnouncements = await getStudentCourseAnnouncements(4, 1);
 
   console.log("~~~~~~~ allStudents ~~~~~~~");
@@ -132,11 +134,11 @@ export const logProfessorDAO = async () => {
   const allProfessors = await getAllProfessors();
   const professors = await getProfessors("IT");
   const professor = await getProfessor(2);
-  const professorsProfiles = await getProfessorsProfiles("IT");
+  const professorsProfiles = await getProfessorsProfile("IT");
   const professorProfile = await getProfessorProfile(1);
   const professorCourses = await getProfessorCourses(4);
-  const professorFollowedCourses = await getProfessorFollowedCourses(3);
-  const professorAnnouncements = await getProfessorAnnouncements(3);
+  const professorFollowedCourses = await getProfessorCoursesFollowed(3);
+  const professorAnnouncements = await getProfessorCoursesAnnouncements(3);
   const professorCourseAnnouncements = await getProfessorCourseAnnouncements(3, 1);
 
   console.log("~~~~~~~ allProfessors ~~~~~~~");
@@ -163,7 +165,7 @@ export const logURegistrarDAO = async () => {
   const allRegistrars = await getAllRegistrars();
   const registrars = await getRegistrars("IT");
   const registrar = await getRegistrar(2);
-  const registrarsProfiles = await getRegistrarsProfiles("IT");
+  const registrarsProfiles = await getRegistrarsProfile("IT");
   const registrarProfile = await getRegistrarProfile(2);
 
   console.log("~~~~~~~ allRegistrars ~~~~~~~");

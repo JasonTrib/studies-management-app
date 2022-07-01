@@ -1,8 +1,8 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { getDepartments } from "~/DAO/departmentDAO";
-import type { DepartmentModelT } from "~/DAO/departmentDAO";
+import { getDepartments } from "~/DAO/departmentDAO.server";
+import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
 import AppLayout from "~/components/AppLayout";
 
 type LoaderData = {
