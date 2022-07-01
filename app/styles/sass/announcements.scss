@@ -11,6 +11,10 @@
     color: var(--color-text-light);
   }
 
+  .no-heading {
+    height: 8px;
+  }
+
   .content {
     padding: 0 12px 8px;
 
@@ -24,6 +28,7 @@
 
       &:last-child {
         box-shadow: none;
+        margin-bottom: 1px;
       }
 
       &:hover {
@@ -31,7 +36,6 @@
       }
 
       .title {
-        color: var(--color-text-cyan);
         font-size: 16px;
         margin-bottom: 4px;
         text-overflow: ellipsis;

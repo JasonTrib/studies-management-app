@@ -1,0 +1,12 @@
+.box {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
+  margin-bottom: 16px;
+  color: var(--color-text-lighter);
+  text-align: end;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+/*# sourceMappingURL=box.css.map */

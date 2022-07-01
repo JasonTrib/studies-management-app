@@ -2,7 +2,6 @@ import type { LinksFunction } from "@remix-run/node";
 import type { FC } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import styles from "~/styles/courses.css";
-import { formatDate } from "~/utils/dateUtils";
 
 type CourseT = {
   data: CourseModelT;

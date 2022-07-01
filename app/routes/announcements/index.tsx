@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import AnnouncementsContainer, {
   links as AnnouncementsContainerLinks,
 } from "~/components/AnnouncementsListContainer";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAllAnnoucements } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
@@ -30,9 +30,9 @@ const AnnouncementIndexPage = () => {
   const { announcements } = useLoaderData() as LoaderData;
 
   return (
-    <AppSkeleton>
+    <AppLayout>
       <AnnouncementsContainer data={announcements} />
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

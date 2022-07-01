@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { getAllRegistrars } from "~/DAO/registrarDAO.server";
 
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const RegistrarIndexPage = () => {
   const { registrars } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>RegistrarIndexPage</div>
       <div>
         <h2>list of registrars</h2>
@@ -27,7 +27,7 @@ const RegistrarIndexPage = () => {
           </li>
         ))}
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

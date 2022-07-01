@@ -1,7 +1,6 @@
-import { prisma } from "~/db.server";
 import type { Course, Department, Student, User } from "@prisma/client";
-import { users } from "prisma/seedData/users";
-export type { Student as StudentModelT } from "@prisma/client";
+import { prisma } from "~/db.server";
+export type { Student as StudentModelT, StudentCourse as StudentCourseT } from "@prisma/client";
 
 export function getAllStudents() {
   return prisma.student.findMany({});

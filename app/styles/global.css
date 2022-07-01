@@ -27,7 +27,7 @@ h3 {
 
 .link a {
   text-decoration: none;
-  color: inherit;
+  color: var(--color-text-cyan);
 }
 .link a:hover {
   text-decoration: underline;

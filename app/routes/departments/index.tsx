@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getDepartments } from "~/DAO/departmentDAO";
 import type { DepartmentModelT } from "~/DAO/departmentDAO";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 
 type LoaderData = {
   departments: DepartmentModelT[];
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const DepartmentIndexPage = () => {
   const { departments } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>DepartmentIndexPage</div>
       <div>
         <h2>list of departments</h2>
@@ -27,7 +27,7 @@ const DepartmentIndexPage = () => {
           </li>
         ))}
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

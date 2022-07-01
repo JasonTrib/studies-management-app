@@ -1,0 +1,60 @@
+.container-blueprint {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px #0000000f;
+  margin-bottom: 16px;
+
+  .heading {
+    padding: 8px 12px;
+    color: var(--color-text-light);
+  }
+
+  .content {
+    padding: 0 12px 8px;
+    box-shadow: 0px -1px 0px #00000020;
+    margin-top: 1px;
+
+    .container-item {
+      background-color: white;
+      padding-bottom: 0;
+      padding: 10px 4px;
+      margin-bottom: 1px;
+      box-shadow: 0px 1px 0 #00000020;
+      cursor: default;
+
+      &:last-child {
+        box-shadow: none;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 255, 0.05);
+      }
+
+      .title {
+        color: var(--color-text-cyan);
+        font-size: 16px;
+        margin-bottom: 4px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .body {
+        color: var(--color-text-dark);
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .no-padding-bot {
+    padding-bottom: 0;
+  }
+
+  .more {
+    padding: 8px 12px;
+    box-shadow: 0px -1px 0px #00000020;
+    margin-top: 1px;
+    text-align: right;
+  }
+}

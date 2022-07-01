@@ -10,6 +10,9 @@
   padding: 8px 12px;
   color: var(--color-text-light);
 }
+.courses-list-container .no-heading {
+  height: 8px;
+}
 .courses-list-container .content {
   padding: 0 12px 8px;
 }
@@ -23,12 +26,12 @@
 }
 .courses-list-container .content .courses-list-item:last-child {
   box-shadow: none;
+  margin-bottom: 0;
 }
 .courses-list-container .content .courses-list-item:hover {
   background-color: rgba(0, 0, 255, 0.05);
 }
 .courses-list-container .content .courses-list-item .title {
-  color: var(--color-text-cyan);
   font-size: 16px;
   text-overflow: ellipsis;
   overflow: hidden;

@@ -7,6 +7,7 @@ import { formatDate } from "~/utils/dateUtils";
 import Announcement from "./AnnouncementsListItem";
 
 type AnnouncementsContainerT = {
+  title?: string;
   data: (AnnouncementModelT & {
     course: {
       title: CourseModelT["title"];
@@ -18,11 +19,11 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-const AnnouncementsContainer: FC<AnnouncementsContainerT> = ({ data }) => {
+const AnnouncementsContainer: FC<AnnouncementsContainerT> = ({ title, data }) => {
   return (
     <div className="announcements-list-container">
-      <div className="heading">
-        <h2>Announcements</h2>
+      <div className={`${title ? "heading" : "no-heading"}`}>
+        <h2>{title}</h2>
       </div>
       <div className="content">
         {data.map((x) => (

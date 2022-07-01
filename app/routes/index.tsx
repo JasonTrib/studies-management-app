@@ -1,53 +1,75 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AnnouncementsContainer, {
-  links as AnnouncementsContainerLinks,
+import AnnouncementsListContainer, {
+  links as AnnouncementsListContainerLinks,
 } from "~/components/AnnouncementsListContainer";
-import AppSkeleton from "~/components/AppSkeleton";
-import CoursesContainer, {
-  links as CoursesContainerLinks,
+import AppLayout from "~/components/AppLayout";
+import Box, { links as BoxLinks } from "~/components/Box";
+import Container, { links as ContainerLinks } from "~/components/Container";
+import CoursesListContainer, {
+  links as CoursesListContainerLinks,
 } from "~/components/CoursesListContainer";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getAllAnnoucements } from "~/DAO/announcementDAO.server";
+import { getAnnouncementsFollowed } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getAllCourses } from "~/DAO/courseDAO.server";
+import type { StudentCourseT } from "~/DAO/studentDAO.server";
+import { getStudentCourses } from "~/DAO/studentDAO.server";
 
 export type LoaderData = {
   announcements: (AnnouncementModelT & {
-    course: {
-      title: CourseModelT["title"];
-    };
+    course: CourseModelT;
+  })[];
+  announcementsFollowed: (AnnouncementModelT & {
+    course: CourseModelT;
   })[];
   courses: CourseModelT[];
+  studentCourses: (StudentCourseT & {
+    course: CourseModelT;
+  })[];
 };
 
 export const links: LinksFunction = () => {
-  return [...AnnouncementsContainerLinks(), ...CoursesContainerLinks()];
+  return [
+    ...AnnouncementsListContainerLinks(),
+    ...CoursesListContainerLinks(),
+    ...ContainerLinks(),
+    ...BoxLinks(),
+  ];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const announcements = await getAllAnnoucements();
   const courses = await getAllCourses();
+  const studentCourses = await getStudentCourses(2);
+  const { coursesFollowed, announcements } = await getAnnouncementsFollowed(2);
 
-  return json({ announcements, courses });
+  const announcementsFollowed = coursesFollowed.flatMap((course) =>
+    announcements.filter((ann) => ann.course_id === course.course_id),
+  );
+
+  return json({ announcements, courses, announcementsFollowed, studentCourses });
 };
 
 export default function Index() {
-  const { announcements, courses } = useLoaderData() as LoaderData;
+  const { announcements, courses, announcementsFollowed, studentCourses } =
+    useLoaderData() as LoaderData;
 
   return (
     <div>
-      <AppSkeleton>
+      <AppLayout>
         <>
-          <AnnouncementsContainer data={announcements} />
-          <CoursesContainer data={courses} />
+          <AnnouncementsListContainer title="My announcements" data={announcementsFollowed} />
+          <Container items={6} maxItems={3} />
+          <Container />
+          <CoursesListContainer data={courses} />
         </>
         <>
-          <CoursesContainer data={courses} />
-          <AnnouncementsContainer data={announcements} />
+          <Box height={250} />
+          <CoursesListContainer title="My courses" data={studentCourses.map((x) => x.course)} />
+          <AnnouncementsListContainer title="Announcements" data={announcements} />
         </>
-      </AppSkeleton>
+      </AppLayout>
     </div>
   );
 }

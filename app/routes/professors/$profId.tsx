@@ -3,7 +3,7 @@ import type { ProfileModelT } from "~/DAO/userDAO.server";
 import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import { getProfessorProfile } from "~/DAO/professorDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
@@ -34,14 +34,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const ProfessorDetailsPage = () => {
   const { professor } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>
         <h2>ProfessorDetailsPage</h2>
         <p>professor id: {professor.id}</p>
         <p>professor department: {professor.user.dep_id}</p>
         <p>professor name: {professor.user.profile?.name}</p>
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

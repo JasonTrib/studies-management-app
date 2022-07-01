@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import CoursesContainer, {
   links as CoursesContainerLinks,
 } from "~/components/CoursesListContainer";
@@ -25,9 +25,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const CourseIndexPage = () => {
   const { courses } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <CoursesContainer data={courses} />
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

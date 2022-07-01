@@ -2,7 +2,7 @@ import type { LoaderFunction } from "@remix-run/node";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import { getAllStudents } from "~/DAO/studentDAO.server";
 
 type LoaderData = {
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const StudentIndexPage = () => {
   const { students } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>StudentIndexPage</div>
       <div>
         <h2>list of students</h2>
@@ -27,7 +27,7 @@ const StudentIndexPage = () => {
           </li>
         ))}
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

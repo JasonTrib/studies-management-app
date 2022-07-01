@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import { getAllProfessors } from "~/DAO/professorDAO.server";
 
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const ProfessorsIndexPage = () => {
   const { professors } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>ProfessorsIndexPage</div>
       <div>
         <h2>list of professors</h2>
@@ -29,7 +29,7 @@ const ProfessorsIndexPage = () => {
           ))}
         </ul>
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

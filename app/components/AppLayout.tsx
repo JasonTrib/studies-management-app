@@ -2,12 +2,12 @@ import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 
-type AppSkeletonT = {
+type AppLayoutT = {
   wide?: boolean;
   children?: JSX.Element[] | JSX.Element;
 };
 
-const AppSkeleton: FC<AppSkeletonT> = ({ wide, children }) => {
+const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
   const [offspring, setOffsping] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const AppSkeleton: FC<AppSkeletonT> = ({ wide, children }) => {
         setOffsping(children);
       }
     }
-  }, [children, offspring]);
+  }, [children]);
 
   return (
     <div>
@@ -64,4 +64,4 @@ const AppSkeleton: FC<AppSkeletonT> = ({ wide, children }) => {
   );
 };
 
-export default AppSkeleton;
+export default AppLayout;

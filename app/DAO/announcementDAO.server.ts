@@ -1,15 +1,12 @@
 import { prisma } from "~/db.server";
-import type { Announcement, Course, User } from "@prisma/client";
+import type { Announcement, Course, StudentCourse, User } from "@prisma/client";
+import { getStudentFollowedCourses } from "./studentDAO.server";
 export type { Announcement as AnnouncementModelT } from "@prisma/client";
 
 export function getAllAnnoucements() {
   return prisma.announcement.findMany({
     include: {
-      course: {
-        select: {
-          title: true,
-        },
-      },
+      course: true,
     },
   });
 }
@@ -66,4 +63,11 @@ function getUserAnnoucement(userId: User["id"], annId: Announcement["id"]) {
       },
     },
   });
+}
+
+export async function getAnnouncementsFollowed(userId: User["id"]) {
+  const coursesFollowed = await getStudentFollowedCourses(userId);
+  const announcements = await getAllAnnoucements();
+
+  return { coursesFollowed, announcements };
 }

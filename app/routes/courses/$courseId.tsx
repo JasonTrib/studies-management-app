@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import Course, { links as CourseLinks } from "~/components/Course";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getCourse } from "~/DAO/courseDAO.server";
@@ -38,14 +38,14 @@ const CourseDetailsPage = () => {
     "is the use of Structured Query Language (SQL), the most common database manipulation language.";
 
   return (
-    <AppSkeleton wide>
+    <AppLayout wide>
       <>
         <div className="content-heading link">
           <Link to={`/courses`}>My courses</Link>
         </div>
         <Course data={course} />
       </>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

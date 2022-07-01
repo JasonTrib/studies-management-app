@@ -5,6 +5,7 @@ import styles from "~/styles/courses.css";
 import Course from "./CoursesListItem";
 
 type CoursesListContainerT = {
+  title?: string;
   data: CourseModelT[];
 };
 
@@ -12,11 +13,11 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-const CoursesListContainer: FC<CoursesListContainerT> = ({ data }) => {
+const CoursesListContainer: FC<CoursesListContainerT> = ({ title, data }) => {
   return (
     <div className="courses-list-container">
-      <div className="heading">
-        <h2>Courses</h2>
+      <div className={`${title ? "heading" : "no-heading"}`}>
+        <h2>{title}</h2>
       </div>
       <div className="content">
         {data.map((x) => (

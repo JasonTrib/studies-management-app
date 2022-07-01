@@ -1,0 +1,53 @@
+.container-blueprint {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
+  margin-bottom: 16px;
+}
+.container-blueprint .heading {
+  padding: 8px 12px;
+  color: var(--color-text-light);
+}
+.container-blueprint .content {
+  padding: 0 12px 8px;
+  box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1254901961);
+  margin-top: 1px;
+}
+.container-blueprint .content .container-item {
+  background-color: white;
+  padding-bottom: 0;
+  padding: 10px 4px;
+  margin-bottom: 1px;
+  box-shadow: 0px 1px 0 rgba(0, 0, 0, 0.1254901961);
+  cursor: default;
+}
+.container-blueprint .content .container-item:last-child {
+  box-shadow: none;
+}
+.container-blueprint .content .container-item:hover {
+  background-color: rgba(0, 0, 255, 0.05);
+}
+.container-blueprint .content .container-item .title {
+  color: var(--color-text-cyan);
+  font-size: 16px;
+  margin-bottom: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.container-blueprint .content .container-item .body {
+  color: var(--color-text-dark);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.container-blueprint .no-padding-bot {
+  padding-bottom: 0;
+}
+.container-blueprint .more {
+  padding: 8px 12px;
+  box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1254901961);
+  margin-top: 1px;
+  text-align: right;
+}
+
+/*# sourceMappingURL=container.css.map */

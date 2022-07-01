@@ -3,7 +3,7 @@ import type { ProfileModelT } from "~/DAO/userDAO.server";
 import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppSkeleton from "~/components/AppSkeleton";
+import AppLayout from "~/components/AppLayout";
 import { getRegistrarProfile } from "~/DAO/registrarDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
@@ -36,14 +36,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const RegistrarDetailsPage = () => {
   const { registrar } = useLoaderData() as LoaderData;
   return (
-    <AppSkeleton>
+    <AppLayout>
       <div>
         <h2>RegistrarDetailsPage</h2>
         <p>registrar id: {registrar?.id}</p>
         <p>registrar department: {registrar?.user.dep_id}</p>
         <p>registrar name: {registrar?.user.profile?.name}</p>
       </div>
-    </AppSkeleton>
+    </AppLayout>
   );
 };
 

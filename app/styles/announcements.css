@@ -10,6 +10,9 @@
   padding: 8px 12px;
   color: var(--color-text-light);
 }
+.announcements-list-container .no-heading {
+  height: 8px;
+}
 .announcements-list-container .content {
   padding: 0 12px 8px;
 }
@@ -23,12 +26,12 @@
 }
 .announcements-list-container .content .announcements-list-item:last-child {
   box-shadow: none;
+  margin-bottom: 1px;
 }
 .announcements-list-container .content .announcements-list-item:hover {
   background-color: rgba(0, 0, 255, 0.05);
 }
 .announcements-list-container .content .announcements-list-item .title {
-  color: var(--color-text-cyan);
   font-size: 16px;
   margin-bottom: 4px;
   text-overflow: ellipsis;
