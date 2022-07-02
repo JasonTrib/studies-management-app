@@ -27,8 +27,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const DepartmentDetailsPage = () => {
   const { department } = useLoaderData() as LoaderData;
 
-  console.log(department);
-
   return (
     <AppLayout>
       <div>DepartmentDetailsPage</div>

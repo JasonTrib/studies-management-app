@@ -1,21 +1,16 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AnnouncementsListContainer, {
-  links as AnnouncementsListContainerLinks,
-} from "~/components/AnnouncementsListContainer";
+import AnnouncementsList from "~/components/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box, { links as BoxLinks } from "~/components/Box";
 import Container, { links as ContainerLinks } from "~/components/Container";
-import CoursesListContainer, {
-  links as CoursesListContainerLinks,
-} from "~/components/CoursesListContainer";
+import CoursesList from "~/components/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnouncementsFollowed } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getAllCourses } from "~/DAO/courseDAO.server";
 import { getStudentCourses } from "~/DAO/studentCourseDAO.server";
-import type { StudentCourseT } from "~/DAO/studentDAO.server";
 
 export type LoaderData = {
   announcements: (AnnouncementModelT & {
@@ -25,24 +20,19 @@ export type LoaderData = {
     course: CourseModelT;
   })[];
   courses: CourseModelT[];
-  studentCourses: (StudentCourseT & {
-    course: CourseModelT;
-  })[];
+  studentCourses: CourseModelT[];
 };
 
 export const links: LinksFunction = () => {
-  return [
-    ...AnnouncementsListContainerLinks(),
-    ...CoursesListContainerLinks(),
-    ...ContainerLinks(),
-    ...BoxLinks(),
-  ];
+  return [...ContainerLinks(), ...BoxLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const courses = await getAllCourses();
-  const studentCourses = await getStudentCourses(2);
+  const studentCoursesRaw = await getStudentCourses(2);
   const { coursesFollowed, announcements } = await getAnnouncementsFollowed(2);
+
+  const studentCourses = studentCoursesRaw.map((x) => x.course);
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>
     announcements.filter((ann) => ann.course_id === course.course_id),
@@ -59,15 +49,21 @@ export default function Index() {
     <div>
       <AppLayout>
         <>
-          <AnnouncementsListContainer title="My announcements" data={announcementsFollowed} />
-          <Container items={6} maxItems={3} />
-          <Container />
-          <CoursesListContainer data={courses} />
+          <Container title="My announcements" data={announcementsFollowed}>
+            <AnnouncementsList />
+          </Container>
+          <Container title="Announcements" data={announcements}>
+            <AnnouncementsList />
+          </Container>
         </>
         <>
           <Box height={250} />
-          <CoursesListContainer title="My courses" data={studentCourses.map((x) => x.course)} />
-          <AnnouncementsListContainer title="Announcements" data={announcements} />
+          <Container title="My courses" data={studentCourses}>
+            <CoursesList />
+          </Container>
+          <Container title="Courses" data={courses}>
+            <CoursesList />
+          </Container>
         </>
       </AppLayout>
     </div>

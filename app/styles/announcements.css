@@ -1,76 +1,25 @@
-.announcements-list-container {
-  display: block;
-  background-color: white;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
-  margin-bottom: 16px;
-}
-.announcements-list-container .heading {
-  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1254901961);
-  margin-bottom: 1px;
-  padding: 8px 12px;
-  color: var(--color-text-light);
-}
-.announcements-list-container .no-heading {
-  height: 8px;
-}
-.announcements-list-container .content {
-  padding: 0 12px 8px;
-}
-.announcements-list-container .content .announcements-list-item {
-  background-color: white;
-  padding-bottom: 0;
-  padding: 10px 4px;
-  margin-bottom: 1px;
-  box-shadow: 0px 1px 0 rgba(0, 0, 0, 0.1254901961);
-  cursor: default;
-}
-.announcements-list-container .content .announcements-list-item:last-child {
-  box-shadow: none;
-  margin-bottom: 1px;
-}
-.announcements-list-container .content .announcements-list-item:hover {
-  background-color: rgba(0, 0, 255, 0.05);
-}
-.announcements-list-container .content .announcements-list-item .title {
-  font-size: 16px;
-  margin-bottom: 4px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.announcements-list-container .content .announcements-list-item .body {
-  color: var(--color-text-dark);
-  font-size: 13px;
-  margin-bottom: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-.announcements-list-container .content .announcements-list-item .metadata {
+.announcements-list-item .metadata {
   font-size: 11px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
-.announcements-list-container .content .announcements-list-item .metadata .date {
+.announcements-list-item .metadata .date {
   color: var(--color-text-light);
   font-style: italic;
 }
-.announcements-list-container .content .announcements-list-item .metadata .course {
+.announcements-list-item .metadata .course {
   color: var(--color-text-lighter);
 }
 
 .announcement-container {
   display: block;
   background-color: white;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.0588235294);
+  box-shadow: 0 0 12px var(--color-shadow-light);
   margin-bottom: 16px;
 }
 .announcement-container .heading {
-  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1254901961);
+  box-shadow: 0px 1px 0px var(--color-shadow);
   margin-bottom: 1px;
   padding: 8px 20px;
 }

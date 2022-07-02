@@ -1,7 +1,7 @@
 .box {
   display: block;
   background-color: white;
-  box-shadow: 0 0 12px #0000000f;
+  box-shadow: 0 0 12px var(--color-shadow-light);
   margin-bottom: 16px;
   color: var(--color-text-lighter);
   text-align: end;

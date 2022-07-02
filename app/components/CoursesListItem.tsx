@@ -13,7 +13,7 @@ const CoursesListItem: FC<CoursesListItemT> = ({ id, title, description }) => {
   const semester = "6";
 
   return (
-    <div className="courses-list-item">
+    <div className="container-item courses-list-item">
       <div className="title link">
         <Link to={`/courses/${id}`}>{title}</Link>
       </div>
