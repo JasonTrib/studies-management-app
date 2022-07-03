@@ -5,6 +5,9 @@
   margin-bottom: 16px;
 
   .heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px 12px;
     color: var(--color-text-light);
   }

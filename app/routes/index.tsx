@@ -4,6 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box, { links as BoxLinks } from "~/components/Box";
+import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
@@ -52,18 +53,24 @@ export default function Index() {
           <Container title="My announcements" data={announcementsFollowed}>
             <AnnouncementsList />
           </Container>
-          <Container title="Announcements" data={announcements}>
+          {/* <Container title="Announcements" data={announcements}>
             <AnnouncementsList />
-          </Container>
+          </Container> */}
         </>
         <>
           <Box height={250} />
-          <Container title="My courses" data={studentCourses}>
+          <Container
+            title="My courses"
+            data={studentCourses}
+            maxItems={6}
+            moreLink={"/courses"}
+            Button={<RegisterToCourseButton />}
+          >
             <CoursesList />
           </Container>
-          <Container title="Courses" data={courses}>
+          {/* <Container title="Courses" data={courses}>
             <CoursesList />
-          </Container>
+          </Container> */}
         </>
       </AppLayout>
     </div>
