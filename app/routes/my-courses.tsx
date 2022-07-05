@@ -4,11 +4,11 @@ import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/CoursesList";
-import { getCoursesExtended } from "~/DAO/composites/composites.server";
+import { getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 
 type LoaderData = {
-  courses: CourseModelT[];
+  coursesRegistered: CourseModelT[];
 };
 
 export const links: LinksFunction = () => {
@@ -16,23 +16,22 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const dep = "IT";
+  const studentID = 2;
 
-  const courses = await getCoursesExtended(dep);
+  const coursesRegistered = await getCoursesRegistered(studentID);
 
-  return json({ courses });
+  return json({ coursesRegistered });
 };
 
-const CourseIndexPage = () => {
-  const { courses } = useLoaderData() as LoaderData;
-
+const MyCoursesPage = () => {
+  const { coursesRegistered } = useLoaderData() as LoaderData;
   return (
     <AppLayout wide>
-      <Container title="Courses" data={courses}>
+      <Container title="My Courses" data={coursesRegistered}>
         <CoursesList />
       </Container>
     </AppLayout>
   );
 };
 
-export default CourseIndexPage;
+export default MyCoursesPage;

@@ -1,5 +1,29 @@
 import type { Course, Professor } from "@prisma/client";
 import { prisma } from "~/db.server";
+export type { ProfessorCourse as ProfessorCourseModelT } from "@prisma/client";
+
+export function getAllProfessorCourses() {
+  return prisma.professorCourse.findMany({
+    where: {},
+    include: {
+      course: true,
+      professor: {
+        include: {
+          user: {
+            select: {
+              profile: {
+                select: {
+                  name: true,
+                  surname: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}
 
 export function getProfessorCourses(userId: Professor["id"]) {
   return prisma.professorCourse.findMany({

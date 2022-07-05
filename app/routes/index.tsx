@@ -8,20 +8,14 @@ import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton"
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getAnnouncementsFollowed } from "~/DAO/composites/composites.server";
+import { getAnnouncementsFollowed, getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
-import { getAllCourses } from "~/DAO/courseDAO.server";
-import { getStudentCourses } from "~/DAO/studentCourseDAO.server";
 
 export type LoaderData = {
-  announcements: (AnnouncementModelT & {
-    course: CourseModelT;
-  })[];
   announcementsFollowed: (AnnouncementModelT & {
     course: CourseModelT;
   })[];
-  courses: CourseModelT[];
-  studentCourses: CourseModelT[];
+  coursesRegistered: CourseModelT[];
 };
 
 export const links: LinksFunction = () => {
@@ -29,22 +23,16 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const courses = await getAllCourses();
-  const studentCoursesRaw = await getStudentCourses(2);
-  const { coursesFollowed, announcements } = await getAnnouncementsFollowed(2);
+  const studentID = 2;
 
-  const studentCourses = studentCoursesRaw.map((x) => x.course);
+  const announcementsFollowed = await getAnnouncementsFollowed(studentID);
+  const coursesRegistered = await getCoursesRegistered(studentID);
 
-  const announcementsFollowed = coursesFollowed.flatMap((course) =>
-    announcements.filter((ann) => ann.course_id === course.course_id),
-  );
-
-  return json({ announcements, courses, announcementsFollowed, studentCourses });
+  return json({ announcementsFollowed, coursesRegistered });
 };
 
 export default function Index() {
-  const { announcements, courses, announcementsFollowed, studentCourses } =
-    useLoaderData() as LoaderData;
+  const { announcementsFollowed, coursesRegistered } = useLoaderData() as LoaderData;
 
   return (
     <div>
@@ -53,24 +41,18 @@ export default function Index() {
           <Container title="My announcements" data={announcementsFollowed}>
             <AnnouncementsList />
           </Container>
-          {/* <Container title="Announcements" data={announcements}>
-            <AnnouncementsList />
-          </Container> */}
         </>
         <>
           <Box height={250} />
           <Container
             title="My courses"
-            data={studentCourses}
+            data={coursesRegistered}
             maxItems={6}
-            moreLink={"/courses"}
+            moreLink={"/my-courses"}
             Button={<RegisterToCourseButton />}
           >
             <CoursesList />
           </Container>
-          {/* <Container title="Courses" data={courses}>
-            <CoursesList />
-          </Container> */}
         </>
       </AppLayout>
     </div>
