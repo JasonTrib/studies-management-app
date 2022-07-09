@@ -1,0 +1,52 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+
+  colgroup {
+    .col-small {
+      width: 50px;
+    }
+  }
+
+  th,
+  td {
+    color: var(--color-text-light);
+    padding: 8px;
+    border: 1px solid hsl(0, 0%, 80%);
+    max-width: 100px;
+    vertical-align: baseline;
+    overflow: hidden;
+  }
+
+  th {
+    background-color: hsl(0, 0%, 90%);
+    color: var(--color-text-dark);
+  }
+
+  td {
+    background-color: white;
+  }
+
+  .table-center {
+    text-align: center;
+  }
+
+  .cell-checkbox {
+    padding: 0;
+    vertical-align: middle;
+
+    .checkbox-large {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .instructors {
+    font-size: 14px;
+  }
+
+  .semester {
+    font-style: italic;
+  }
+}

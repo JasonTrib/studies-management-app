@@ -44,9 +44,7 @@ const Container: FC<ContainerT> = ({ title, data, maxItems, moreLink, Button, ch
         {Button}
       </div>
       {slicedData && slicedData.length > 0 && (
-        <div
-          className={`content ${moreExist ? "no-padding-bot" : null} ${title ? null : "no-shadow"}`}
-        >
+        <div className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "no-shadow"}`}>
           {childrenWithProps(slicedData)}
         </div>
       )}

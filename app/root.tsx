@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { links as IndexLinks } from "~/routes/index";
 import styles from "~/styles/global.css";
-import stylesIndex from "~/styles/index.css";
 // import {
 //   logUserDAO,
 //   logCourseDAO,
@@ -19,10 +19,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: styles },
-    { rel: "stylesheet", href: stylesIndex },
-  ];
+  return [{ rel: "stylesheet", href: styles }, ...IndexLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

@@ -37,6 +37,15 @@ h3 {
   color: var(--color-text-cyan-dark);
 }
 
+.link-simple a {
+  text-decoration: none;
+  color: inherit;
+}
+.link-simple a:hover {
+  text-decoration: underline;
+  color: inherit;
+}
+
 .ellipsis-3 {
   overflow: hidden;
   text-overflow: ellipsis;

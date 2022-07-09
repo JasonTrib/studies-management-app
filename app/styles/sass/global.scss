@@ -40,6 +40,18 @@ h3 {
   }
 }
 
+.link-simple {
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      text-decoration: underline;
+      color: inherit;
+    }
+  }
+}
+
 .ellipsis-3 {
   $lines: 3;
 

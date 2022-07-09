@@ -1,12 +1,17 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
+import React from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 
 type CoursesListItemT = {
   id: CourseModelT["id"];
   title: CourseModelT["title"];
   semester: CourseModelT["semester"];
-  professors: string[];
+  professors: {
+    id: number;
+    name: string;
+    surname: string;
+  }[];
 };
 
 const CoursesListItem: FC<CoursesListItemT> = ({ id, title, semester, professors }) => {
@@ -16,7 +21,18 @@ const CoursesListItem: FC<CoursesListItemT> = ({ id, title, semester, professors
         <Link to={`/courses/${id}`}>{title}</Link>
       </div>
       <div>
-        {!!professors.length && <span className="professors mr-12">{professors.join(" - ")}</span>}
+        {!!professors.length && (
+          <span className="professors mr-12 link-simple">
+            {professors.map((prof, i) => (
+              <React.Fragment key={prof.id}>
+                <Link to={`/professors/${prof.id}`}>
+                  {prof.name} {prof.surname}
+                </Link>
+                {i < professors.length - 1 && " - "}
+              </React.Fragment>
+            ))}
+          </span>
+        )}
         <span className="semester">semester: {semester}</span>
       </div>
     </div>

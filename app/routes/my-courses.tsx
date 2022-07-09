@@ -2,8 +2,9 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import Container, { links as ContainerLinks } from "~/components/Container";
-import CoursesList from "~/components/CoursesList";
+import { links as ContainerLinks } from "~/components/Container";
+import MyCoursesTable from "~/components/MyCoursesTable";
+import Table, { links as TableLinks } from "~/components/Table";
 import { getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 
@@ -12,7 +13,7 @@ type LoaderData = {
 };
 
 export const links: LinksFunction = () => {
-  return [...ContainerLinks()];
+  return [...ContainerLinks(), ...TableLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -25,11 +26,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const MyCoursesPage = () => {
   const { coursesRegistered } = useLoaderData() as LoaderData;
+
   return (
     <AppLayout wide>
-      <Container title="My Courses" data={coursesRegistered}>
-        <CoursesList />
-      </Container>
+      <Table data={coursesRegistered}>
+        <MyCoursesTable />
+      </Table>
     </AppLayout>
   );
 };

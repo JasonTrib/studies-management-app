@@ -1,0 +1,43 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+table colgroup .col-small {
+  width: 50px;
+}
+table th,
+table td {
+  color: var(--color-text-light);
+  padding: 8px;
+  border: 1px solid hsl(0deg, 0%, 80%);
+  max-width: 100px;
+  vertical-align: baseline;
+  overflow: hidden;
+}
+table th {
+  background-color: hsl(0deg, 0%, 90%);
+  color: var(--color-text-dark);
+}
+table td {
+  background-color: white;
+}
+table .table-center {
+  text-align: center;
+}
+table .cell-checkbox {
+  padding: 0;
+  vertical-align: middle;
+}
+table .cell-checkbox .checkbox-large {
+  width: 16px;
+  height: 16px;
+}
+table .instructors {
+  font-size: 14px;
+}
+table .semester {
+  font-style: italic;
+}
+
+/*# sourceMappingURL=table.css.map */

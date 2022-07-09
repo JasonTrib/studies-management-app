@@ -19,42 +19,57 @@ export async function getCoursesRegistered(userId: Student["id"]) {
   const studentCoursesRaw = await getStudentCourses(userId);
   const professorCoursesRaw = await getAllProfessorCourses();
 
-  const studentCourses = studentCoursesRaw.map((x) => x.course);
+  const studentCourses = studentCoursesRaw.map((x) => ({
+    ...x.course,
+    student: { grade: x.grade, isEnrolled: x.is_enrolled, isFollowing: x.is_following },
+  }));
   const profCourses = studentCourses.flatMap((studentCourse) =>
     professorCoursesRaw.filter((professorCourse) => professorCourse.course_id === studentCourse.id),
   );
-  const coursesRegistered = studentCourses;
 
-  coursesRegistered.forEach((course: any) => {
-    course.professors = profCourses
-      .map((profCourse) =>
-        profCourse.course_id === course.id
-          ? `${profCourse.professor.user.profile?.name} ${profCourse.professor.user.profile?.surname}`
-          : null,
-      )
-      .filter((x) => x);
+  const coursesRegistered = studentCourses.map((course) => {
+    const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
+
+    return {
+      ...course,
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        name: prof.professor.user.profile?.name,
+        surname: prof.professor.user.profile?.surname,
+      })),
+    };
   });
 
   return coursesRegistered;
 }
 
-export async function getCoursesExtended(depId: Department["title_id"]) {
+export async function getCoursesExtended(depId: Department["title_id"], userId: Student["id"]) {
   const courses = await getCourses(depId);
+  const studentCourses = await getStudentCourses(userId);
   const profCoursesRaw = await getAllProfessorCourses();
 
   const profCourses = courses.flatMap((course) =>
     profCoursesRaw.filter((profCourse) => profCourse.course_id === course.id),
   );
-  const coursesExtended = courses;
 
-  coursesExtended.forEach((course: any) => {
-    course.professors = profCourses
-      .map((profCourse) =>
-        profCourse.course_id === course.id
-          ? `${profCourse.professor.user.profile?.name} ${profCourse.professor.user.profile?.surname}`
-          : null,
-      )
-      .filter((x) => x);
+  const coursesExtended = courses.map((course) => {
+    const studentCourseMatch = studentCourses.filter(
+      (studentCourse) => studentCourse.course_id === course.id,
+    )[0];
+    const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
+
+    return {
+      ...course,
+      student: {
+        isEnrolled: studentCourseMatch?.is_enrolled || false,
+        isFollowing: studentCourseMatch?.is_following || false,
+      },
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        name: prof.professor.user.profile?.name,
+        surname: prof.professor.user.profile?.surname,
+      })),
+    };
   });
 
   return coursesExtended;

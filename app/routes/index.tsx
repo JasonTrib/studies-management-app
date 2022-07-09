@@ -10,6 +10,7 @@ import CoursesList from "~/components/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnouncementsFollowed, getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import styles from "~/styles/index.css";
 
 export type LoaderData = {
   announcementsFollowed: (AnnouncementModelT & {
@@ -19,7 +20,7 @@ export type LoaderData = {
 };
 
 export const links: LinksFunction = () => {
-  return [...ContainerLinks(), ...BoxLinks()];
+  return [{ rel: "stylesheet", href: styles }, ...ContainerLinks(), ...BoxLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

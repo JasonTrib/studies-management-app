@@ -3,12 +3,16 @@ import type { CourseModelT } from "~/DAO/courseDAO.server";
 import CoursesListItem from "./CoursesListItem";
 
 type CoursesListT = {
-  data?: (CourseModelT & { professors?: string[] })[];
+  data?: (CourseModelT & {
+    professors?: {
+      id: number;
+      name: string;
+      surname: string;
+    }[];
+  })[];
 };
 
-const CoursesList: FC<CoursesListT> = ({ data }) => {
-  data ??= [];
-
+const CoursesList: FC<CoursesListT> = ({ data = [] }) => {
   return (
     <>
       {data.map((x) => (
