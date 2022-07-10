@@ -1,12 +1,12 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AnnouncementsList from "~/components/AnnouncementsList";
+import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box, { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
-import CoursesList from "~/components/CoursesList";
+import CoursesList from "~/components/courses/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnouncementsFollowed, getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";

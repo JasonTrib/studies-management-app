@@ -1,6 +1,6 @@
 .app-container {
   width: 1200px;
-  line-height: "1.4";
+  line-height: 1.25;
   margin: 0 auto;
 }
 
@@ -26,27 +26,29 @@
 
 .page-content {
   background-color: var(--color-bg-lightest);
+  padding: 12px;
 }
 .page-content .content-feed {
   grid-area: "content-feed";
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: 1fr;
-  gap: 0px 0px;
+  gap: 0px 24px;
   grid-auto-flow: row;
   grid-template-areas: "main-feed side-feed";
   justify-content: space-between;
 }
 .page-content .content-feed .main-feed {
   grid-area: "main-feed";
-  padding: 12px;
 }
 .page-content .content-feed .side-feed {
   grid-area: "side-feed";
-  padding: 12px;
 }
-.page-content .wide-content-feed {
-  padding: 12px;
+.page-content .wide-content-feed .content-feed .main-feed {
+  padding: 0;
+}
+.page-content .wide-content-feed .content-feed .side-feed {
+  padding: 0;
 }
 
 .content-heading {

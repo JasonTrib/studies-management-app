@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
-import CoursesTableItem from "./CoursesTableItem";
+import CoursesTableItem from "~/components/courses/CoursesTableItem";
 
 type CoursesTableT = {
   data?: (CourseModelT & {

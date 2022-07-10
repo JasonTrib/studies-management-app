@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import { links as ContainerLinks } from "~/components/Container";
-import MyCoursesTable from "~/components/MyCoursesTable";
+import MyCoursesTable from "~/components/courses/MyCoursesTable";
 import Table, { links as TableLinks } from "~/components/Table";
 import { getCoursesRegistered } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";

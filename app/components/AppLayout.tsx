@@ -8,14 +8,14 @@ type AppLayoutT = {
 };
 
 const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
-  const [offspring, setOffsping] = useState<JSX.Element[]>([]);
+  const [offsprings, setOffspings] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     if (children) {
       if (!Array.isArray(children)) {
-        setOffsping([children]);
+        setOffspings([children]);
       } else {
-        setOffsping(children);
+        setOffspings(children);
       }
     }
   }, [children]);
@@ -53,11 +53,17 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
           </div>
           <div className="page-content">
             {wide ? (
-              <div className="wide-content-feed">{offspring[0]}</div>
+              <div className="wide-content-feed">
+                <div className="mb-32">{offsprings[0]}</div>
+                <div className="content-feed">
+                  <div className="main-feed">{offsprings[1]}</div>
+                  <div className="side-feed">{offsprings[2]}</div>
+                </div>
+              </div>
             ) : (
               <div className="content-feed">
-                <div className="main-feed">{offspring[0]}</div>
-                <div className="side-feed">{offspring[1]}</div>
+                <div className="main-feed">{offsprings[0]}</div>
+                <div className="side-feed">{offsprings[1]}</div>
               </div>
             )}
           </div>

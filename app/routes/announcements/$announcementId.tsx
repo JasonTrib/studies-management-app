@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import Announcement, { links as AnnouncementLinks } from "~/components/Announcement";
+import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
 import AppLayout from "~/components/AppLayout";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucement } from "~/DAO/announcementDAO.server";
