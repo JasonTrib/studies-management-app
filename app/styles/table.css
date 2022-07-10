@@ -35,6 +35,7 @@ table .cell-checkbox .checkbox-large {
 }
 table .instructors {
   font-size: 14px;
+  color: var(--color-text-cyan-dark);
 }
 table .semester {
   font-style: italic;

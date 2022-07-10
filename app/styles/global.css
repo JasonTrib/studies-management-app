@@ -17,9 +17,10 @@ h3 {
   --color-shadow-light: hsla(0, 0%, 0%, 0.07);
   --color-shadow: hsla(0, 0%, 0%, 0.14);
   --color-text-dark: hsl(0, 0%, 20%);
+  --color-text: hsl(0, 0%, 40%);
   --color-text-light: hsl(0, 0%, 50%);
   --color-text-lighter: hsl(0, 0%, 67%);
-  --color-text-cyan-light: hsl(200, 100%, 70%);
+  --color-text-cyan-hovered: hsl(200, 100%, 70%);
   --color-text-cyan: hsl(210, 90%, 60%);
   --color-text-cyan-dark: hsl(210, 80%, 40%);
 }

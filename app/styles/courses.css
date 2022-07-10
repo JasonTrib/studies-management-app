@@ -23,7 +23,7 @@
 .course-container .heading .title {
   font-size: 17px;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: var(--color-text);
 }
 .course-container .content {
   padding: 12px 20px;
@@ -31,15 +31,28 @@
 .course-container .content .body {
   color: var(--color-text-dark);
   font-size: 15px;
-  margin-bottom: 8px;
 }
-.course-container .content .meta-data {
+.course-container .content .footer {
   color: var(--color-text-light);
+  margin-top: 16px;
   font-size: 13px;
+  display: flex;
+  justify-content: space-between;
 }
-.course-container .content .meta-data .semester {
+.course-container .content .footer .data .instructor {
+  color: var(--color-text-cyan-dark);
+}
+.course-container .content .footer .data .semester {
   color: var(--color-text-lighter);
   font-style: italic;
+}
+.course-container .content .footer .meta-data {
+  color: var(--color-text-lighter);
+  font-style: italic;
+  text-align: right;
+}
+.course-container .content .footer .vertical-space > :nth-child(n+2) {
+  margin-top: 4px;
 }
 
 /*# sourceMappingURL=courses.css.map */

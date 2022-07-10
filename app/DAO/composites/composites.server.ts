@@ -1,8 +1,13 @@
-import type { Department, Student, User } from "@prisma/client";
+import type { Course, Department, Student, User } from "@prisma/client";
 import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourses } from "../courseDAO.server";
-import { getAllProfessorCourses } from "../professorCourseDAO.server";
-import { getStudentCourses, getStudentCoursesFollowed } from "../studentCourseDAO.server";
+import { getAllProfessorCourses, getProfessorCoursesOnCourse } from "../professorCourseDAO.server";
+import {
+  getStudentCourses,
+  getStudentCoursesFollowed,
+  getStudentCoursesFollowedCount,
+  getStudentCoursesRegisteredCount,
+} from "../studentCourseDAO.server";
 
 export async function getAnnouncementsFollowed(userId: User["id"]) {
   const coursesFollowed = await getStudentCoursesFollowed(userId);
@@ -73,4 +78,23 @@ export async function getCoursesExtended(depId: Department["title_id"], userId: 
   });
 
   return coursesExtended;
+}
+
+export async function getCourseExtended(courseId: Course["id"]) {
+  const profCourses = await getProfessorCoursesOnCourse(courseId);
+  const studentsRegisteredCount = await getStudentCoursesRegisteredCount(courseId);
+  const studentsFollowingCount = await getStudentCoursesFollowedCount(courseId);
+
+  const courseExtended = {
+    ...profCourses[0].course,
+    students_registered: studentsRegisteredCount,
+    students_following: studentsFollowingCount,
+    professors: profCourses.map((prof) => ({
+      id: prof.prof_id,
+      name: prof.professor.user.profile?.name,
+      surname: prof.professor.user.profile?.surname,
+    })),
+  };
+
+  return courseExtended;
 }

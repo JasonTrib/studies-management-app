@@ -20,7 +20,7 @@ const Announcement: FC<AnnouncementT> = ({ data }) => {
       </div>
       <div className="content">
         <div className="body">{data.body}</div>
-        <div className="date">{formatDate(new Date(data.updated_at))}</div>
+        <div className="meta-data">{formatDate(new Date(data.updated_at))}</div>
       </div>
     </div>
   );

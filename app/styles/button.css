@@ -12,7 +12,7 @@
   cursor: pointer;
 }
 .action-button:hover {
-  background-color: var(--color-text-cyan-light);
+  background-color: var(--color-text-cyan-hovered);
 }
 
 /*# sourceMappingURL=button.css.map */

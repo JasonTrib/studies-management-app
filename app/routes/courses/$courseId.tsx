@@ -3,12 +3,20 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import Course, { links as CourseLinks } from "~/components/Course";
+import { getCourseExtended } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
-import { getCourse } from "~/DAO/courseDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {
-  course: CourseModelT;
+  course: CourseModelT & {
+    students_registered: number;
+    students_following: number;
+    professors: {
+      id: number;
+      name: string;
+      surname: string;
+    }[];
+  };
 };
 
 export const links: LinksFunction = () => {
@@ -21,7 +29,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const course = await getCourse(id);
+  const course = await getCourseExtended(id);
   if (!course) {
     throw new Response("Not Found", { status: 404 });
   }

@@ -34,9 +34,9 @@
 .announcement-container .content .body {
   color: var(--color-text-dark);
   font-size: 15px;
-  margin-bottom: 8px;
 }
-.announcement-container .content .date {
+.announcement-container .content .meta-data {
+  margin-top: 16px;
   color: var(--color-text-light);
   font-size: 13px;
 }

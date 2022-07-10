@@ -58,6 +58,24 @@ export function getStudentCourseAnnouncements(userId: Student["id"], courseId: C
   });
 }
 
+export function getStudentCoursesRegisteredCount(courseId: Course["id"]) {
+  return prisma.studentCourse.count({
+    where: {
+      course_id: courseId,
+      is_enrolled: true,
+    },
+  });
+}
+
+export function getStudentCoursesFollowedCount(courseId: Course["id"]) {
+  return prisma.studentCourse.count({
+    where: {
+      course_id: courseId,
+      is_following: true,
+    },
+  });
+}
+
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
 function getStudentCourseAnnouncementsGenerous(userId: Student["id"], courseId: Course["id"]) {
   return prisma.studentCourse.findMany({
