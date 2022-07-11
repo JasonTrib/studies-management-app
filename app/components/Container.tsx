@@ -10,6 +10,7 @@ import coursesStyles from "~/styles/courses.css";
 type ContainerT = {
   title?: string;
   data?: any[];
+  noResults?: string;
   maxItems?: number;
   moreLink?: string;
   Button?: JSX.Element;
@@ -24,8 +25,15 @@ export const links: LinksFunction = () => {
   ];
 };
 
-const Container: FC<ContainerT> = ({ title, data, maxItems, moreLink, Button, children }) => {
-  data ??= [];
+const Container: FC<ContainerT> = ({
+  title,
+  data = [],
+  noResults,
+  maxItems,
+  moreLink,
+  Button,
+  children,
+}) => {
   const slicedData = data.slice(0, maxItems);
   const moreExist = data.length > slicedData.length;
 
@@ -40,10 +48,11 @@ const Container: FC<ContainerT> = ({ title, data, maxItems, moreLink, Button, ch
   return (
     <div className="container-blueprint">
       <div className={`${title ? "heading" : "no-heading"}`}>
-        <h2>{title}</h2>
+        <h3>{title}</h3>
         {Button}
       </div>
-      {slicedData && slicedData.length > 0 && (
+      {slicedData.length === 0 && noResults && <div className="no-results">{noResults}</div>}
+      {slicedData.length > 0 && (
         <div className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "no-shadow"}`}>
           {childrenWithProps(slicedData)}
         </div>

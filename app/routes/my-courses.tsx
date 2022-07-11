@@ -17,7 +17,7 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const studentID = 2;
+  const studentID = 1;
 
   const coursesRegistered = await getCoursesRegistered(studentID);
 
@@ -29,7 +29,7 @@ const MyCoursesPage = () => {
 
   return (
     <AppLayout wide>
-      <Table data={coursesRegistered}>
+      <Table data={coursesRegistered} noResults={"No courses found which you are enrolled in."}>
         <MyCoursesTable />
       </Table>
     </AppLayout>

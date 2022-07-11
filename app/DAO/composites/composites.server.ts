@@ -3,6 +3,8 @@ import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourses } from "../courseDAO.server";
 import { getAllProfessorCourses, getProfessorCoursesOnCourse } from "../professorCourseDAO.server";
 import {
+  getStudentCourseAnnouncements,
+  getStudentCourseAnnouncementsCount,
   getStudentCourses,
   getStudentCoursesFollowed,
   getStudentCoursesFollowedCount,
@@ -97,4 +99,27 @@ export async function getCourseExtended(courseId: Course["id"]) {
   };
 
   return courseExtended;
+}
+
+export async function getAnnouncementsOnFollowedCourse(
+  studentId: Student["id"],
+  courseId: Course["id"],
+) {
+  const studentCourseRaw = await getStudentCourseAnnouncements(studentId, courseId);
+
+  const announcements = studentCourseRaw?.course.announcements.map((ann) => ({
+    ...ann,
+    course: { title: studentCourseRaw?.course.title },
+  }));
+
+  return announcements;
+}
+
+export async function getIsStudentFollowingCourse(
+  studentId: Student["id"],
+  courseId: Course["id"],
+) {
+  const count = await getStudentCourseAnnouncementsCount(studentId, courseId);
+
+  return !!count;
 }

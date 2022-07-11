@@ -39,7 +39,11 @@ export default function Index() {
     <div>
       <AppLayout>
         <>
-          <Container title="My announcements" data={announcementsFollowed}>
+          <Container
+            title="My announcements"
+            data={announcementsFollowed}
+            noResults={"No announcements found"}
+          >
             <AnnouncementsList />
           </Container>
         </>
@@ -48,6 +52,7 @@ export default function Index() {
           <Container
             title="My courses"
             data={coursesRegistered}
+            noResults={"No courses found"}
             maxItems={6}
             moreLink={"/my-courses"}
             Button={<RegisterToCourseButton />}

@@ -42,7 +42,7 @@ export function getStudentCoursesAnnouncements(userId: Student["id"]) {
 }
 
 export function getStudentCourseAnnouncements(userId: Student["id"], courseId: Course["id"]) {
-  return prisma.studentCourse.findMany({
+  return prisma.studentCourse.findFirst({
     where: {
       student_id: userId,
       course_id: courseId,
@@ -52,8 +52,19 @@ export function getStudentCourseAnnouncements(userId: Student["id"], courseId: C
       course: {
         select: {
           announcements: true,
+          title: true,
         },
       },
+    },
+  });
+}
+
+export function getStudentCourseAnnouncementsCount(userId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.count({
+    where: {
+      student_id: userId,
+      course_id: courseId,
+      is_following: true,
     },
   });
 }

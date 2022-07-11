@@ -10,9 +10,7 @@ type AnnouncementsListT = {
   })[];
 };
 
-const AnnouncementsList: FC<AnnouncementsListT> = ({ data }) => {
-  data ??= [];
-
+const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [] }) => {
   return (
     <>
       {data.map((x) => (

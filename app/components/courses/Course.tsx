@@ -25,7 +25,7 @@ const Course: FC<CourseT> = ({ data }) => {
   return (
     <div className="course-container">
       <div className="heading">
-        <div className="title">{data.title}</div>
+        <h3>{data.title}</h3>
       </div>
       <div className="content">
         <div className="body">{data.description}</div>

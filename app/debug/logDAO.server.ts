@@ -17,8 +17,8 @@ import {
   getAllCourses,
   getCourses,
   getCourse,
+  getCoursesAnnoucements,
   getCourseAnnoucements,
-  getCourseAnnoucement,
 } from "../DAO/courseDAO.server";
 import {
   getAllProfessors,
@@ -88,8 +88,8 @@ export const logCourseDAO = async () => {
 
 export const logAnnouncementDAO = async () => {
   const allAnnouncements = await getAllAnnoucements();
-  const courseAnnouncements = await getCourseAnnoucements("IT");
-  const courseAnnouncement = await getCourseAnnoucement(3);
+  const courseAnnouncements = await getCoursesAnnoucements("IT");
+  const courseAnnouncement = await getCourseAnnoucements(3);
 
   console.log("~~~~~~~ allAnnouncements ~~~~~~~");
   console.log(allAnnouncements);

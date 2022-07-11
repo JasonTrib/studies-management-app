@@ -20,7 +20,7 @@ export function getCourse(id: Course["id"]) {
   });
 }
 
-export function getCourseAnnoucements(depId: Course["dep_id"]) {
+export function getCoursesAnnoucements(depId: Course["dep_id"]) {
   return prisma.course.findMany({
     where: {
       dep_id: depId,
@@ -33,7 +33,7 @@ export function getCourseAnnoucements(depId: Course["dep_id"]) {
   });
 }
 
-export function getCourseAnnoucement(id: Course["id"]) {
+export function getCourseAnnoucements(id: Course["id"]) {
   return prisma.course.findUnique({
     where: { id },
     select: {

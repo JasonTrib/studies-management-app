@@ -10,10 +10,22 @@
     align-items: center;
     padding: 8px 12px;
     color: var(--color-text-light);
+
+    h3 {
+      font-size: 21px;
+    }
   }
 
   .no-heading {
     height: 8px;
+  }
+
+  .no-results {
+    padding: 8px 12px;
+    color: var(--color-text-lighter);
+    font-style: italic;
+    box-shadow: 0px -1px 0px var(--color-shadow);
+    margin-top: 1px;
   }
 
   .content {

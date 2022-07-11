@@ -41,4 +41,15 @@ table .semester {
   font-style: italic;
 }
 
+.table-no-results {
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  padding: 8px 12px;
+}
+.table-no-results h3 {
+  color: var(--color-text-lighter);
+  font-style: italic;
+  font-size: 21px;
+}
+
 /*# sourceMappingURL=table.css.map */

@@ -16,7 +16,7 @@ const Announcement: FC<AnnouncementT> = ({ data }) => {
   return (
     <div className="announcement-container">
       <div className="heading">
-        <div className="title">{data.title}</div>
+        <h3>{data.title}</h3>
       </div>
       <div className="content">
         <div className="body">{data.body}</div>
