@@ -60,11 +60,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const CourseDetailsPage = () => {
   const { course, announcements, isFollowingCourse } = useLoaderData() as LoaderData;
 
-  course.description =
-    "Database management courses introduce students to languages, applications and programming used for the" +
-    "design and maintenance of business databases. One of the basic skills covered in database management courses" +
-    "is the use of Structured Query Language (SQL), the most common database manipulation language.";
-
   return (
     <AppLayout wide>
       <>

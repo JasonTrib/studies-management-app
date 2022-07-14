@@ -10,7 +10,7 @@ export const studentCourses: {
   {
     studentId: 1,
     courseId: 2,
-    grade: 8.5,
+    grade: 4,
     isEnrolled: true,
     isFollowing: true,
   },
@@ -31,14 +31,14 @@ export const studentCourses: {
   {
     studentId: 1,
     courseId: 6,
-    grade: 9.5,
+    grade: 9,
     isEnrolled: true,
     isFollowing: false,
   },
   {
     studentId: 1,
     courseId: 8,
-    grade: 6.5,
+    grade: 6,
     isEnrolled: true,
     isFollowing: true,
   },
@@ -87,7 +87,7 @@ export const studentCourses: {
   {
     studentId: 2,
     courseId: 8,
-    grade: 5.5,
+    grade: 6,
     isEnrolled: true,
     isFollowing: false,
   },
@@ -115,7 +115,7 @@ export const studentCourses: {
   {
     studentId: 5,
     courseId: 6,
-    grade: 7.5,
+    grade: 7,
     isEnrolled: true,
     isFollowing: true,
   },

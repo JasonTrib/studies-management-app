@@ -19,4 +19,5 @@ export const users: {
   { id: 11, depId: "GEO", username: "steve", role: "STUDENT" },
   { id: 12, depId: "IT", username: "anna", role: "STUDENT" },
   { id: 13, depId: "IT", username: "denice", role: "STUDENT" },
+  { id: 14, depId: "IT", username: "clyde", role: "PROFESSOR" },
 ];

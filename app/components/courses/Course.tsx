@@ -28,7 +28,9 @@ const Course: FC<CourseT> = ({ data }) => {
         <h3>{data.title}</h3>
       </div>
       <div className="content">
-        <div className="body">{data.description}</div>
+        <div className="body">
+          {data.description || <span className="no-desc">No description</span>}
+        </div>
         <div className="footer">
           <div className="data vertical-space">
             <div>

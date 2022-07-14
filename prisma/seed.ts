@@ -195,7 +195,7 @@ async function upsertProfessorCourses() {
       create: {
         prof_id: professorCourses[i].profId,
         course_id: professorCourses[i].courseId,
-        is_lecturing: professorCourses[i].isEnrolled,
+        is_lecturing: professorCourses[i].isLecturing,
         is_following: professorCourses[i].isFollowing,
       },
     });
@@ -213,6 +213,7 @@ async function upsertCourses() {
         id: courses[i].id,
         dep_id: courses[i].depId,
         title: courses[i].title,
+        description: courses[i].description,
         semester: courses[i].semester,
         is_elective: courses[i].isElective,
         is_postgraduate: courses[i].isPostgraduate,
@@ -241,14 +242,10 @@ async function upsertAnnouncements() {
 async function upsertUserAnnouncements() {
   for (let i = 0; i < userAnnouncements.length; i++) {
     await prisma.userAnnouncement.upsert({
-      where: {
-        user_id_announcement_id: {
-          user_id: userAnnouncements[i].userId,
-          announcement_id: userAnnouncements[i].annId,
-        },
-      },
+      where: { id: userAnnouncements[i].id },
       update: {},
       create: {
+        id: userAnnouncements[i].id,
         user_id: userAnnouncements[i].userId,
         announcement_id: userAnnouncements[i].annId,
         has_posted: userAnnouncements[i].hasPosted,
@@ -358,7 +355,7 @@ async function createProfessorCourses() {
       data: {
         prof_id: professorCourses[i].profId,
         course_id: professorCourses[i].courseId,
-        is_lecturing: professorCourses[i].isEnrolled,
+        is_lecturing: professorCourses[i].isLecturing,
         is_following: professorCourses[i].isFollowing,
       },
     });
@@ -372,6 +369,7 @@ async function createCourses() {
         id: courses[i].id,
         dep_id: courses[i].depId,
         title: courses[i].title,
+        description: courses[i].description,
         semester: courses[i].semester,
         is_elective: courses[i].isElective,
         is_postgraduate: courses[i].isPostgraduate,
@@ -397,6 +395,7 @@ async function createUserAnnouncements() {
   for (let i = 0; i < userAnnouncements.length; i++) {
     await prisma.userAnnouncement.create({
       data: {
+        id: userAnnouncements[i].id,
         user_id: userAnnouncements[i].userId,
         announcement_id: userAnnouncements[i].annId,
         has_posted: userAnnouncements[i].hasPosted,

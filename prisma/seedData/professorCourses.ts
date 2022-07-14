@@ -3,61 +3,91 @@ import type { ProfessorCourse } from "@prisma/client";
 export const professorCourses: {
   profId: ProfessorCourse["prof_id"];
   courseId: ProfessorCourse["course_id"];
-  isEnrolled: ProfessorCourse["is_lecturing"];
+  isLecturing: ProfessorCourse["is_lecturing"];
   isFollowing: ProfessorCourse["is_following"];
 }[] = [
   {
     profId: 1,
     courseId: 1,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 2,
     courseId: 6,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 2,
     courseId: 7,
-    isEnrolled: true,
+    isLecturing: true,
+    isFollowing: true,
+  },
+  {
+    profId: 2,
+    courseId: 11,
+    isLecturing: false,
     isFollowing: true,
   },
   {
     profId: 3,
     courseId: 2,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: false,
   },
   {
     profId: 3,
     courseId: 3,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 3,
     courseId: 4,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 3,
     courseId: 5,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 4,
     courseId: 3,
-    isEnrolled: true,
+    isLecturing: true,
     isFollowing: true,
   },
   {
     profId: 4,
     courseId: 8,
-    isEnrolled: true,
+    isLecturing: true,
+    isFollowing: true,
+  },
+  {
+    profId: 5,
+    courseId: 2,
+    isLecturing: false,
+    isFollowing: true,
+  },
+  {
+    profId: 5,
+    courseId: 9,
+    isLecturing: true,
+    isFollowing: true,
+  },
+  {
+    profId: 5,
+    courseId: 10,
+    isLecturing: true,
+    isFollowing: true,
+  },
+  {
+    profId: 5,
+    courseId: 11,
+    isLecturing: true,
     isFollowing: true,
   },
 ];

@@ -25,6 +25,31 @@ export function getAllProfessorCourses() {
   });
 }
 
+export function getAllProfessorCoursesLectured() {
+  return prisma.professorCourse.findMany({
+    where: {
+      is_lecturing: true,
+    },
+    include: {
+      course: true,
+      professor: {
+        include: {
+          user: {
+            select: {
+              profile: {
+                select: {
+                  name: true,
+                  surname: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
 export function getProfessorCourses(userId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {

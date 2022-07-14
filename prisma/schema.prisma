@@ -146,14 +146,14 @@ model Announcement {
 }
 
 model UserAnnouncement {
-  user_id         Int
+  id              Int     @id @default(autoincrement())
   announcement_id Int
+  user_id         Int?
   has_posted      Boolean @default(false)
   has_seen        Boolean @default(false)
 
-  user         User         @relation(fields: [user_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
   announcement Announcement @relation(fields: [announcement_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  @@id([user_id, announcement_id])
+  user         User?        @relation(fields: [user_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }
 
 enum Role {

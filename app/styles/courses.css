@@ -31,6 +31,10 @@
   color: var(--color-text-dark);
   font-size: 15px;
 }
+.course-container .content .body .no-desc {
+  color: var(--color-text-lighter);
+  font-style: italic;
+}
 .course-container .content .footer {
   color: var(--color-text-light);
   margin-top: 16px;

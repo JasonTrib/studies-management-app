@@ -35,6 +35,11 @@
     .body {
       color: var(--color-text-dark);
       font-size: 15px;
+
+      .no-desc {
+        color: var(--color-text-lighter);
+        font-style: italic;
+      }
     }
 
     .footer {
