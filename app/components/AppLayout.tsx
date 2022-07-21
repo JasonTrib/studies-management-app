@@ -42,6 +42,9 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
               <Link to="/students">Students</Link>
             </div>
             <div>
+              <Link to="/students/new">New student</Link>
+            </div>
+            <div>
               <Link to="/courses">Courses</Link>
             </div>
             <div>

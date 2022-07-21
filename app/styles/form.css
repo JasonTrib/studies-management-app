@@ -1,0 +1,77 @@
+.form {
+  color: var(--color-text);
+  padding: 16px 32px;
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.form .form-fields {
+  overflow: hidden;
+  margin: 12px 0;
+}
+.form .form-fields.fields-separator {
+  box-shadow: 0px 1px 0px var(--color-shadow);
+}
+.form .form-fields .field {
+  margin-bottom: 4px;
+  min-height: 70px;
+}
+.form .form-fields .field .label {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+.form .form-fields .field .label .field-text {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.form .form-fields .field .label .field-input {
+  height: 24px;
+  font-size: 14px;
+  color: var(--color-text-light);
+  outline: none;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-text-lighter);
+}
+.form .form-fields .field .label .field-input.invalid-input {
+  border-color: red;
+}
+.form .form-fields .field .label .field-input:focus {
+  border-color: var(--color-text-cyan);
+}
+.form .form-fields .field .label .field-select-height {
+  height: 28px;
+}
+.form .form-fields .field .error {
+  color: red;
+  text-align: center;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.form .form-submit {
+  margin: 8px 0;
+  text-align: center;
+  display: grid;
+}
+.form .form-reset {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+  height: 24px;
+  width: 32px;
+  background: white;
+  box-shadow: 0 0 12px var(--color-shadow);
+  font-size: 16px;
+  padding: 0;
+}
+.form .form-reset:hover {
+  background-color: hsla(0deg, 100%, 50%, 0.14);
+}
+
+/*# sourceMappingURL=form.css.map */

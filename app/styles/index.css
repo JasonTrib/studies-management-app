@@ -58,4 +58,16 @@
   font-weight: 700;
 }
 
+.form-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-page .heading {
+  margin-bottom: 8px;
+}
+.form-page .form-container {
+  width: 420px;
+}
+
 /*# sourceMappingURL=index.css.map */

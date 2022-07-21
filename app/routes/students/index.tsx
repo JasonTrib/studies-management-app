@@ -1,8 +1,8 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { getAllStudents } from "~/DAO/studentDAO.server";
 
 type LoaderData = {
