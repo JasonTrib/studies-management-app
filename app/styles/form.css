@@ -58,7 +58,7 @@
   text-align: center;
   display: grid;
 }
-.form .form-reset {
+.form .form-submit .form-reset {
   position: absolute;
   right: 0;
   top: 0;
@@ -70,7 +70,7 @@
   font-size: 16px;
   padding: 0;
 }
-.form .form-reset:hover {
+.form .form-submit .form-reset:hover {
   background-color: hsla(0deg, 100%, 50%, 0.14);
 }
 

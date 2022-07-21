@@ -1,6 +1,6 @@
-import type { ActionFunction, LinksFunction } from "@remix-run/node";
+import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useActionData, useTransition } from "@remix-run/react";
+import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
@@ -28,7 +28,12 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect("/students");
 };
 
+export const loader: LoaderFunction = async ({ request, params }) => {
+  return { dep: "IT" };
+};
+
 const StudentNewPage = () => {
+  const { dep } = useLoaderData();
   const actionData = useActionData() as {
     formData: SchemaT;
     errors: SchemaErrorsT<SchemaT> | null;
@@ -133,13 +138,14 @@ const StudentNewPage = () => {
               </div>
             </div>
             <div className="form-submit">
+              <input type="hidden" id="dep" name="dep" value={dep} />
+              <button className="form-reset" type="reset" disabled={isSubmitting}>
+                ✖
+              </button>
               <button className="action-button submit-button" type="submit" disabled={isSubmitting}>
                 SUBMIT
               </button>
             </div>
-            <button className="form-reset" type="reset" disabled={isSubmitting}>
-              ✖
-            </button>
           </Form>
         </div>
       </div>
