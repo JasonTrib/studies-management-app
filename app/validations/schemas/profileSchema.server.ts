@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const courseSchema = z.object({
   userId: z.string().min(1),
-  email: z.string().email(),
+  email: z.string().email().or(z.string().regex(/^$/)),
   name: z.string(),
   surname: z.string(),
   gender: z.enum(["MALE", "FEMALE"]).optional(),

@@ -59,10 +59,11 @@
       }
 
       .error {
+        display: block;
         color: red;
-        margin-top: 2px;
-        height: 18px;
         font-size: 12px;
+        min-height: 18px;
+        margin-top: 2px;
       }
     }
 
@@ -90,6 +91,8 @@
     }
 
     .radiogroup-field {
+      margin-bottom: 4px;
+
       .field-text {
         display: inline-block;
         font-weight: 600;
@@ -112,10 +115,10 @@
       }
 
       .error {
+        display: block;
         color: red;
         font-size: 12px;
-        margin-top: 2px;
-        height: 18px;
+        min-height: 20px;
       }
     }
   }

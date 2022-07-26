@@ -51,10 +51,11 @@
   height: 100px;
 }
 .form .form-fields .field .error {
+  display: block;
   color: red;
-  margin-top: 2px;
-  height: 18px;
   font-size: 12px;
+  min-height: 18px;
+  margin-top: 2px;
 }
 .form .form-fields .checkbox-field {
   height: 40px;
@@ -74,6 +75,9 @@
   color: red;
   font-size: 12px;
 }
+.form .form-fields .radiogroup-field {
+  margin-bottom: 4px;
+}
 .form .form-fields .radiogroup-field .field-text {
   display: inline-block;
   font-weight: 600;
@@ -92,10 +96,10 @@
   margin: 0 4px 0 0;
 }
 .form .form-fields .radiogroup-field .error {
+  display: block;
   color: red;
   font-size: 12px;
-  margin-top: 2px;
-  height: 18px;
+  min-height: 20px;
 }
 .form .form-submit {
   margin: 8px 0;
