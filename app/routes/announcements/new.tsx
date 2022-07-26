@@ -5,11 +5,11 @@ import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import FormInput from "~/components/form/FormInput";
-import FormSelect from "~/components/form/FormSelect";
+import FormTextarea from "~/components/form/FormTextarea";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import formSchema from "~/validations/schemas/studentSchema.server";
+import formSchema from "~/validations/schemas/announcementSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -27,15 +27,15 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   console.log("query db...");
 
-  return redirect("/students");
+  return redirect("/announcements");
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  return { dep: "IT" };
+  return { courseId: 2 };
 };
 
-const StudentNewPage = () => {
-  const { dep } = useLoaderData();
+const AnnouncementsNewPage = () => {
+  const { courseId } = useLoaderData();
   const actionData = useActionData() as {
     formData: SchemaT;
     errors: SchemaErrorsT<SchemaT> | null;
@@ -46,52 +46,26 @@ const StudentNewPage = () => {
   return (
     <AppLayout wide>
       <div className="form-page">
-        <h2 className="heading">New student</h2>
+        <h2 className="heading">New announcement</h2>
         <div className="form-container">
-          <Form method="post" action="/students/new" className="form" autoComplete="off">
-            <div className="form-fields fields-separator">
-              <FormInput
-                text="Username"
-                label="username"
-                type="text"
-                disabled={isSubmitting}
-                error={actionData?.errors?.username}
-              />
-              <FormInput
-                text="Password"
-                label="password"
-                type="password"
-                disabled={isSubmitting}
-                error={actionData?.errors?.password}
-              />
-              <FormInput
-                text="Confirm password"
-                label="confirmPassword"
-                type="password"
-                disabled={isSubmitting}
-                error={actionData?.errors?.confirmPassword}
-              />
-            </div>
+          <Form method="post" action="/announcements/new" className="form" autoComplete="off">
             <div className="form-fields">
               <FormInput
-                text="Enrollment year"
-                label="enrollmentYear"
-                type="number"
-                defaultValue={new Date().getFullYear()}
+                text="Title"
+                label="title"
+                type="text"
                 disabled={isSubmitting}
-                error={actionData?.errors?.enrollmentYear}
+                error={actionData?.errors?.title}
               />
-              <FormSelect
-                text="Enrollment status"
-                label="enrollmentStatus"
-                values={["UNDERGRADUATE", "POSTGRADUATE", "ALUM"]}
-                defaultValue={"UNDERGRADUATE"}
+              <FormTextarea
+                text="Body"
+                label="body"
                 disabled={isSubmitting}
-                error={actionData?.errors?.enrollmentStatus}
+                error={actionData?.errors?.body}
               />
             </div>
             <div className="form-submit">
-              <input type="hidden" id="dep" name="dep" value={dep} />
+              <input type="hidden" id="courseId" name="courseId" value={courseId} />
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
@@ -106,4 +80,4 @@ const StudentNewPage = () => {
   );
 };
 
-export default StudentNewPage;
+export default AnnouncementsNewPage;

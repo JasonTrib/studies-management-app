@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const createStudentSchema = z
+const studentSchema = z
   .object({
     dep: z.enum(["IT", "GEO"]),
     username: z.string().min(3, "Username must be at least 3 characters long"),
@@ -14,4 +14,4 @@ const createStudentSchema = z
     path: ["confirmPassword"],
   });
 
-export default createStudentSchema;
+export default studentSchema;

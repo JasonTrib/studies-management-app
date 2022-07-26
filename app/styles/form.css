@@ -17,7 +17,6 @@
 }
 .form .form-fields .field {
   margin-bottom: 4px;
-  min-height: 70px;
 }
 .form .form-fields .field .label {
   display: flex;
@@ -44,14 +43,59 @@
 .form .form-fields .field .label .field-input:focus {
   border-color: var(--color-text-cyan);
 }
-.form .form-fields .field .label .field-select-height {
+.form .form-fields .field .label .select {
   height: 28px;
+}
+.form .form-fields .field .label .textarea {
+  resize: none;
+  height: 100px;
 }
 .form .form-fields .field .error {
   color: red;
-  text-align: center;
   margin-top: 2px;
+  height: 18px;
   font-size: 12px;
+}
+.form .form-fields .checkbox-field {
+  height: 40px;
+}
+.form .form-fields .checkbox-field .label {
+  display: flex;
+}
+.form .form-fields .checkbox-field .label .checkbox {
+  width: 16px;
+  height: 16px;
+}
+.form .form-fields .checkbox-field .label .field-text {
+  font-weight: 600;
+  margin: 2px 0 0 4px;
+}
+.form .form-fields .checkbox-field .error {
+  color: red;
+  font-size: 12px;
+}
+.form .form-fields .radiogroup-field .field-text {
+  display: inline-block;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.form .form-fields .radiogroup-field .fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
+.form .form-fields .radiogroup-field .fieldset .label {
+  margin-right: 16px;
+}
+.form .form-fields .radiogroup-field .fieldset .label .radio {
+  margin: 0 4px 0 0;
+}
+.form .form-fields .radiogroup-field .error {
+  color: red;
+  font-size: 12px;
+  margin-top: 2px;
+  height: 18px;
 }
 .form .form-submit {
   margin: 8px 0;

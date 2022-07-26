@@ -5,11 +5,10 @@ import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import FormInput from "~/components/form/FormInput";
-import FormSelect from "~/components/form/FormSelect";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import formSchema from "~/validations/schemas/studentSchema.server";
+import formSchema from "~/validations/schemas/professorSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -27,14 +26,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   console.log("query db...");
 
-  return redirect("/students");
+  return redirect("/professors");
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   return { dep: "IT" };
 };
 
-const StudentNewPage = () => {
+const ProfessorsNewPage = () => {
   const { dep } = useLoaderData();
   const actionData = useActionData() as {
     formData: SchemaT;
@@ -46,9 +45,9 @@ const StudentNewPage = () => {
   return (
     <AppLayout wide>
       <div className="form-page">
-        <h2 className="heading">New student</h2>
+        <h2 className="heading">New professor</h2>
         <div className="form-container">
-          <Form method="post" action="/students/new" className="form" autoComplete="off">
+          <Form method="post" action="/professors/new" className="form" autoComplete="off">
             <div className="form-fields fields-separator">
               <FormInput
                 text="Username"
@@ -74,20 +73,11 @@ const StudentNewPage = () => {
             </div>
             <div className="form-fields">
               <FormInput
-                text="Enrollment year"
-                label="enrollmentYear"
-                type="number"
-                defaultValue={new Date().getFullYear()}
+                text="Title"
+                label="title"
+                type="text"
                 disabled={isSubmitting}
-                error={actionData?.errors?.enrollmentYear}
-              />
-              <FormSelect
-                text="Enrollment status"
-                label="enrollmentStatus"
-                values={["UNDERGRADUATE", "POSTGRADUATE", "ALUM"]}
-                defaultValue={"UNDERGRADUATE"}
-                disabled={isSubmitting}
-                error={actionData?.errors?.enrollmentStatus}
+                error={actionData?.errors?.title}
               />
             </div>
             <div className="form-submit">
@@ -106,4 +96,4 @@ const StudentNewPage = () => {
   );
 };
 
-export default StudentNewPage;
+export default ProfessorsNewPage;
