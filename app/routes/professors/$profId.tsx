@@ -1,10 +1,10 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { ProfileModelT } from "~/DAO/userDAO.server";
-import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import { getProfessorProfile } from "~/DAO/professorDAO.server";
+import type { ProfileModelT } from "~/DAO/profileDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {

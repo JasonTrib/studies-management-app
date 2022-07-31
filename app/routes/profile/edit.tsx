@@ -8,6 +8,8 @@ import FormCheckbox from "~/components/form/FormCheckbox";
 import FormInput from "~/components/form/FormInput";
 import FormRadioGroup from "~/components/form/FormRadioGroup";
 import FormTextarea from "~/components/form/FormTextarea";
+import type { profileDataT, ProfileModelT } from "~/DAO/profileDAO.server";
+import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -22,22 +24,45 @@ type SchemaT = z.infer<typeof formSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
 
-  console.log("...calculating...");
-  for (let i = 0; i < 1_000_000_000; i++);
+  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
 
-  if (!_.isEmpty(errors)) return { formData, errors };
+  const data: profileDataT = {
+    user_id: parseInt(formData.userId),
+    name: formData.name || undefined,
+    surname: formData.surname || undefined,
+    email: formData.email || undefined,
+    gender: formData.gender === "MALE" ? "M" : formData.gender === "FEMALE" ? "F" : undefined,
+    phone: formData.phone || undefined,
+    info: formData.info || undefined,
+    avatar: formData.avatar || undefined,
+    is_public: formData.isPublic === "on" ? true : false,
+    updated_at: new Date().toISOString(),
+  };
 
-  console.log("query db...");
+  try {
+    await updateProfile(data);
 
-  return redirect("/profile");
+    return redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    throw new Response("Server Error", {
+      status: 500,
+    });
+  }
+};
+
+type LoaderData = {
+  profile: ProfileModelT;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  return { userId: 8 };
+  const userId = 29;
+  const profile = await getProfile(userId);
+  return { profile };
 };
 
 const ProfileEditPage = () => {
-  const { userId } = useLoaderData();
+  const { profile } = useLoaderData() as LoaderData;
   const actionData = useActionData() as {
     formData: SchemaT;
     errors: SchemaErrorsT<SchemaT> | null;
@@ -56,6 +81,7 @@ const ProfileEditPage = () => {
                 text="Name"
                 label="name"
                 type="text"
+                defaultValue={profile.name || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.name}
               />
@@ -63,6 +89,7 @@ const ProfileEditPage = () => {
                 text="Surname"
                 label="surname"
                 type="text"
+                defaultValue={profile.surname || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.surname}
               />
@@ -70,6 +97,7 @@ const ProfileEditPage = () => {
                 text="Email"
                 label="email"
                 type="email"
+                defaultValue={profile.email || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.email}
               />
@@ -77,6 +105,9 @@ const ProfileEditPage = () => {
                 text="Gender"
                 label="gender"
                 values={["MALE", "FEMALE"]}
+                defaultChecked={
+                  profile.gender === "M" ? "MALE" : profile.gender === "F" ? "FEMALE" : undefined
+                }
                 disabled={isSubmitting}
                 error={actionData?.errors?.gender}
               />
@@ -84,6 +115,7 @@ const ProfileEditPage = () => {
                 text="Phone"
                 label="phone"
                 type="tel"
+                defaultValue={profile.phone || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.phone}
               />
@@ -91,25 +123,27 @@ const ProfileEditPage = () => {
                 text="Avatar"
                 label="avatar"
                 type="text"
+                defaultValue={profile.avatar || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.avatar}
               />
               <FormTextarea
                 text="Info"
                 label="info"
+                defaultValue={profile.info || undefined}
                 disabled={isSubmitting}
                 error={actionData?.errors?.info}
               />
-
               <FormCheckbox
                 text="Public"
                 label="isPublic"
+                defaultChecked={profile.is_public}
                 disabled={isSubmitting}
                 error={actionData?.errors?.isPublic}
               />
             </div>
             <div className="form-submit">
-              <input type="hidden" id="userId" name="userId" value={userId} />
+              <input type="hidden" id="userId" name="userId" value={profile.user_id} />
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>

@@ -5,6 +5,8 @@ import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
+import type { courseDataT } from "~/DAO/courseDAO.server";
+import { createCourse } from "~/DAO/courseDAO.server";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -19,14 +21,28 @@ type SchemaT = z.infer<typeof formSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
 
-  console.log("...calculating...");
-  for (let i = 0; i < 1_000_000_000; i++);
+  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
 
-  if (!_.isEmpty(errors)) return { formData, errors };
+  const data: courseDataT = {
+    dep_id: formData.dep,
+    title: formData.title,
+    description: formData.description || undefined,
+    semester: formData.semester,
+    is_elective: formData.isElective === "on" ? true : false,
+    is_postgraduate: formData.isPostgraduate === "on" ? true : false,
+    is_public: formData.isPublic === "on" ? true : false,
+  };
 
-  console.log("query db...");
+  try {
+    await createCourse(data);
 
-  return redirect("/courses");
+    return redirect("/courses");
+  } catch (error) {
+    console.log(error);
+    throw new Response("Server Error", {
+      status: 500,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

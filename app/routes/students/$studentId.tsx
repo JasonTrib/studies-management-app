@@ -2,9 +2,9 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import type { ProfileModelT } from "~/DAO/profileDAO.server";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { getStudentProfile } from "~/DAO/studentDAO.server";
-import type { ProfileModelT } from "~/DAO/userDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
 type LoaderData = {

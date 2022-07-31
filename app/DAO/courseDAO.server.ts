@@ -41,3 +41,45 @@ export function getCourseAnnoucements(id: Course["id"]) {
     },
   });
 }
+
+export type courseDataT = {
+  id?: number;
+  dep_id: string;
+  title: string;
+  description?: string;
+  semester: string;
+  is_elective: boolean;
+  is_postgraduate: boolean;
+  is_public: boolean;
+};
+
+export function createCourse(data: courseDataT) {
+  return prisma.course.create({
+    data: {
+      dep_id: data.dep_id,
+      title: data.title,
+      description: data.description,
+      semester: data.semester,
+      is_elective: data.is_elective,
+      is_postgraduate: data.is_postgraduate,
+      is_public: data.is_public,
+    },
+  });
+}
+
+export function editCourse(data: courseDataT) {
+  return prisma.course.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      dep_id: data.dep_id,
+      title: data.title,
+      description: data.description,
+      semester: data.semester,
+      is_elective: data.is_elective,
+      is_postgraduate: data.is_postgraduate,
+      is_public: data.is_public,
+    },
+  });
+}

@@ -259,7 +259,7 @@ async function createUsers() {
   for (let i = 0; i < users.length; i++) {
     await prisma.user.create({
       data: {
-        id: users[i].id,
+        // id: users[i].id,
         dep_id: users[i].depId,
         role: users[i].role,
         username: users[i].username,
@@ -277,7 +277,7 @@ async function createProfiles() {
   for (let i = 0; i < profiles.length; i++) {
     await prisma.profile.create({
       data: {
-        id: profiles[i].id,
+        // id: profiles[i].id,
         name: profiles[i].name,
         surname: profiles[i].surname,
         email: profiles[i].email,
@@ -302,7 +302,7 @@ async function createRegistrars() {
   for (let i = 0; i < registrars.length; i++) {
     await prisma.registrar.create({
       data: {
-        id: registrars[i].id,
+        // id: registrars[i].id,
         title: registrars[i].title,
         user_id: registrars[i].userId,
       },
@@ -314,7 +314,7 @@ async function createProfessors() {
   for (let i = 0; i < professors.length; i++) {
     await prisma.professor.create({
       data: {
-        id: professors[i].id,
+        // id: professors[i].id,
         title: professors[i].title,
         user_id: professors[i].userId,
       },
@@ -326,7 +326,7 @@ async function createStudents() {
   for (let i = 0; i < students.length; i++) {
     await prisma.student.create({
       data: {
-        id: students[i].id,
+        // id: students[i].id,
         enrollment_year: students[i].enrollment_year,
         studies_status: students[i].studies_status,
         user_id: students[i].userId,
@@ -366,7 +366,7 @@ async function createCourses() {
   for (let i = 0; i < courses.length; i++) {
     await prisma.course.create({
       data: {
-        id: courses[i].id,
+        // id: courses[i].id,
         dep_id: courses[i].depId,
         title: courses[i].title,
         description: courses[i].description,
@@ -382,7 +382,7 @@ async function createAnnouncements() {
   for (let i = 0; i < announcements.length; i++) {
     await prisma.announcement.create({
       data: {
-        id: announcements[i].id,
+        // id: announcements[i].id,
         title: announcements[i].title,
         body: announcements[i].body,
         course_id: announcements[i].courseId,

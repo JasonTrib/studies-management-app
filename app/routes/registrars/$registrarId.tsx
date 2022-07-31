@@ -1,9 +1,9 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { ProfileModelT } from "~/DAO/userDAO.server";
-import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import type { ProfileModelT } from "~/DAO/profileDAO.server";
+import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { getRegistrarProfile } from "~/DAO/registrarDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 

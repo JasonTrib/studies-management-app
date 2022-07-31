@@ -15,7 +15,8 @@ export async function validateFormData<SchemaT>(request: Request, schema: ZodSch
     const errors = e as ZodError<SchemaT>;
 
     return {
-      formData: body,
+      // formData: body,
+      formData: null,
       errors: errors.issues.reduce((acc: SchemaErrorsT<SchemaT>, curr) => {
         const key = curr.path[0] as keyof SchemaT;
         acc[key] = curr.message;

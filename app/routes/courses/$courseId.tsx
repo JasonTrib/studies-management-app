@@ -4,6 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box from "~/components/Box";
+import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
@@ -74,6 +75,7 @@ const CourseDetailsPage = () => {
             title={`Course announcements`}
             data={announcements}
             noResults={"No announcements found"}
+            Button={<NewAnnouncementButton courseId={course.id} />}
           >
             <AnnouncementsList />
           </Container>

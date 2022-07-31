@@ -5,6 +5,9 @@ import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import FormInput from "~/components/form/FormInput";
+import FormSelect from "~/components/form/FormSelect";
+import type { professorUserDataT } from "~/DAO/userDAO.server";
+import { createProfessor } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -19,14 +22,26 @@ type SchemaT = z.infer<typeof formSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
 
-  console.log("...calculating...");
-  for (let i = 0; i < 1_000_000_000; i++);
+  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
 
-  if (!_.isEmpty(errors)) return { formData, errors };
+  const data: professorUserDataT = {
+    dep_id: formData.dep,
+    username: formData.username,
+    password: formData.password,
+    role: "PROFESSOR",
+    title: formData.title,
+  };
 
-  console.log("query db...");
+  try {
+    await createProfessor(data);
 
-  return redirect("/professors");
+    return redirect("/professors");
+  } catch (error) {
+    console.log(error);
+    throw new Response("Server Error", {
+      status: 500,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -72,10 +87,17 @@ const ProfessorsNewPage = () => {
               />
             </div>
             <div className="form-fields">
-              <FormInput
+              <FormSelect
                 text="Title"
                 label="title"
-                type="text"
+                values={[
+                  "Lecturer",
+                  "Assistant Professor",
+                  "Associate Professor",
+                  "Professor",
+                  "Emeritus Professor",
+                ]}
+                defaultValue={"Professor"}
                 disabled={isSubmitting}
                 error={actionData?.errors?.title}
               />

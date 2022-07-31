@@ -99,6 +99,7 @@ model StudentCourse {
 
   student Student @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@id([student_id, course_id])
 }
 
@@ -110,6 +111,7 @@ model ProfessorCourse {
 
   professor Professor @relation(fields: [prof_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   course    Course    @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@id([prof_id, course_id])
 }
 
@@ -135,7 +137,7 @@ model Course {
 model Announcement {
   id         Int      @id @default(autoincrement())
   title      String
-  body       String?  @db.VarChar(2000)
+  body       String   @db.VarChar(2000)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

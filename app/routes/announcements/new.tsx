@@ -6,7 +6,10 @@ import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
+import type { announcementDataT } from "~/DAO/announcementDAO.server";
+import { createAnnouncement } from "~/DAO/announcementDAO.server";
 import styles from "~/styles/form.css";
+import { paramToInt } from "~/utils/paramToInt";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/announcementSchema.server";
@@ -18,20 +21,45 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof formSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  const url = new URL(request.url);
+  const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
+  if (courseId == null) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
 
   console.log("...calculating...");
   for (let i = 0; i < 1_000_000_000; i++);
 
-  if (!_.isEmpty(errors)) return { formData, errors };
+  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
 
-  console.log("query db...");
+  const data: announcementDataT = {
+    course_id: courseId,
+    title: formData.title,
+    body: formData.body,
+  };
 
-  return redirect("/announcements");
+  try {
+    await createAnnouncement(data);
+
+    return redirect("/announcements");
+  } catch (error) {
+    console.log(error);
+    throw new Response("Server Error", {
+      status: 500,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  return { courseId: 2 };
+  const url = new URL(request.url);
+  const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
+  if (courseId == null) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  return { courseId: courseId };
 };
 
 const AnnouncementsNewPage = () => {
@@ -48,7 +76,12 @@ const AnnouncementsNewPage = () => {
       <div className="form-page">
         <h2 className="heading">New announcement</h2>
         <div className="form-container">
-          <Form method="post" action="/announcements/new" className="form" autoComplete="off">
+          <Form
+            method="post"
+            action={`/announcements/new?course=${courseId}`}
+            className="form"
+            autoComplete="off"
+          >
             <div className="form-fields">
               <FormInput
                 text="Title"

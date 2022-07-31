@@ -6,6 +6,8 @@ import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import FormInput from "~/components/form/FormInput";
 import FormSelect from "~/components/form/FormSelect";
+import type { studentUserDataT } from "~/DAO/userDAO.server";
+import { createStudent } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -20,14 +22,27 @@ type SchemaT = z.infer<typeof formSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
 
-  console.log("...calculating...");
-  for (let i = 0; i < 1_000_000_000; i++);
+  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
 
-  if (!_.isEmpty(errors)) return { formData, errors };
+  const data: studentUserDataT = {
+    dep_id: formData.dep,
+    username: formData.username,
+    password: formData.password,
+    role: "STUDENT",
+    enrollment_year: parseInt(formData.enrollmentYear),
+    studies_status: formData.studiesStatus,
+  };
 
-  console.log("query db...");
+  try {
+    await createStudent(data);
 
-  return redirect("/students");
+    return redirect("/students");
+  } catch (error) {
+    console.log(error);
+    throw new Response("Server Error", {
+      status: 500,
+    });
+  }
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -82,12 +97,12 @@ const StudentNewPage = () => {
                 error={actionData?.errors?.enrollmentYear}
               />
               <FormSelect
-                text="Enrollment status"
-                label="enrollmentStatus"
+                text="Studies status"
+                label="studiesStatus"
                 values={["UNDERGRADUATE", "POSTGRADUATE", "ALUM"]}
                 defaultValue={"UNDERGRADUATE"}
                 disabled={isSubmitting}
-                error={actionData?.errors?.enrollmentStatus}
+                error={actionData?.errors?.studiesStatus}
               />
             </div>
             <div className="form-submit">

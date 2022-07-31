@@ -20,8 +20,8 @@ export const announcements: {
   },
   {
     id: 3,
-    title: "Thursday's lecture to be held on auditorium B1.",
-    body: "",
+    title: "Thursday's lecture",
+    body: "Thursday's lecture to be held on auditorium B1.",
     courseId: 2,
   },
   {

@@ -26,6 +26,9 @@ const Course: FC<CourseT> = ({ data }) => {
     <div className="course-container">
       <div className="heading">
         <h3>{data.title}</h3>
+        <span className="link">
+          <Link to={`/courses/${data.id}/edit`}>Edit</Link>
+        </span>
       </div>
       <div className="content">
         <div className="body">

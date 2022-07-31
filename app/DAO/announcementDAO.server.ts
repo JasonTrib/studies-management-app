@@ -33,3 +33,23 @@ export function getAnnoucements(courseId: Course["id"]) {
     },
   });
 }
+
+export type announcementDataT = {
+  course_id: number;
+  title: string;
+  body: string;
+};
+
+export function createAnnouncement(data: announcementDataT) {
+  return prisma.announcement.create({
+    data: {
+      title: data.title,
+      body: data.body,
+      course: {
+        connect: {
+          id: data.course_id,
+        },
+      },
+    },
+  });
+}

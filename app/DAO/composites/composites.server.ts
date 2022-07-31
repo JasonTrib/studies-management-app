@@ -1,6 +1,6 @@
 import type { Course, Department, Student, User } from "@prisma/client";
 import { getAllAnnoucements } from "../announcementDAO.server";
-import { getCourses } from "../courseDAO.server";
+import { getCourse, getCourses } from "../courseDAO.server";
 import {
   getAllProfessorCourses,
   getAllProfessorCoursesLectured,
@@ -88,11 +88,12 @@ export async function getCoursesExtended(depId: Department["title_id"], userId: 
 
 export async function getCourseExtended(courseId: Course["id"]) {
   const profCourses = await getProfessorCoursesOnCourse(courseId);
+  const course = await getCourse(courseId);
   const studentsRegisteredCount = await getStudentCoursesRegisteredCount(courseId);
   const studentsFollowingCount = await getStudentCoursesFollowedCount(courseId);
 
   const courseExtended = {
-    ...profCourses[0].course,
+    ...course,
     students_registered: studentsRegisteredCount,
     students_following: studentsFollowingCount,
     professors: profCourses.map((prof) => ({
