@@ -38,16 +38,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     updated_at: new Date().toISOString(),
   };
 
-  try {
-    await updateProfile(data);
+  await updateProfile(data);
 
-    return redirect("/profile");
-  } catch (error) {
-    console.log(error);
-    throw new Response("Server Error", {
-      status: 500,
-    });
-  }
+  return redirect("/profile");
 };
 
 type LoaderData = {
@@ -56,13 +49,8 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = 8;
-  let profile;
 
-  try {
-    profile = await getProfile(userId);
-  } finally {
-    if (_.isEmpty(profile)) throw new Response("Server Error", { status: 500 });
-  }
+  const profile = await getProfile(userId);
 
   return { profile };
 };

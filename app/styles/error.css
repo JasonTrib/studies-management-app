@@ -1,0 +1,27 @@
+.error-page-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+  color: var(--color-text-dark);
+}
+.error-page-container .inner-container {
+  background-color: white;
+  border-radius: 8px;
+  width: 800px;
+}
+.error-page-container .inner-container .status {
+  box-shadow: 0px 1px 0px var(--color-shadow);
+  margin-bottom: 1px;
+  padding: 16px;
+}
+.error-page-container .inner-container .body {
+  padding: 16px;
+}
+.error-page-container .inner-container .body .message {
+  font-size: 16px;
+}
+.error-page-container .inner-container .body .link {
+  margin-top: 40px;
+}
+
+/*# sourceMappingURL=error.css.map */

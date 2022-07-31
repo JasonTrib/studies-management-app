@@ -33,16 +33,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     studies_status: formData.studiesStatus,
   };
 
-  try {
-    await createStudent(data);
+  await createStudent(data);
 
-    return redirect("/students");
-  } catch (error) {
-    console.log(error);
-    throw new Response("Server Error", {
-      status: 500,
-    });
-  }
+  return redirect("/students");
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

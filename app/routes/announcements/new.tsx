@@ -40,23 +40,15 @@ export const action: ActionFunction = async ({ request, params }) => {
     body: formData.body,
   };
 
-  try {
-    await createAnnouncement(data);
+  await createAnnouncement(data);
 
-    return redirect("/announcements");
-  } catch (error) {
-    console.log(error);
-    throw new Response("Server Error", {
-      status: 500,
-    });
-  }
+  return redirect("/announcements");
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const url = new URL(request.url);
-  const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
+  const courseId = paramToInt(new URL(request.url).searchParams.get("course") ?? undefined);
   if (courseId == null) {
-    throw new Response("Not Found", { status: 404 });
+    return redirect("/announcements");
   }
 
   return { courseId: courseId };

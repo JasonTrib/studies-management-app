@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/nod
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import { links as IndexLinks } from "~/routes/index";
 import styles from "~/styles/global.css";
+import errorStyles from "~/styles/error.css";
 // import {
 //   logUserDAO,
 //   logCourseDAO,
@@ -11,6 +12,7 @@ import styles from "~/styles/global.css";
 //   logURegistrarDAO,
 // } from "./debug/logDAO.server";
 export { CatchBoundary } from "~/components/CatchBoundary";
+export { ErrorBoundary } from "~/components/ErrorBoundary";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -21,6 +23,7 @@ export const meta: MetaFunction = () => ({
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: errorStyles },
     {
       rel: "preconnect",
       href: "https://fonts.googleapis.com",

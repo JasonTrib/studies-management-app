@@ -33,16 +33,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     is_public: formData.isPublic === "on" ? true : false,
   };
 
-  try {
-    await createCourse(data);
+  await createCourse(data);
 
-    return redirect("/courses");
-  } catch (error) {
-    console.log(error);
-    throw new Response("Server Error", {
-      status: 500,
-    });
-  }
+  return redirect("/courses");
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {

@@ -39,7 +39,7 @@ const ProfessorDetailsPage = () => {
         <h2>ProfessorDetailsPage</h2>
         <p>professor id: {professor.id}</p>
         <p>professor department: {professor.user.dep_id}</p>
-        <p>professor name: {professor.user.profile?.name}</p>
+        <p>professor name: {professor.user.profile?.fullname}</p>
       </div>
     </AppLayout>
   );
