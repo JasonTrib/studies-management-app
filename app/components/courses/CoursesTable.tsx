@@ -11,8 +11,7 @@ type CoursesTableT = {
     };
     professors?: {
       id: number;
-      name: string;
-      surname: string;
+      fullname: string;
     }[];
   })[];
 };

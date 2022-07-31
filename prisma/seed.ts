@@ -88,8 +88,7 @@ async function upsertProfiles() {
       update: {},
       create: {
         id: profiles[i].id,
-        name: profiles[i].name,
-        surname: profiles[i].surname,
+        fullname: profiles[i].fullname,
         email: profiles[i].email,
         user_id: profiles[i].userId,
       },
@@ -278,8 +277,7 @@ async function createProfiles() {
     await prisma.profile.create({
       data: {
         // id: profiles[i].id,
-        name: profiles[i].name,
-        surname: profiles[i].surname,
+        fullname: profiles[i].fullname,
         email: profiles[i].email,
         user_id: profiles[i].userId,
       },

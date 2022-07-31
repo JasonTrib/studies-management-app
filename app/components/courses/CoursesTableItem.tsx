@@ -8,8 +8,7 @@ type CoursesTableItemT = {
   title: CourseModelT["title"];
   professors: {
     id: number;
-    name: string;
-    surname: string;
+    fullname: string;
   }[];
   semester?: CourseModelT["semester"];
   isFollowing?: boolean;
@@ -41,9 +40,7 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
           <span className="link-simple">
             {professors.map((prof, i) => (
               <React.Fragment key={prof.id}>
-                <Link to={`/professors/${prof.id}`}>
-                  {prof.name} {prof.surname}
-                </Link>
+                <Link to={`/professors/${prof.id}`}>{prof.fullname}</Link>
                 {i < professors.length - 1 && " - "}
               </React.Fragment>
             ))}

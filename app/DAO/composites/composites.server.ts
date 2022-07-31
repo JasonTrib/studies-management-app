@@ -45,8 +45,7 @@ export async function getCoursesRegistered(userId: Student["id"]) {
       ...course,
       professors: professors.map((prof) => ({
         id: prof.professor.id,
-        name: prof.professor.user.profile?.name,
-        surname: prof.professor.user.profile?.surname,
+        fullname: prof.professor.user.profile?.fullname,
       })),
     };
   });
@@ -77,8 +76,7 @@ export async function getCoursesExtended(depId: Department["title_id"], userId: 
       },
       professors: professors.map((prof) => ({
         id: prof.professor.id,
-        name: prof.professor.user.profile?.name,
-        surname: prof.professor.user.profile?.surname,
+        fullname: prof.professor.user.profile?.fullname,
       })),
     };
   });
@@ -98,8 +96,7 @@ export async function getCourseExtended(courseId: Course["id"]) {
     students_following: studentsFollowingCount,
     professors: profCourses.map((prof) => ({
       id: prof.prof_id,
-      name: prof.professor.user.profile?.name,
-      surname: prof.professor.user.profile?.surname,
+      fullname: prof.professor.user.profile?.fullname,
     })),
   };
 

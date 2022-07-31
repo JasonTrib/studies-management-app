@@ -10,8 +10,7 @@ export function getProfile(userId: Profile["user_id"]) {
 
 export type profileDataT = {
   user_id: number;
-  name?: string;
-  surname?: string;
+  fullname?: string;
   email?: string;
   gender?: "M" | "F";
   phone?: string;
@@ -26,8 +25,7 @@ export function updateProfile(data: profileDataT) {
     where: { user_id: data.user_id },
     data: {
       email: data.email,
-      name: data.name,
-      surname: data.surname,
+      fullname: data.fullname,
       gender: data.gender,
       phone: data.phone,
       info: data.info,

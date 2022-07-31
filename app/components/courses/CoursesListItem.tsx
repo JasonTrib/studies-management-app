@@ -9,8 +9,7 @@ type CoursesListItemT = {
   semester: CourseModelT["semester"];
   professors: {
     id: number;
-    name: string;
-    surname: string;
+    fullname: string;
   }[];
 };
 
@@ -25,9 +24,7 @@ const CoursesListItem: FC<CoursesListItemT> = ({ id, title, semester, professors
           <span className="professors mr-12 link-simple">
             {professors.map((prof, i) => (
               <React.Fragment key={prof.id}>
-                <Link to={`/professors/${prof.id}`}>
-                  {prof.name} {prof.surname}
-                </Link>
+                <Link to={`/professors/${prof.id}`}>{prof.fullname}</Link>
                 {i < professors.length - 1 && " - "}
               </React.Fragment>
             ))}

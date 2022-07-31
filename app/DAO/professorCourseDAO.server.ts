@@ -13,8 +13,7 @@ export function getAllProfessorCourses() {
             select: {
               profile: {
                 select: {
-                  name: true,
-                  surname: true,
+                  fullname: true,
                 },
               },
             },
@@ -38,8 +37,7 @@ export function getAllProfessorCoursesLectured() {
             select: {
               profile: {
                 select: {
-                  name: true,
-                  surname: true,
+                  fullname: true,
                 },
               },
             },
@@ -76,8 +74,7 @@ export function getProfessorCoursesOnCourse(courseId: Course["id"]) {
             select: {
               profile: {
                 select: {
-                  name: true,
-                  surname: true,
+                  fullname: true,
                 },
               },
             },

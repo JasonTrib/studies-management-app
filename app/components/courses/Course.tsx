@@ -11,8 +11,7 @@ type CourseT = {
     students_following: number;
     professors: {
       id: number;
-      name: string;
-      surname: string;
+      fullname: string;
     }[];
   };
 };
@@ -41,9 +40,7 @@ const Course: FC<CourseT> = ({ data }) => {
               {data.professors.map((prof, i) => (
                 <React.Fragment key={prof.id}>
                   <span className="instructor link-simple">
-                    <Link to={`/professors/${prof.id}`}>
-                      {prof.name} {prof.surname}
-                    </Link>
+                    <Link to={`/professors/${prof.id}`}>{prof.fullname}</Link>
                   </span>
                   {i < data.professors.length - 1 && " - "}
                 </React.Fragment>

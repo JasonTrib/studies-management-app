@@ -14,12 +14,14 @@ export function getUserAnnouncementsPosted(userId: User["id"]) {
 }
 
 function getUserAnnoucement(userId: User["id"], annId: Announcement["id"]) {
-  return prisma.userAnnouncement.findUnique({
+  return prisma.userAnnouncement.findFirst({
     where: {
-      user_id_announcement_id: {
-        user_id: userId,
-        announcement_id: annId,
-      },
+      user_id: userId,
+      announcement_id: annId,
+      // user_id_announcement_id: {
+      //   user_id: userId,
+      //   announcement_id: annId,
+      // },
     },
     include: {
       announcement: {

@@ -6,8 +6,7 @@ type CoursesListT = {
   data?: (CourseModelT & {
     professors?: {
       id: number;
-      name: string;
-      surname: string;
+      fullname: string;
     }[];
   })[];
 };

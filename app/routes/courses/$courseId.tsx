@@ -22,8 +22,7 @@ type LoaderData = {
     students_following: number;
     professors: {
       id: number;
-      name: string;
-      surname: string;
+      fullname: string;
     }[];
   };
   announcements: AnnouncementModelT &

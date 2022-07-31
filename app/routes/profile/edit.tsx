@@ -28,8 +28,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const data: profileDataT = {
     user_id: parseInt(formData.userId),
-    name: formData.name || undefined,
-    surname: formData.surname || undefined,
+    fullname: formData.fullname || undefined,
     email: formData.email || undefined,
     gender: formData.gender === "MALE" ? "M" : formData.gender === "FEMALE" ? "F" : undefined,
     phone: formData.phone || undefined,
@@ -56,8 +55,15 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = 29;
-  const profile = await getProfile(userId);
+  const userId = 8;
+  let profile;
+
+  try {
+    profile = await getProfile(userId);
+  } finally {
+    if (_.isEmpty(profile)) throw new Response("Server Error", { status: 500 });
+  }
+
   return { profile };
 };
 
@@ -78,20 +84,12 @@ const ProfileEditPage = () => {
           <Form method="post" action="/profile/edit" className="form" autoComplete="off">
             <div className="form-fields">
               <FormInput
-                text="Name"
-                label="name"
+                text="Fullname"
+                label="fullname"
                 type="text"
-                defaultValue={profile.name || undefined}
+                defaultValue={profile.fullname || undefined}
                 disabled={isSubmitting}
-                error={actionData?.errors?.name}
-              />
-              <FormInput
-                text="Surname"
-                label="surname"
-                type="text"
-                defaultValue={profile.surname || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.surname}
+                error={actionData?.errors?.fullname}
               />
               <FormInput
                 text="Email"
