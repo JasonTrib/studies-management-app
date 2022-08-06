@@ -51,7 +51,7 @@ export type courseDataT = {
   is_elective: boolean;
   is_postgraduate: boolean;
   is_public: boolean;
-  updated_at: string;
+  updated_at?: string;
 };
 
 export function createCourse(data: courseDataT) {

@@ -41,7 +41,7 @@ const RegistrarDetailsPage = () => {
         <h2>RegistrarDetailsPage</h2>
         <p>registrar id: {registrar?.id}</p>
         <p>registrar department: {registrar?.user.dep_id}</p>
-        <p>registrar name: {registrar?.user.profile?.name}</p>
+        <p>registrar name: {registrar?.user.profile?.fullname}</p>
       </div>
     </AppLayout>
   );

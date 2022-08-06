@@ -1,4 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
@@ -9,7 +10,7 @@ import FormSelect from "~/components/form/FormSelect";
 import type { studentUserDataT } from "~/DAO/userDAO.server";
 import { createStudent } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
-import type { SchemaErrorsT } from "~/validations/formValidation.server";
+import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/studentSchema.server";
 
@@ -20,17 +21,19 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof formSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
+  const form = await validateFormData<SchemaT>(request, formSchema);
 
-  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
+  if (!_.isEmpty(form.errors) || form.data === null) {
+    return json(form, { status: 400 });
+  }
 
   const data: studentUserDataT = {
-    dep_id: formData.dep,
-    username: formData.username,
-    password: formData.password,
+    dep_id: form.data.dep,
+    username: form.data.username,
+    password: form.data.password,
     role: "STUDENT",
-    enrollment_year: parseInt(formData.enrollmentYear),
-    studies_status: formData.studiesStatus,
+    enrollment_year: parseInt(form.data.enrollmentYear),
+    studies_status: form.data.studiesStatus,
   };
 
   await createStudent(data);
@@ -42,12 +45,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { dep: "IT" };
 };
 
+type ActionDataT = FormValidationT<SchemaT> | undefined;
+
 const StudentNewPage = () => {
   const { dep } = useLoaderData();
-  const actionData = useActionData() as {
-    formData: SchemaT;
-    errors: SchemaErrorsT<SchemaT> | null;
-  } | null;
+  const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 

@@ -1,4 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
@@ -6,12 +7,11 @@ import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
 import type { courseDataT, CourseModelT } from "~/DAO/courseDAO.server";
-import { editCourse } from "~/DAO/courseDAO.server";
-import { getCourse } from "~/DAO/courseDAO.server";
+import { editCourse, getCourse } from "~/DAO/courseDAO.server";
 import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
 import styles from "~/styles/form.css";
 import { paramToInt } from "~/utils/paramToInt";
-import type { SchemaErrorsT } from "~/validations/formValidation.server";
+import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/courseSchema.server";
 
@@ -27,19 +27,21 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
+  const form = await validateFormData<SchemaT>(request, formSchema);
 
-  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
+  if (!_.isEmpty(form.errors) || form.data === null) {
+    return json(form, { status: 400 });
+  }
 
   const data: courseDataT = {
     id: courseId,
-    dep_id: formData.dep,
-    title: formData.title,
-    description: formData.description || undefined,
-    semester: formData.semester,
-    is_elective: formData.isElective === "on" ? true : false,
-    is_postgraduate: formData.isPostgraduate === "on" ? true : false,
-    is_public: formData.isPublic === "on" ? true : false,
+    dep_id: form.data.dep,
+    title: form.data.title,
+    description: form.data.description || undefined,
+    semester: form.data.semester,
+    is_elective: form.data.isElective === "on" ? true : false,
+    is_postgraduate: form.data.isPostgraduate === "on" ? true : false,
+    is_public: form.data.isPublic === "on" ? true : false,
     updated_at: new Date().toISOString(),
   };
 
@@ -63,12 +65,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { dep: "IT", course };
 };
 
+type ActionDataT = FormValidationT<SchemaT> | undefined;
+
 const CourseEditPage = () => {
   const { dep, course } = useLoaderData() as LoaderData;
-  const actionData = useActionData() as {
-    formData: SchemaT;
-    errors: SchemaErrorsT<SchemaT> | null;
-  } | null;
+  const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 

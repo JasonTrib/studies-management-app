@@ -1,4 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
@@ -10,7 +11,7 @@ import type { announcementDataT } from "~/DAO/announcementDAO.server";
 import { createAnnouncement } from "~/DAO/announcementDAO.server";
 import styles from "~/styles/form.css";
 import { paramToInt } from "~/utils/paramToInt";
-import type { SchemaErrorsT } from "~/validations/formValidation.server";
+import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/announcementSchema.server";
 
@@ -27,17 +28,16 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
+  const form = await validateFormData<SchemaT>(request, formSchema);
 
-  console.log("...calculating...");
-  for (let i = 0; i < 1_000_000_000; i++);
-
-  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
+  if (!_.isEmpty(form.errors) || form.data === null) {
+    return json(form, { status: 400 });
+  }
 
   const data: announcementDataT = {
     course_id: courseId,
-    title: formData.title,
-    body: formData.body,
+    title: form.data.title,
+    body: form.data.body,
   };
 
   await createAnnouncement(data);
@@ -54,12 +54,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { courseId: courseId };
 };
 
+type ActionDataT = FormValidationT<SchemaT> | undefined;
+
 const AnnouncementsNewPage = () => {
   const { courseId } = useLoaderData();
-  const actionData = useActionData() as {
-    formData: SchemaT;
-    errors: SchemaErrorsT<SchemaT> | null;
-  } | null;
+  const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 

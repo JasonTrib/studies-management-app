@@ -1,4 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
@@ -11,7 +12,7 @@ import FormTextarea from "~/components/form/FormTextarea";
 import type { profileDataT, ProfileModelT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import styles from "~/styles/form.css";
-import type { SchemaErrorsT } from "~/validations/formValidation.server";
+import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/profileSchema.server";
 
@@ -22,19 +23,21 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof formSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const { formData, errors } = await validateFormData<SchemaT>(request, formSchema);
+  const form = await validateFormData<SchemaT>(request, formSchema);
 
-  if (!_.isEmpty(errors) || formData === null) return { formData, errors };
+  if (!_.isEmpty(form.errors) || form.data === null) {
+    return json(form, { status: 400 });
+  }
 
   const data: profileDataT = {
-    user_id: parseInt(formData.userId),
-    fullname: formData.fullname || undefined,
-    email: formData.email || undefined,
-    gender: formData.gender === "MALE" ? "M" : formData.gender === "FEMALE" ? "F" : undefined,
-    phone: formData.phone || undefined,
-    info: formData.info || undefined,
-    avatar: formData.avatar || undefined,
-    is_public: formData.isPublic === "on" ? true : false,
+    user_id: parseInt(form.data.userId),
+    fullname: form.data.fullname || undefined,
+    email: form.data.email || undefined,
+    gender: form.data.gender === "MALE" ? "M" : form.data.gender === "FEMALE" ? "F" : undefined,
+    phone: form.data.phone || undefined,
+    info: form.data.info || undefined,
+    avatar: form.data.avatar || undefined,
+    is_public: form.data.isPublic === "on" ? true : false,
     updated_at: new Date().toISOString(),
   };
 
@@ -55,12 +58,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { profile };
 };
 
+type ActionDataT = FormValidationT<SchemaT> | undefined;
+
 const ProfileEditPage = () => {
   const { profile } = useLoaderData() as LoaderData;
-  const actionData = useActionData() as {
-    formData: SchemaT;
-    errors: SchemaErrorsT<SchemaT> | null;
-  } | null;
+  const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 
