@@ -7,8 +7,9 @@ import {
   ScrollRestoration,
   useCatch,
 } from "@remix-run/react";
+import type { CatchBoundaryComponent } from "@remix-run/react/routeModules";
 
-export function CatchBoundary() {
+export const CatchBoundary: CatchBoundaryComponent = () => {
   const caught = useCatch();
 
   return (
@@ -39,4 +40,4 @@ export function CatchBoundary() {
       </body>
     </html>
   );
-}
+};

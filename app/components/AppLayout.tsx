@@ -25,7 +25,22 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
       <div className="app-container">
         <div className="appbar">
           <h1>Studies Management App</h1>
-          <Link to="/">Home</Link>
+          <div>
+            <Link to="/">Home</Link>
+          </div>
+          <div>
+            <Link to="/login">Login</Link>
+          </div>
+          <div>
+            <Link to="/logout">Logout</Link>
+          </div>
+          <div style={{ position: "absolute", top: "8px", right: "8px" }}>
+            <form action="/logout" method="post">
+              <button type="submit" className="button">
+                Logout
+              </button>
+            </form>
+          </div>
         </div>
         <div className="container">
           <div className="sidebar">

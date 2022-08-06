@@ -1,6 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
@@ -12,6 +11,7 @@ import FormTextarea from "~/components/form/FormTextarea";
 import type { profileDataT, ProfileModelT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import styles from "~/styles/form.css";
+import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/profileSchema.server";
@@ -51,9 +51,10 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = 8;
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
 
-  const profile = await getProfile(userId);
+  const profile = await getProfile(user.id);
 
   return { profile };
 };
@@ -71,7 +72,7 @@ const ProfileEditPage = () => {
       <div className="form-page">
         <h2 className="heading">Edit profile</h2>
         <div className="form-container">
-          <Form method="post" action="/profile/edit" className="form" autoComplete="off">
+          <Form method="post" action="#" className="form" autoComplete="off">
             <div className="form-fields">
               <FormInput
                 text="Fullname"

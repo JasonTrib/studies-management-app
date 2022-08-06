@@ -33,6 +33,10 @@ h3 {
   margin-bottom: 32px;
 }
 
+.pt-100 {
+  padding-top: 100px;
+}
+
 .link a {
   text-decoration: none;
   color: var(--color-text-cyan);

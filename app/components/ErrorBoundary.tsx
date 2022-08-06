@@ -1,7 +1,8 @@
 import { Link, Links, LiveReload, Meta, Scripts, ScrollRestoration } from "@remix-run/react";
+import type { ErrorBoundaryComponent } from "@remix-run/react/routeModules";
 
-export function ErrorBoundary({ error }: any) {
-  console.error(error);
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error(error.message);
 
   return (
     <html lang="en">
@@ -29,4 +30,4 @@ export function ErrorBoundary({ error }: any) {
       </body>
     </html>
   );
-}
+};

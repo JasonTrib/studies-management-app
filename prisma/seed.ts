@@ -10,6 +10,7 @@ import { announcements } from "./seedData/announcements";
 import { professorCourses } from "./seedData/professorCourses";
 import { studentCourses } from "./seedData/studentCourses";
 import { userAnnouncements } from "./seedData/userAnnnouncements";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -71,7 +72,7 @@ async function upsertUsers() {
         username: users[i].username,
         password: {
           create: {
-            hash: "1234",
+            hash: await bcrypt.hash(users[i].password, 10),
           },
         },
       },
@@ -264,7 +265,7 @@ async function createUsers() {
         username: users[i].username,
         password: {
           create: {
-            hash: "1234",
+            hash: await bcrypt.hash(users[i].password, 10),
           },
         },
       },

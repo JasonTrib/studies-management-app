@@ -58,7 +58,7 @@ const StudentNewPage = () => {
       <div className="form-page">
         <h2 className="heading">New student</h2>
         <div className="form-container">
-          <Form method="post" action="/students/new" className="form" autoComplete="off">
+          <Form method="post" action="#" className="form" autoComplete="off">
             <div className="form-fields fields-separator">
               <FormInput
                 text="Username"

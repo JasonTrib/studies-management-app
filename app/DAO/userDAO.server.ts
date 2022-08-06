@@ -6,13 +6,27 @@ export function getAllUsers() {
   return prisma.user.findMany({});
 }
 
-export function getUserPassword(userId: User["id"]) {
+export function getUserByUsername(username: User["username"]) {
+  return prisma.user.findUnique({
+    where: {
+      username: username,
+    },
+    include: {
+      password: true,
+    },
+  });
+}
+
+export function getUser(userId: User["id"]) {
   return prisma.user.findUnique({
     where: {
       id: userId,
     },
-    include: {
-      password: true,
+    select: {
+      id: true,
+      username: true,
+      dep_id: true,
+      role: true,
     },
   });
 }

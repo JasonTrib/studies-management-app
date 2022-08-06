@@ -17,6 +17,7 @@
 .appbar {
   height: 100px;
   background-color: rgb(240, 255, 249);
+  position: relative;
 }
 
 .sidebar {
@@ -68,6 +69,13 @@
 }
 .form-page .form-container {
   width: 420px;
+}
+
+.login-page {
+  height: 100%;
+  background-color: var(--color-bg-lightest);
+  width: 840px;
+  margin-inline: auto;
 }
 
 /*# sourceMappingURL=index.css.map */
