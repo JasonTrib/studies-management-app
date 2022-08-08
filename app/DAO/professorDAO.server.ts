@@ -44,3 +44,14 @@ export function getProfessorProfile(userId: User["id"]) {
     },
   });
 }
+
+export function getProfessorId(userId: User["id"]) {
+  return prisma.professor.findUnique({
+    where: {
+      user_id: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+}

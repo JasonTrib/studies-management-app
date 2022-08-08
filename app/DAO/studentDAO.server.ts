@@ -54,3 +54,14 @@ export function getStudentProfile(userId: User["id"]) {
     },
   });
 }
+
+export function getStudentId(userId: User["id"]) {
+  return prisma.student.findUnique({
+    where: {
+      user_id: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+}

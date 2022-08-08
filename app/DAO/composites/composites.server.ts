@@ -1,9 +1,9 @@
-import type { Course, Department, Student, User } from "@prisma/client";
+import type { Course, Department, Professor, Student, User } from "@prisma/client";
 import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourse, getCourses } from "../courseDAO.server";
 import {
-  getAllProfessorCourses,
   getAllProfessorCoursesLectured,
+  getProfessorCourses,
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
 import {
@@ -28,7 +28,7 @@ export async function getAnnouncementsFollowed(userId: User["id"]) {
 
 export async function getCoursesRegistered(userId: Student["id"]) {
   const studentCoursesRaw = await getStudentCourses(userId);
-  const professorCoursesRaw = await getAllProfessorCourses();
+  const professorCoursesRaw = await getAllProfessorCoursesLectured();
 
   const studentCourses = studentCoursesRaw.map((x) => ({
     ...x.course,
@@ -53,9 +53,35 @@ export async function getCoursesRegistered(userId: Student["id"]) {
   return coursesRegistered;
 }
 
-export async function getCoursesExtended(depId: Department["title_id"], userId: Student["id"]) {
+export async function getCoursesExtended(depId: Department["title_id"]) {
   const courses = await getCourses(depId);
-  const studentCourses = await getStudentCourses(userId);
+  const profCoursesRaw = await getAllProfessorCoursesLectured();
+
+  const profCourses = courses.flatMap((course) =>
+    profCoursesRaw.filter((profCourse) => profCourse.course_id === course.id),
+  );
+
+  const coursesExtended = courses.map((course) => {
+    const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
+
+    return {
+      ...course,
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        fullname: prof.professor.user.profile?.fullname,
+      })),
+    };
+  });
+
+  return coursesExtended;
+}
+
+export async function getCoursesAsStudentExtended(
+  depId: Department["title_id"],
+  studentId: Student["id"],
+) {
+  const courses = await getCourses(depId);
+  const studentCourses = await getStudentCourses(studentId);
   const profCoursesRaw = await getAllProfessorCoursesLectured();
 
   const profCourses = courses.flatMap((course) =>
@@ -70,10 +96,40 @@ export async function getCoursesExtended(depId: Department["title_id"], userId: 
 
     return {
       ...course,
-      student: {
-        isEnrolled: studentCourseMatch?.is_enrolled || false,
-        isFollowing: studentCourseMatch?.is_following || false,
-      },
+      isEnrolled: studentCourseMatch?.is_enrolled || false,
+      isFollowing: studentCourseMatch?.is_following || false,
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        fullname: prof.professor.user.profile?.fullname,
+      })),
+    };
+  });
+
+  return coursesExtended;
+}
+
+export async function getCoursesAsProfessorExtended(
+  depId: Department["title_id"],
+  profId: Professor["id"],
+) {
+  const courses = await getCourses(depId);
+  const professorCourses = await getProfessorCourses(profId);
+  const profCoursesRaw = await getAllProfessorCoursesLectured();
+
+  const profCourses = courses.flatMap((course) =>
+    profCoursesRaw.filter((profCourse) => profCourse.course_id === course.id),
+  );
+
+  const coursesExtended = courses.map((course) => {
+    const profCourseMatch = professorCourses.filter(
+      (profCourse) => profCourse.course_id === course.id,
+    )[0];
+    const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
+
+    return {
+      ...course,
+      isLecturing: profCourseMatch?.is_lecturing || false,
+      isFollowing: profCourseMatch?.is_following || false,
       professors: professors.map((prof) => ({
         id: prof.professor.id,
         fullname: prof.professor.user.profile?.fullname,

@@ -5,11 +5,21 @@ import AppLayout from "~/components/AppLayout";
 import { links as ContainerLinks } from "~/components/Container";
 import CoursesTable from "~/components/courses/CoursesTable";
 import Table, { links as TableLinks } from "~/components/Table";
-import { getCoursesExtended } from "~/DAO/composites/composites.server";
+import {
+  getCoursesAsProfessorExtended,
+  getCoursesAsStudentExtended,
+  getCoursesExtended,
+} from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import { getProfessorId } from "~/DAO/professorDAO.server";
+import { getStudentId } from "~/DAO/studentDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { USER_ROLE } from "~/data/data";
+import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderData = {
   courses: CourseModelT[];
+  userRole: UserModelT["role"];
 };
 
 export const links: LinksFunction = () => {
@@ -17,20 +27,38 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const dep = "IT";
-  const studentID = 1;
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
 
-  const courses = await getCoursesExtended(dep, studentID);
+  let courses;
+  switch (user.role) {
+    case USER_ROLE.SUPERADMIN:
+    case USER_ROLE.REGISTRAR:
+      courses = await getCoursesExtended(user.dep_id);
+      break;
+    case USER_ROLE.PROFESSOR:
+      const prof = await getProfessorId(user.id);
+      if (!prof) throw new Error();
+      courses = await getCoursesAsProfessorExtended(user.dep_id, prof.id);
+      break;
+    case USER_ROLE.STUDENT:
+      const student = await getStudentId(user.id);
+      if (!student) throw new Error();
+      courses = await getCoursesAsStudentExtended(user.dep_id, student.id);
+      break;
+    default:
+      throw new Response("Unauthorized", { status: 401 });
+  }
 
-  return json({ courses });
+  return json({ courses, userRole: user.role });
 };
 
 const CourseIndexPage = () => {
-  const { courses } = useLoaderData() as LoaderData;
+  const { courses, userRole } = useLoaderData() as LoaderData;
 
   return (
     <AppLayout wide>
-      <Table data={courses} noResults={"No courses found."}>
+      <Table data={courses} noResults={"No courses found."} userRole={userRole}>
         <CoursesTable />
       </Table>
     </AppLayout>

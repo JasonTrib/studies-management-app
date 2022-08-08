@@ -1,38 +1,46 @@
 import type { FC } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import CoursesTableItem from "~/components/courses/CoursesTableItem";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { USER_ROLE } from "~/data/data";
 
 type CoursesTableT = {
   data?: (CourseModelT & {
-    student: {
-      grade: number;
-      isEnrolled: boolean;
-      isFollowing: boolean;
-    };
+    isEnrolled?: boolean;
+    isLecturing?: boolean;
+    isFollowing: boolean;
     professors?: {
       id: number;
       fullname: string;
     }[];
   })[];
+  userRole?: UserModelT["role"];
 };
 
-const CoursesTable: FC<CoursesTableT> = ({ data = [] }) => {
+const CoursesTable: FC<CoursesTableT> = ({ data = [], userRole }) => {
+  const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
+
   return (
     <table>
       <colgroup>
         <col />
         <col />
         <col className="col-small" />
-        <col className="col-small" />
-        <col className="col-small" />
+        {!isPriviledged && (
+          <>
+            <col className="col-small" />
+            <col className="col-small" />
+          </>
+        )}
       </colgroup>
       <thead>
         <tr>
           <th>Course</th>
           <th>Instructors</th>
           <th>Semester</th>
-          <th>Following</th>
-          <th>Registered</th>
+          {!isPriviledged && <th>Following</th>}
+          {userRole === USER_ROLE.PROFESSOR && <th>Lecturing</th>}
+          {userRole === USER_ROLE.STUDENT && <th>Enrolled</th>}
         </tr>
       </thead>
       <tbody>
@@ -43,8 +51,9 @@ const CoursesTable: FC<CoursesTableT> = ({ data = [] }) => {
             title={x.title}
             semester={x.semester}
             professors={x.professors || []}
-            isFollowing={x.student.isFollowing}
-            isRegistered={x.student.isEnrolled}
+            isFollowing={x.isFollowing}
+            isLecturing={x.isLecturing}
+            isEnrolled={x.isEnrolled}
           />
         ))}
       </tbody>

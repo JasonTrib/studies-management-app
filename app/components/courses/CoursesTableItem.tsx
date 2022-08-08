@@ -12,7 +12,8 @@ type CoursesTableItemT = {
   }[];
   semester?: CourseModelT["semester"];
   isFollowing?: boolean;
-  isRegistered?: boolean;
+  isEnrolled?: boolean;
+  isLecturing?: boolean;
   grade?: number | null;
 };
 
@@ -22,13 +23,12 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
   semester,
   professors,
   isFollowing,
-  isRegistered,
+  isEnrolled,
+  isLecturing,
   grade,
 }) => {
   const [checked, setChecked] = useState(isFollowing);
-  const [checked2, setChecked2] = useState(isRegistered);
-  const handleClick = () => setChecked((prev) => !prev);
-  const handleClick2 = () => setChecked2((prev) => !prev);
+  const handleClick1 = () => setChecked((prev) => !prev);
 
   return (
     <tr>
@@ -53,22 +53,25 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
         <td className="table-center cell-checkbox">
           <input
             type="checkbox"
-            disabled={false}
             checked={checked}
-            onChange={handleClick}
+            onChange={handleClick1}
+            disabled={false}
             className="checkbox-large"
           />
         </td>
       )}
-      {isRegistered !== undefined && (
+      {isEnrolled !== undefined && (
         <td className="table-center cell-checkbox">
-          <input
-            type="checkbox"
-            disabled={false}
-            checked={checked2}
-            onChange={handleClick2}
-            className="checkbox-large"
-          />
+          {isEnrolled && (
+            <input type="checkbox" checked={isEnrolled} disabled className="checkbox-large" />
+          )}
+        </td>
+      )}
+      {isLecturing !== undefined && (
+        <td className="table-center cell-checkbox">
+          {isLecturing && (
+            <input type="checkbox" checked={isLecturing} disabled className="checkbox-large" />
+          )}
         </td>
       )}
     </tr>

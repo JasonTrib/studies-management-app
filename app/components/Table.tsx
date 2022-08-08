@@ -1,6 +1,7 @@
 import type { LinksFunction } from "@remix-run/node";
 import type { FC } from "react";
 import React from "react";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import announcementsStyles from "~/styles/announcements.css";
 import butttonStyles from "~/styles/button.css";
 import containerStyles from "~/styles/container.css";
@@ -10,6 +11,7 @@ import tableStyles from "~/styles/table.css";
 type TableT = {
   data?: any[];
   noResults?: string;
+  userRole?: UserModelT["role"];
 };
 
 export const links: LinksFunction = () => {
@@ -22,11 +24,11 @@ export const links: LinksFunction = () => {
   ];
 };
 
-const Table: FC<TableT> = ({ data = [], noResults, children }) => {
-  const childrenWithProps = (data: any[]) =>
+const Table: FC<TableT> = ({ data = [], noResults, userRole, children }) => {
+  const childrenWithProps = (data: any[], userRole: any) =>
     React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
-        return React.cloneElement(child, { data });
+        return React.cloneElement(child, { data, userRole });
       }
       return child;
     });
@@ -38,7 +40,7 @@ const Table: FC<TableT> = ({ data = [], noResults, children }) => {
           <h3>{noResults}</h3>
         </div>
       ) : (
-        childrenWithProps(data)
+        childrenWithProps(data, userRole)
       )}
     </>
   );
