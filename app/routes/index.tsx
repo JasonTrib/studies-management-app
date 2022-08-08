@@ -36,31 +36,29 @@ export default function Index() {
   const { announcementsFollowed, coursesRegistered } = useLoaderData() as LoaderData;
 
   return (
-    <div>
-      <AppLayout>
-        <>
-          <Container
-            title="My announcements"
-            data={announcementsFollowed}
-            noResults={"No announcements found"}
-          >
-            <AnnouncementsList />
-          </Container>
-        </>
-        <>
-          <Box height={250} />
-          <Container
-            title="My courses"
-            data={coursesRegistered}
-            noResults={"No courses found"}
-            maxItems={6}
-            moreLink={"/my-courses"}
-            Button={<RegisterToCourseButton />}
-          >
-            <CoursesList />
-          </Container>
-        </>
-      </AppLayout>
-    </div>
+    <AppLayout>
+      <>
+        <Container
+          title="My announcements"
+          data={announcementsFollowed}
+          noResults={"No announcements found"}
+        >
+          <AnnouncementsList />
+        </Container>
+      </>
+      <>
+        <Box height={250} />
+        <Container
+          title="My courses"
+          data={coursesRegistered}
+          noResults={"No courses found"}
+          maxItems={6}
+          moreLink={"/my-courses"}
+          Button={<RegisterToCourseButton />}
+        >
+          <CoursesList />
+        </Container>
+      </>
+    </AppLayout>
   );
 }

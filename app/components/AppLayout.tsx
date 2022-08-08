@@ -21,85 +21,83 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
   }, [children]);
 
   return (
-    <div>
-      <div className="app-container">
-        <div className="appbar">
-          <h1>Studies Management App</h1>
+    <div className="app-container">
+      <div className="appbar">
+        <h1>Studies Management App</h1>
+        <div>
+          <Link to="/">Home</Link>
+        </div>
+        <div>
+          <Link to="/login">Login</Link>
+        </div>
+        <div>
+          <Link to="/logout">Logout</Link>
+        </div>
+        <div style={{ position: "absolute", top: "8px", right: "8px" }}>
+          <form action="/logout" method="post">
+            <button type="submit" className="button">
+              Logout
+            </button>
+          </form>
+        </div>
+      </div>
+      <div className="container">
+        <div className="sidebar">
           <div>
-            <Link to="/">Home</Link>
+            <Link to="/departments">Departments</Link>
           </div>
           <div>
-            <Link to="/login">Login</Link>
+            <Link to="/registrars">Registrars</Link>
           </div>
           <div>
-            <Link to="/logout">Logout</Link>
+            <Link to="/professors/new">New professor</Link>
           </div>
-          <div style={{ position: "absolute", top: "8px", right: "8px" }}>
-            <form action="/logout" method="post">
-              <button type="submit" className="button">
-                Logout
-              </button>
-            </form>
+          <div>
+            <Link to="/professors">Professors</Link>
+          </div>
+          <div>
+            <Link to="/students/new">New student</Link>
+          </div>
+          <div>
+            <Link to="/students">Students</Link>
+          </div>
+          <div>
+            <Link to="/courses/new">New course</Link>
+          </div>
+          <div>
+            <Link to="/courses">Courses</Link>
+          </div>
+          <div>
+            <Link to="/my-courses">My courses</Link>
+          </div>
+          <div>
+            <Link to="/announcements/new">New announcement</Link>
+          </div>
+          <div>
+            <Link to="/announcements">Announcements</Link>
+          </div>
+          <div>
+            <Link to="/profile/edit">Edit profile</Link>
+          </div>
+          <div>
+            <Link to="/profile">Profile</Link>
           </div>
         </div>
-        <div className="container">
-          <div className="sidebar">
-            <div>
-              <Link to="/departments">Departments</Link>
-            </div>
-            <div>
-              <Link to="/registrars">Registrars</Link>
-            </div>
-            <div>
-              <Link to="/professors/new">New professor</Link>
-            </div>
-            <div>
-              <Link to="/professors">Professors</Link>
-            </div>
-            <div>
-              <Link to="/students/new">New student</Link>
-            </div>
-            <div>
-              <Link to="/students">Students</Link>
-            </div>
-            <div>
-              <Link to="/courses/new">New course</Link>
-            </div>
-            <div>
-              <Link to="/courses">Courses</Link>
-            </div>
-            <div>
-              <Link to="/my-courses">My courses</Link>
-            </div>
-            <div>
-              <Link to="/announcements/new">New announcement</Link>
-            </div>
-            <div>
-              <Link to="/announcements">Announcements</Link>
-            </div>
-            <div>
-              <Link to="/profile/edit">Edit profile</Link>
-            </div>
-            <div>
-              <Link to="/profile">Profile</Link>
-            </div>
-          </div>
-          <div className="page-content">
-            {wide ? (
-              <div className="wide-content-feed">
-                <div className="mb-32">{offsprings[0]}</div>
-                <div className="content-feed">
-                  <div className="main-feed">{offsprings[1]}</div>
-                  <div className="side-feed">{offsprings[2]}</div>
-                </div>
-              </div>
-            ) : (
+        <div className="page-content">
+          {wide ? (
+            <div className="wide-content-feed">
+              <div className="mb-32">{offsprings[0]}</div>
               <div className="content-feed">
-                <div className="main-feed">{offsprings[0]}</div>
-                <div className="side-feed">{offsprings[1]}</div>
+                <div className="main-feed">{offsprings[1]}</div>
+                <div className="side-feed">{offsprings[2]}</div>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="content-feed">
+              <div className="main-feed">{offsprings[0]}</div>
+              <div className="side-feed">{offsprings[1]}</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
