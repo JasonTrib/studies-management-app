@@ -26,8 +26,8 @@ export async function getAnnouncementsFollowed(userId: User["id"]) {
   return announcementsFollowed;
 }
 
-export async function getCoursesEnrolled(userId: Student["id"]) {
-  const studentCoursesRaw = await getStudentCourses(userId);
+export async function getCoursesEnrolled(studentId: Student["id"]) {
+  const studentCoursesRaw = await getStudentCourses(studentId);
   const professorCoursesRaw = await getAllProfessorCoursesLectured();
 
   const studentCourses = studentCoursesRaw.map((x) => ({
@@ -55,8 +55,8 @@ export async function getCoursesEnrolled(userId: Student["id"]) {
   return coursesEnrolled;
 }
 
-export async function getCoursesLecturing(userId: Professor["id"]) {
-  const profCoursesRaw = await getProfessorCourses(userId);
+export async function getCoursesLecturing(profId: Professor["id"]) {
+  const profCoursesRaw = await getProfessorCourses(profId);
   const allProfsCoursesRaw = await getAllProfessorCoursesLectured();
 
   const profCourses = profCoursesRaw.map((x) => ({

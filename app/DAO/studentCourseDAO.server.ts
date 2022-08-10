@@ -1,10 +1,10 @@
 import type { Course, Student } from "@prisma/client";
 import { prisma } from "~/db.server";
 
-export function getStudentCourses(userId: Student["id"]) {
+export function getStudentCourses(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
-      student_id: userId,
+      student_id: studentId,
       is_enrolled: true,
     },
     include: {
@@ -13,10 +13,10 @@ export function getStudentCourses(userId: Student["id"]) {
   });
 }
 
-export function getStudentCoursesFollowed(userId: Student["id"]) {
+export function getStudentCoursesFollowed(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
-      student_id: userId,
+      student_id: studentId,
       is_following: true,
     },
     include: {
@@ -25,10 +25,10 @@ export function getStudentCoursesFollowed(userId: Student["id"]) {
   });
 }
 
-export function getStudentCoursesAnnouncements(userId: Student["id"]) {
+export function getStudentCoursesAnnouncements(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
-      student_id: userId,
+      student_id: studentId,
       is_following: true,
     },
     select: {
@@ -41,10 +41,10 @@ export function getStudentCoursesAnnouncements(userId: Student["id"]) {
   });
 }
 
-export function getStudentCourseAnnouncements(userId: Student["id"], courseId: Course["id"]) {
+export function getStudentCourseAnnouncements(studentId: Student["id"], courseId: Course["id"]) {
   return prisma.studentCourse.findFirst({
     where: {
-      student_id: userId,
+      student_id: studentId,
       course_id: courseId,
       is_following: true,
     },
@@ -59,10 +59,13 @@ export function getStudentCourseAnnouncements(userId: Student["id"], courseId: C
   });
 }
 
-export function getStudentCourseAnnouncementsCount(userId: Student["id"], courseId: Course["id"]) {
+export function getStudentCourseAnnouncementsCount(
+  studentId: Student["id"],
+  courseId: Course["id"],
+) {
   return prisma.studentCourse.count({
     where: {
-      student_id: userId,
+      student_id: studentId,
       course_id: courseId,
       is_following: true,
     },
@@ -88,10 +91,10 @@ export function getStudentCoursesFollowedCount(courseId: Course["id"]) {
 }
 
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
-function getStudentCourseAnnouncementsGenerous(userId: Student["id"], courseId: Course["id"]) {
+function getStudentCourseAnnouncementsGenerous(studentId: Student["id"], courseId: Course["id"]) {
   return prisma.studentCourse.findMany({
     where: {
-      student_id: userId,
+      student_id: studentId,
       course_id: courseId,
       is_following: true,
     },

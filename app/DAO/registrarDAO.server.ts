@@ -1,5 +1,5 @@
+import type { Department, Registrar } from "@prisma/client";
 import { prisma } from "~/db.server";
-import type { Department, Registrar, User } from "@prisma/client";
 export type { Registrar as RegistrarModelT } from "@prisma/client";
 
 export function getAllRegistrars() {
@@ -39,11 +39,9 @@ export function getRegistrarsProfile(depId: Department["title_id"]) {
   });
 }
 
-export function getRegistrarProfile(userId: User["id"]) {
+export function getRegistrarProfile(id: Registrar["id"]) {
   return prisma.registrar.findUnique({
-    where: {
-      id: userId,
-    },
+    where: { id },
     include: {
       user: {
         select: {

@@ -17,11 +17,9 @@ export function getUserByUsername(username: User["username"]) {
   });
 }
 
-export function getUser(userId: User["id"]) {
+export function getUser(id: User["id"]) {
   return prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
+    where: { id },
     select: {
       id: true,
       username: true,
@@ -31,11 +29,9 @@ export function getUser(userId: User["id"]) {
   });
 }
 
-export function getUserAnnouncements(userId: User["id"]) {
+export function getUserAnnouncements(id: User["id"]) {
   return prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
+    where: { id },
     select: {
       userAnnouncements: {
         include: {

@@ -39,11 +39,9 @@ export function getStudentsProfile(depId: Department["title_id"]) {
   });
 }
 
-export function getStudentProfile(userId: User["id"]) {
+export function getStudentProfile(id: Student["id"]) {
   return prisma.student.findUnique({
-    where: {
-      id: userId,
-    },
+    where: { id },
     include: {
       user: {
         select: {

@@ -48,10 +48,10 @@ export function getAllProfessorCoursesLectured() {
   });
 }
 
-export function getProfessorCourses(userId: Professor["id"]) {
+export function getProfessorCourses(profId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {
-      prof_id: userId,
+      prof_id: profId,
       is_lecturing: true,
     },
     include: {
@@ -85,10 +85,10 @@ export function getProfessorCoursesOnCourse(courseId: Course["id"]) {
   });
 }
 
-export function getProfessorCoursesFollowed(userId: Professor["id"]) {
+export function getProfessorCoursesFollowed(profId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {
-      prof_id: userId,
+      prof_id: profId,
       is_following: true,
     },
     include: {
@@ -97,10 +97,10 @@ export function getProfessorCoursesFollowed(userId: Professor["id"]) {
   });
 }
 
-export function getProfessorCoursesAnnouncements(userId: Professor["id"]) {
+export function getProfessorCoursesAnnouncements(profId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {
-      prof_id: userId,
+      prof_id: profId,
       is_following: true,
     },
     select: {
@@ -113,10 +113,10 @@ export function getProfessorCoursesAnnouncements(userId: Professor["id"]) {
   });
 }
 
-export function getProfessorCourseAnnouncements(userId: Professor["id"], courseId: Course["id"]) {
+export function getProfessorCourseAnnouncements(profId: Professor["id"], courseId: Course["id"]) {
   return prisma.professorCourse.findMany({
     where: {
-      prof_id: userId,
+      prof_id: profId,
       course_id: courseId,
       is_following: true,
     },
@@ -131,10 +131,10 @@ export function getProfessorCourseAnnouncements(userId: Professor["id"], courseI
 }
 
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
-function getProfessorCourseAnnouncementsGenerous(userId: Professor["id"], courseId: Course["id"]) {
+function getProfessorCourseAnnouncementsGenerous(profId: Professor["id"], courseId: Course["id"]) {
   return prisma.professorCourse.findMany({
     where: {
-      prof_id: userId,
+      prof_id: profId,
       course_id: courseId,
       is_following: true,
     },
