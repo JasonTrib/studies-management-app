@@ -8,7 +8,7 @@ import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton"
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getAnnouncementsFollowed, getCoursesRegistered } from "~/DAO/composites/composites.server";
+import { getAnnouncementsFollowed, getCoursesEnrolled } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import styles from "~/styles/index.css";
 
@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const studentID = 2;
 
   const announcementsFollowed = await getAnnouncementsFollowed(studentID);
-  const coursesRegistered = await getCoursesRegistered(studentID);
+  const coursesRegistered = await getCoursesEnrolled(studentID);
 
   return json({ announcementsFollowed, coursesRegistered });
 };

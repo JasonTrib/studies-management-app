@@ -1,5 +1,7 @@
 import type { FC } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { USER_ROLE } from "~/data/data";
 import CoursesTableItem from "./CoursesTableItem";
 
 type MyCoursesTableT = {
@@ -8,29 +10,29 @@ type MyCoursesTableT = {
       id: number;
       fullname: string;
     }[];
-    student: {
-      grade: number;
-      isEnrolled: boolean;
-      isFollowing: boolean;
-    };
+    grade?: number;
+    isEnrolled?: boolean;
+    isLecturing?: boolean;
+    isFollowing: boolean;
   })[];
+  userRole?: UserModelT["role"];
 };
 
-const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [] }) => {
+const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole }) => {
   return (
     <table>
       <colgroup>
         <col />
         <col />
         <col className="col-small" />
-        <col className="col-small" />
+        {userRole === USER_ROLE.STUDENT && <col className="col-small" />}
       </colgroup>
       <thead>
         <tr>
           <th>Course</th>
           <th>Instructors</th>
           <th>Semester</th>
-          <th>Grade</th>
+          {userRole === USER_ROLE.STUDENT && <th>Grade</th>}
         </tr>
       </thead>
       <tbody>
@@ -41,7 +43,7 @@ const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [] }) => {
             title={x.title}
             semester={x.semester}
             professors={x.professors}
-            grade={x.student.grade}
+            grade={x.grade}
           />
         ))}
       </tbody>

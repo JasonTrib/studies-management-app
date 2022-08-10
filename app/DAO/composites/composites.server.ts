@@ -26,19 +26,21 @@ export async function getAnnouncementsFollowed(userId: User["id"]) {
   return announcementsFollowed;
 }
 
-export async function getCoursesRegistered(userId: Student["id"]) {
+export async function getCoursesEnrolled(userId: Student["id"]) {
   const studentCoursesRaw = await getStudentCourses(userId);
   const professorCoursesRaw = await getAllProfessorCoursesLectured();
 
   const studentCourses = studentCoursesRaw.map((x) => ({
     ...x.course,
-    student: { grade: x.grade, isEnrolled: x.is_enrolled, isFollowing: x.is_following },
+    grade: x.grade,
+    isEnrolled: x.is_enrolled,
+    isFollowing: x.is_following,
   }));
   const profCourses = studentCourses.flatMap((studentCourse) =>
     professorCoursesRaw.filter((professorCourse) => professorCourse.course_id === studentCourse.id),
   );
 
-  const coursesRegistered = studentCourses.map((course) => {
+  const coursesEnrolled = studentCourses.map((course) => {
     const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
 
     return {
@@ -50,7 +52,35 @@ export async function getCoursesRegistered(userId: Student["id"]) {
     };
   });
 
-  return coursesRegistered;
+  return coursesEnrolled;
+}
+
+export async function getCoursesLecturing(userId: Professor["id"]) {
+  const profCoursesRaw = await getProfessorCourses(userId);
+  const allProfsCoursesRaw = await getAllProfessorCoursesLectured();
+
+  const profCourses = profCoursesRaw.map((x) => ({
+    ...x.course,
+    isLecturing: x.is_lecturing,
+    isFollowing: x.is_following,
+  }));
+  const profsCourses = profCourses.flatMap((profCourse) =>
+    allProfsCoursesRaw.filter((professorCourse) => professorCourse.course_id === profCourse.id),
+  );
+
+  const coursesLecturing = profCourses.map((course) => {
+    const professors = profsCourses.filter((profsCourse) => profsCourse.course_id === course.id);
+
+    return {
+      ...course,
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        fullname: prof.professor.user.profile?.fullname,
+      })),
+    };
+  });
+
+  return coursesLecturing;
 }
 
 export async function getCoursesExtended(depId: Department["title_id"]) {
