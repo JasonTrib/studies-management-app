@@ -113,8 +113,11 @@ export function getProfessorCoursesAnnouncements(profId: Professor["id"]) {
   });
 }
 
-export function getProfessorCourseAnnouncements(profId: Professor["id"], courseId: Course["id"]) {
-  return prisma.professorCourse.findMany({
+export function getProfessorCourseFollowedAnnouncements(
+  profId: Professor["id"],
+  courseId: Course["id"],
+) {
+  return prisma.professorCourse.findFirst({
     where: {
       prof_id: profId,
       course_id: courseId,
@@ -124,8 +127,49 @@ export function getProfessorCourseAnnouncements(profId: Professor["id"], courseI
       course: {
         select: {
           announcements: true,
+          title: true,
         },
       },
+    },
+  });
+}
+
+export function getProfessorCourseAnnouncements(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.findFirst({
+    where: {
+      prof_id: profId,
+      course_id: courseId,
+    },
+    select: {
+      course: {
+        select: {
+          announcements: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
+export function getProfessorCourseAnnouncementsCount(
+  profId: Professor["id"],
+  courseId: Course["id"],
+) {
+  return prisma.professorCourse.count({
+    where: {
+      prof_id: profId,
+      course_id: courseId,
+      is_following: true,
+    },
+  });
+}
+
+export function getProfessorCourseLecturingCount(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.count({
+    where: {
+      prof_id: profId,
+      course_id: courseId,
+      is_lecturing: true,
     },
   });
 }

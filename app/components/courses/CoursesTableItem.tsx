@@ -28,7 +28,7 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
   grade,
 }) => {
   const [checked, setChecked] = useState(isFollowing);
-  const handleClick1 = () => setChecked((prev) => !prev);
+  const handleChange = () => setChecked((prev) => !prev);
 
   return (
     <tr>
@@ -54,7 +54,7 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
           <input
             type="checkbox"
             checked={checked}
-            onChange={handleClick1}
+            onChange={handleChange}
             disabled={false}
             className="checkbox-large"
           />

@@ -9,8 +9,12 @@ import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
 import type { announcementDataT } from "~/DAO/announcementDAO.server";
 import { createAnnouncement } from "~/DAO/announcementDAO.server";
+import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
+import { getProfessorId } from "~/DAO/professorDAO.server";
+import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { paramToInt } from "~/utils/paramToInt";
+import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/announcementSchema.server";
@@ -51,7 +55,28 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return redirect("/announcements");
   }
 
-  return { courseId: courseId };
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  switch (user.role) {
+    case USER_ROLE.SUPERADMIN:
+    case USER_ROLE.REGISTRAR:
+      break;
+    case USER_ROLE.PROFESSOR:
+      const prof = await getProfessorId(user.id);
+      if (!prof) throw new Error();
+
+      const isAuthorized = await getIsProfessorLecturingCourse(prof.id, courseId);
+      if (!isAuthorized) {
+        throw new Response("Unauthorized", { status: 401 });
+      }
+      break;
+    case USER_ROLE.STUDENT:
+    default:
+      throw new Response("Unauthorized", { status: 401 });
+  }
+
+  return { courseId };
 };
 
 type ActionDataT = FormValidationT<SchemaT> | undefined;

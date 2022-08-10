@@ -6,11 +6,15 @@ import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
+import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
 import type { courseDataT, CourseModelT } from "~/DAO/courseDAO.server";
 import { editCourse, getCourse } from "~/DAO/courseDAO.server";
 import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
+import { getProfessorId } from "~/DAO/professorDAO.server";
+import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { paramToInt } from "~/utils/paramToInt";
+import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/courseSchema.server";
@@ -60,7 +64,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (courseId == null) {
     throw new Response("Not Found", { status: 404 });
   }
+
   const course = await getCourse(courseId);
+  if (!course) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  switch (user.role) {
+    case USER_ROLE.SUPERADMIN:
+    case USER_ROLE.REGISTRAR:
+      break;
+    default:
+      throw new Response("Unauthorized", { status: 401 });
+  }
 
   return { dep: "IT", course };
 };

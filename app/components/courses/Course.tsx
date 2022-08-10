@@ -14,20 +14,23 @@ type CourseT = {
       fullname: string;
     }[];
   };
+  canEdit?: boolean;
 };
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-const Course: FC<CourseT> = ({ data }) => {
+const Course: FC<CourseT> = ({ data, canEdit }) => {
   return (
     <div className="course-container">
       <div className="heading">
         <h3>{data.title}</h3>
-        <span className="link">
-          <Link to={`/courses/${data.id}/edit`}>Edit</Link>
-        </span>
+        {canEdit && (
+          <span className="link">
+            <Link to={`/courses/${data.id}/edit`}>Edit</Link>
+          </span>
+        )}
       </div>
       <div className="content">
         <div className="body">

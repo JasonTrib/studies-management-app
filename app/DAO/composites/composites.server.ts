@@ -3,6 +3,9 @@ import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourse, getCourses } from "../courseDAO.server";
 import {
   getAllProfessorCoursesLectured,
+  getProfessorCourseAnnouncements,
+  getProfessorCourseAnnouncementsCount,
+  getProfessorCourseLecturingCount,
   getProfessorCourses,
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
@@ -189,7 +192,7 @@ export async function getCourseExtended(courseId: Course["id"]) {
   return courseExtended;
 }
 
-export async function getAnnouncementsOnFollowedCourse(
+export async function getAnnouncementsOnStudentFollowedCourse(
   studentId: Student["id"],
   courseId: Course["id"],
 ) {
@@ -203,11 +206,43 @@ export async function getAnnouncementsOnFollowedCourse(
   return announcements;
 }
 
+export async function getAnnouncementsOnProfessorFollowedCourse(
+  profId: Professor["id"],
+  courseId: Course["id"],
+) {
+  const profCourseRaw = await getProfessorCourseAnnouncements(profId, courseId);
+
+  const announcements = profCourseRaw?.course.announcements.map((ann) => ({
+    ...ann,
+    course: { title: profCourseRaw?.course.title },
+  }));
+
+  return announcements;
+}
+
 export async function getIsStudentFollowingCourse(
   studentId: Student["id"],
   courseId: Course["id"],
 ) {
   const count = await getStudentCourseAnnouncementsCount(studentId, courseId);
+
+  return !!count;
+}
+
+export async function getIsProfessorFollowingCourse(
+  profId: Professor["id"],
+  courseId: Course["id"],
+) {
+  const count = await getProfessorCourseAnnouncementsCount(profId, courseId);
+
+  return !!count;
+}
+
+export async function getIsProfessorLecturingCourse(
+  profId: Professor["id"],
+  courseId: Course["id"],
+) {
+  const count = await getProfessorCourseLecturingCount(profId, courseId);
 
   return !!count;
 }
