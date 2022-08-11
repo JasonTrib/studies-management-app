@@ -8,7 +8,9 @@ import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
 import type { courseDataT } from "~/DAO/courseDAO.server";
 import { createCourse } from "~/DAO/courseDAO.server";
+import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
+import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/courseSchema.server";
@@ -42,7 +44,18 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  return { dep: "IT" };
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  switch (user.role) {
+    case USER_ROLE.SUPERADMIN:
+    case USER_ROLE.REGISTRAR:
+      break;
+    default:
+      throw new Response("Unauthorized", { status: 401 });
+  }
+
+  return { dep: user.dep_id };
 };
 
 type ActionDataT = FormValidationT<SchemaT> | undefined;

@@ -1,9 +1,22 @@
-import type { Announcement, Course } from "@prisma/client";
+import type { Announcement, Course, Department } from "@prisma/client";
 import { prisma } from "~/db.server";
 export type { Announcement as AnnouncementModelT } from "@prisma/client";
 
 export function getAllAnnoucements() {
   return prisma.announcement.findMany({
+    include: {
+      course: true,
+    },
+  });
+}
+
+export function getAnnoucements(depId: Department["title_id"]) {
+  return prisma.announcement.findMany({
+    where: {
+      course: {
+        dep_id: depId,
+      },
+    },
     include: {
       course: true,
     },
@@ -19,7 +32,7 @@ export function getAnnoucement(id: Announcement["id"]) {
   });
 }
 
-export function getAnnoucements(courseId: Course["id"]) {
+export function getAnnoucementsOfCourse(courseId: Course["id"]) {
   return prisma.announcement.findMany({
     where: {
       course_id: courseId,

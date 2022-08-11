@@ -8,7 +8,7 @@ import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
-import { getAnnoucements } from "~/DAO/announcementDAO.server";
+import { getAnnoucementsOfCourse } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsOnProfessorFollowedCourse,
   getAnnouncementsOnStudentFollowedCourse,
@@ -72,7 +72,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       canEditCourse = true;
       canCreateAnn = true;
       isFollowingCourse = true;
-      announcements = await getAnnoucements(courseId);
+      announcements = await getAnnoucementsOfCourse(courseId);
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);

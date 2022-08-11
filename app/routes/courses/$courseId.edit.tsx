@@ -1,16 +1,13 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
-import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
 import type { courseDataT, CourseModelT } from "~/DAO/courseDAO.server";
 import { editCourse, getCourse } from "~/DAO/courseDAO.server";
 import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
-import { getProfessorId } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { paramToInt } from "~/utils/paramToInt";
@@ -37,9 +34,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     return json(form, { status: 400 });
   }
 
-  const data: courseDataT = {
+  const data: Omit<courseDataT, "dep_id"> = {
     id: courseId,
-    dep_id: form.data.dep,
     title: form.data.title,
     description: form.data.description || undefined,
     semester: form.data.semester,
@@ -81,7 +77,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
 
-  return { dep: "IT", course };
+  return { dep: user.dep_id, course };
 };
 
 type ActionDataT = FormValidationT<SchemaT> | undefined;

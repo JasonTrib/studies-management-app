@@ -7,6 +7,7 @@ import {
   getProfessorCourseAnnouncementsCount,
   getProfessorCourseLecturingCount,
   getProfessorCourses,
+  getProfessorCoursesFollowed,
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
 import {
@@ -18,8 +19,19 @@ import {
   getStudentCoursesRegisteredCount,
 } from "../studentCourseDAO.server";
 
-export async function getAnnouncementsFollowed(userId: User["id"]) {
-  const coursesFollowed = await getStudentCoursesFollowed(userId);
+export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
+  const coursesFollowed = await getStudentCoursesFollowed(studentId);
+  const announcements = await getAllAnnoucements();
+
+  const announcementsFollowed = coursesFollowed.flatMap((course) =>
+    announcements.filter((ann) => ann.course_id === course.course_id),
+  );
+
+  return announcementsFollowed;
+}
+
+export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"]) {
+  const coursesFollowed = await getProfessorCoursesFollowed(profId);
   const announcements = await getAllAnnoucements();
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>

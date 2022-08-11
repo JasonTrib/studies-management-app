@@ -68,13 +68,12 @@ export function createCourse(data: courseDataT) {
   });
 }
 
-export function editCourse(data: courseDataT) {
+export function editCourse(data: Omit<courseDataT, "dep_id">) {
   return prisma.course.update({
     where: {
       id: data.id,
     },
     data: {
-      dep_id: data.dep_id,
       title: data.title,
       description: data.description,
       semester: data.semester,
