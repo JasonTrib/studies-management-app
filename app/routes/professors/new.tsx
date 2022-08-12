@@ -1,7 +1,7 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import bcrypt from "bcryptjs";
 import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const data: professorUserDataT = {
     dep_id: form.data.dep,
     username: form.data.username,
-    password: form.data.password,
+    password: await bcrypt.hash(form.data.password, 10),
     role: "PROFESSOR",
     title: form.data.title,
   };
