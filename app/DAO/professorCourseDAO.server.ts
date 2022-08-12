@@ -185,6 +185,61 @@ export function getProfessorCourseLecturingCount(profId: Professor["id"], course
   });
 }
 
+export function assignProfessorCourse(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.upsert({
+    where: {
+      prof_id_course_id: {
+        prof_id: profId,
+        course_id: courseId,
+      },
+    },
+    update: {
+      is_following: true,
+      is_lecturing: true,
+    },
+    create: {
+      prof_id: profId,
+      course_id: courseId,
+      is_following: true,
+      is_lecturing: true,
+    },
+  });
+}
+
+export function followProfessorCourse(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.upsert({
+    where: {
+      prof_id_course_id: {
+        prof_id: profId,
+        course_id: courseId,
+      },
+    },
+    update: {
+      is_following: true,
+    },
+    create: {
+      prof_id: profId,
+      course_id: courseId,
+      is_following: true,
+      is_lecturing: false,
+    },
+  });
+}
+
+export function unfollowProfessorCourse(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.update({
+    where: {
+      prof_id_course_id: {
+        prof_id: profId,
+        course_id: courseId,
+      },
+    },
+    data: {
+      is_following: false,
+    },
+  });
+}
+
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
 function getProfessorCourseAnnouncementsGenerous(profId: Professor["id"], courseId: Course["id"]) {
   return prisma.professorCourse.findMany({

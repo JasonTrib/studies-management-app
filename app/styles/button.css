@@ -9,10 +9,16 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   flex-shrink: 0;
+  white-space: nowrap;
   cursor: pointer;
 }
 .action-button:hover {
   background-color: var(--color-text-cyan-hovered);
+}
+.action-button:disabled {
+  background-color: var(--color-text-cyan-disabled);
+  box-shadow: none;
+  cursor: default;
 }
 
 .submit-button {

@@ -101,6 +101,61 @@ export function getStudentCoursesFollowingCount(courseId: Course["id"]) {
   });
 }
 
+export function assignStudentCourse(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.upsert({
+    where: {
+      student_id_course_id: {
+        student_id: studentId,
+        course_id: courseId,
+      },
+    },
+    update: {
+      is_following: true,
+      is_enrolled: true,
+    },
+    create: {
+      student_id: studentId,
+      course_id: courseId,
+      is_following: true,
+      is_enrolled: true,
+    },
+  });
+}
+
+export function followStudentCourse(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.upsert({
+    where: {
+      student_id_course_id: {
+        student_id: studentId,
+        course_id: courseId,
+      },
+    },
+    update: {
+      is_following: true,
+    },
+    create: {
+      student_id: studentId,
+      course_id: courseId,
+      is_following: true,
+      is_enrolled: false,
+    },
+  });
+}
+
+export function unfollowStudentCourse(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.update({
+    where: {
+      student_id_course_id: {
+        student_id: studentId,
+        course_id: courseId,
+      },
+    },
+    data: {
+      is_following: false,
+    },
+  });
+}
+
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
 function getStudentCourseAnnouncementsGenerous(studentId: Student["id"], courseId: Course["id"]) {
   return prisma.studentCourse.findMany({

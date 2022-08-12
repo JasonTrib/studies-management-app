@@ -1,9 +1,10 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box from "~/components/Box";
+import FollowCourseButton from "~/components/buttons/FollowCourseButton";
 import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
@@ -18,12 +19,17 @@ import {
   getIsStudentFollowingCourse,
 } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import { followProfessorCourse, unfollowProfessorCourse } from "~/DAO/professorCourseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
+import { followStudentCourse, unfollowStudentCourse } from "~/DAO/studentCourseDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
+export const links: LinksFunction = () => {
+  return [...CourseLinks()];
+};
 type LoaderData = {
   course: CourseModelT & {
     students_registered: number;
@@ -44,8 +50,40 @@ type LoaderData = {
   canEditCourse: boolean;
 };
 
-export const links: LinksFunction = () => {
-  return [...CourseLinks()];
+export const action: ActionFunction = async ({ request, params }) => {
+  const formData = await request.formData();
+  const action = formData.get("_action");
+  const courseIdRaw = formData.get("courseId");
+
+  const courseId = paramToInt(`${courseIdRaw}`);
+  if (!courseId) throw new Error();
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  switch (user.role) {
+    case USER_ROLE.SUPERADMIN:
+    case USER_ROLE.REGISTRAR:
+      break;
+    case USER_ROLE.PROFESSOR:
+      const prof = await getProfessorId(user.id);
+      if (!prof) throw new Error();
+
+      if (action === "follow") await followProfessorCourse(prof.id, courseId);
+      if (action === "unfollow") await unfollowProfessorCourse(prof.id, courseId);
+      break;
+    case USER_ROLE.STUDENT:
+      const student = await getStudentId(user.id);
+      if (!student) throw new Error();
+
+      if (action === "follow") await followStudentCourse(student.id, courseId);
+      if (action === "unfollow") await unfollowStudentCourse(student.id, courseId);
+      break;
+    default:
+      throw new Response("Unauthorized", { status: 401 });
+  }
+
+  return null;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -122,12 +160,21 @@ const CourseDetailsPage = () => {
             title={`Course announcements`}
             data={announcements}
             noResults={"No announcements found"}
-            Button={canCreateAnn ? <NewAnnouncementButton courseId={course.id} /> : undefined}
+            Button={
+              canCreateAnn ? (
+                <NewAnnouncementButton courseId={course.id} />
+              ) : (
+                <FollowCourseButton variant="unfollow" courseId={course.id} />
+              )
+            }
           >
             <AnnouncementsList />
           </Container>
         ) : (
-          <Container title={`Follow course to view announcements ⬇`} />
+          <Container
+            title={`Follow to view announcements`}
+            Button={<FollowCourseButton variant="follow" courseId={course.id} />}
+          />
         )}
       </>
       <Box height={250} />
