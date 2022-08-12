@@ -52,6 +52,17 @@ export function getProfessorCourses(profId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {
       prof_id: profId,
+    },
+    include: {
+      course: true,
+    },
+  });
+}
+
+export function getProfessorCoursesLecturing(profId: Professor["id"]) {
+  return prisma.professorCourse.findMany({
+    where: {
+      prof_id: profId,
       is_lecturing: true,
     },
     include: {
@@ -85,7 +96,7 @@ export function getProfessorCoursesOnCourse(courseId: Course["id"]) {
   });
 }
 
-export function getProfessorCoursesFollowed(profId: Professor["id"]) {
+export function getProfessorCoursesFollowing(profId: Professor["id"]) {
   return prisma.professorCourse.findMany({
     where: {
       prof_id: profId,

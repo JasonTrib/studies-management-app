@@ -5,6 +5,17 @@ export function getStudentCourses(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
       student_id: studentId,
+    },
+    include: {
+      course: true,
+    },
+  });
+}
+
+export function getStudentCoursesEnrolled(studentId: Student["id"]) {
+  return prisma.studentCourse.findMany({
+    where: {
+      student_id: studentId,
       is_enrolled: true,
     },
     include: {
@@ -13,7 +24,7 @@ export function getStudentCourses(studentId: Student["id"]) {
   });
 }
 
-export function getStudentCoursesFollowed(studentId: Student["id"]) {
+export function getStudentCoursesFollowing(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
       student_id: studentId,
@@ -81,7 +92,7 @@ export function getStudentCoursesRegisteredCount(courseId: Course["id"]) {
   });
 }
 
-export function getStudentCoursesFollowedCount(courseId: Course["id"]) {
+export function getStudentCoursesFollowingCount(courseId: Course["id"]) {
   return prisma.studentCourse.count({
     where: {
       course_id: courseId,

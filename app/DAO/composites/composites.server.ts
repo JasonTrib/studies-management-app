@@ -1,4 +1,4 @@
-import type { Course, Department, Professor, Student, User } from "@prisma/client";
+import type { Course, Department, Professor, Student } from "@prisma/client";
 import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourse, getCourses } from "../courseDAO.server";
 import {
@@ -7,20 +7,22 @@ import {
   getProfessorCourseAnnouncementsCount,
   getProfessorCourseLecturingCount,
   getProfessorCourses,
-  getProfessorCoursesFollowed,
+  getProfessorCoursesFollowing,
+  getProfessorCoursesLecturing,
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
 import {
   getStudentCourseAnnouncements,
   getStudentCourseAnnouncementsCount,
   getStudentCourses,
-  getStudentCoursesFollowed,
-  getStudentCoursesFollowedCount,
+  getStudentCoursesEnrolled,
+  getStudentCoursesFollowing,
+  getStudentCoursesFollowingCount,
   getStudentCoursesRegisteredCount,
 } from "../studentCourseDAO.server";
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
-  const coursesFollowed = await getStudentCoursesFollowed(studentId);
+  const coursesFollowed = await getStudentCoursesFollowing(studentId);
   const announcements = await getAllAnnoucements();
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>
@@ -31,7 +33,7 @@ export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]
 }
 
 export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"]) {
-  const coursesFollowed = await getProfessorCoursesFollowed(profId);
+  const coursesFollowed = await getProfessorCoursesFollowing(profId);
   const announcements = await getAllAnnoucements();
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>
@@ -42,7 +44,7 @@ export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"
 }
 
 export async function getCoursesEnrolled(studentId: Student["id"]) {
-  const studentCoursesRaw = await getStudentCourses(studentId);
+  const studentCoursesRaw = await getStudentCoursesEnrolled(studentId);
   const professorCoursesRaw = await getAllProfessorCoursesLectured();
 
   const studentCourses = studentCoursesRaw.map((x) => ({
@@ -71,7 +73,7 @@ export async function getCoursesEnrolled(studentId: Student["id"]) {
 }
 
 export async function getCoursesLecturing(profId: Professor["id"]) {
-  const profCoursesRaw = await getProfessorCourses(profId);
+  const profCoursesRaw = await getProfessorCoursesLecturing(profId);
   const allProfsCoursesRaw = await getAllProfessorCoursesLectured();
 
   const profCourses = profCoursesRaw.map((x) => ({
@@ -189,7 +191,7 @@ export async function getCourseExtended(courseId: Course["id"]) {
   const profCourses = await getProfessorCoursesOnCourse(courseId);
   const course = await getCourse(courseId);
   const studentsRegisteredCount = await getStudentCoursesRegisteredCount(courseId);
-  const studentsFollowingCount = await getStudentCoursesFollowedCount(courseId);
+  const studentsFollowingCount = await getStudentCoursesFollowingCount(courseId);
 
   const courseExtended = {
     ...course,

@@ -3,13 +3,13 @@ import {
   getProfessorCoursesAnnouncements,
   getProfessorCourseAnnouncements,
   getProfessorCourses,
-  getProfessorCoursesFollowed,
+  getProfessorCoursesFollowing,
 } from "~/DAO/professorCourseDAO.server";
 import {
   getStudentCoursesAnnouncements,
   getStudentCourseAnnouncements,
   getStudentCourses,
-  getStudentCoursesFollowed,
+  getStudentCoursesFollowing,
 } from "~/DAO/studentCourseDAO.server";
 import { getUserAnnouncementsPosted } from "~/DAO/userAnnouncementDAO.server";
 import { getAllAnnoucements } from "../DAO/announcementDAO.server";
@@ -40,23 +40,15 @@ import {
   getStudentsProfile,
   getStudentProfile,
 } from "../DAO/studentDAO.server";
-import {
-  getAllUsers,
-  getProfessors,
-  getUserAnnouncements,
-  getUserPassword,
-} from "../DAO/userDAO.server";
+import { getAllUsers, getProfessors, getUserAnnouncements } from "../DAO/userDAO.server";
 
 export const logUserDAO = async () => {
   const allUsers = await getAllUsers();
-  const userPassword = await getUserPassword(1);
   const userAnnouncements = await getUserAnnouncements(4);
   const userAnnouncementsPosted = await getUserAnnouncementsPosted(8);
 
   console.log("~~~~~~~ allUsers ~~~~~~~");
   console.log(allUsers);
-  console.log("~~~~~~~ userPassword ~~~~~~~");
-  console.log(userPassword);
   console.log("~~~~~~~ userAnnouncements ~~~~~~~");
   console.log(userAnnouncements);
   console.log("~~~~~~~ userAnnouncementsPosted ~~~~~~~");
@@ -106,7 +98,7 @@ export const logStudentDAO = async () => {
   const studentsProfiles = await getStudentsProfile("IT");
   const studentProfile = await getStudentProfile(3);
   const studentCourses = await getStudentCourses(5);
-  const studentFollowedCourses = await getStudentCoursesFollowed(1);
+  const studentFollowedCourses = await getStudentCoursesFollowing(1);
   const studentAnnouncements = await getStudentCoursesAnnouncements(4);
   const studentCourseAnnouncements = await getStudentCourseAnnouncements(4, 1);
 
@@ -137,7 +129,7 @@ export const logProfessorDAO = async () => {
   const professorsProfiles = await getProfessorsProfile("IT");
   const professorProfile = await getProfessorProfile(1);
   const professorCourses = await getProfessorCourses(4);
-  const professorFollowedCourses = await getProfessorCoursesFollowed(3);
+  const professorFollowedCourses = await getProfessorCoursesFollowing(3);
   const professorAnnouncements = await getProfessorCoursesAnnouncements(3);
   const professorCourseAnnouncements = await getProfessorCourseAnnouncements(3, 1);
 
