@@ -121,5 +121,10 @@
 .form .form-submit .form-reset:hover {
   background-color: hsla(0deg, 100%, 50%, 0.14);
 }
+.form .form-submit .invalid {
+  color: red;
+  margin-top: 16px;
+  font-weight: 500;
+}
 
 /*# sourceMappingURL=form.css.map */

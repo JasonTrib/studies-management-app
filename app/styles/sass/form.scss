@@ -144,5 +144,11 @@
         background-color: hsla(0, 100%, 50%, 0.14);
       }
     }
+
+    .invalid {
+      color: red;
+      margin-top: 16px;
+      font-weight: 500;
+    }
   }
 }

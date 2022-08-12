@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const user = await login(form.data);
 
   if (!user) {
-    return json({ ...form, authError: "Invalid username/password" }, { status: 400 });
+    return json({ ...form, authError: "Invalid username/password combination" }, { status: 400 });
   }
 
   const redirectTo = new URL(request.url).searchParams.get("redirectTo") || "/";
@@ -81,7 +81,7 @@ const LoginPage = () => {
               <button className="action-button submit-button" type="submit" disabled={isSubmitting}>
                 SUBMIT
               </button>
-              {actionData?.authError}
+              <div className="invalid">{actionData?.authError}</div>
             </div>
           </Form>
         </div>
