@@ -46,6 +46,11 @@
           &:focus {
             border-color: var(--color-text-cyan);
           }
+
+          &:disabled {
+            border-color: var(--color-text-disabled);
+            pointer-events: none;
+          }
         }
 
         .select {

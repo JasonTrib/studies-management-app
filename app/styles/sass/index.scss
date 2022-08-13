@@ -82,6 +82,24 @@
 
   .form-container {
     width: 420px;
+
+    .form-tabs {
+      display: flex;
+      justify-content: center;
+      column-gap: 24px;
+
+      .tab-option {
+        cursor: pointer;
+
+        &.selected {
+          border-bottom: 2px solid var(--color-text-cyan-dark);
+        }
+
+        &:hover {
+          color: var(--color-text-cyan-dark);
+        }
+      }
+    }
   }
 }
 

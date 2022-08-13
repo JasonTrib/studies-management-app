@@ -43,6 +43,10 @@
 .form .form-fields .field .label .field-input:focus {
   border-color: var(--color-text-cyan);
 }
+.form .form-fields .field .label .field-input:disabled {
+  border-color: var(--color-text-disabled);
+  pointer-events: none;
+}
 .form .form-fields .field .label .select {
   height: 28px;
 }

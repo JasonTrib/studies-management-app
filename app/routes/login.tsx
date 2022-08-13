@@ -7,7 +7,7 @@ import FormInput from "~/components/form/FormInput";
 import styles from "~/styles/form.css";
 import { createUserSession, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
-import { validateFormData } from "~/validations/formValidation.server";
+import { extractAndValidateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/userSchema.server";
 
 type SchemaT = z.infer<typeof formSchema>;
@@ -17,7 +17,7 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const form = await validateFormData<SchemaT>(request, formSchema);
+  const form = await extractAndValidateFormData<SchemaT>(request, formSchema);
 
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const user = await login(form.data);
 
   if (!user) {
-    return json({ ...form, authError: "Invalid username/password combination" }, { status: 400 });
+    return json({ ...form, authError: "Invalid credentials" }, { status: 400 });
   }
 
   const redirectTo = new URL(request.url).searchParams.get("redirectTo") || "/";

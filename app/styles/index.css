@@ -73,6 +73,20 @@
 .form-page .form-container {
   width: 420px;
 }
+.form-page .form-container .form-tabs {
+  display: flex;
+  justify-content: center;
+  column-gap: 24px;
+}
+.form-page .form-container .form-tabs .tab-option {
+  cursor: pointer;
+}
+.form-page .form-container .form-tabs .tab-option.selected {
+  border-bottom: 2px solid var(--color-text-cyan-dark);
+}
+.form-page .form-container .form-tabs .tab-option:hover {
+  color: var(--color-text-cyan-dark);
+}
 
 .login-page {
   height: 100%;

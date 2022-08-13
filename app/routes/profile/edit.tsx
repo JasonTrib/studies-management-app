@@ -1,53 +1,78 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import bcrypt from "bcryptjs";
 import _ from "lodash";
+import { useEffect, useState } from "react";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
+import ActionButton from "~/components/buttons/ActionButton";
 import FormCheckbox from "~/components/form/FormCheckbox";
 import FormInput from "~/components/form/FormInput";
 import FormRadioGroup from "~/components/form/FormRadioGroup";
+import FormTabs from "~/components/form/FormTabs";
 import FormTextarea from "~/components/form/FormTextarea";
 import type { profileDataT, ProfileModelT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { updateUserPassword } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
-import { logout, requireUser } from "~/utils/session.server";
+import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import formSchema from "~/validations/schemas/profileSchema.server";
+import changePasswordSchema from "~/validations/schemas/changePasswordSchema.server";
+import profileSchema from "~/validations/schemas/profileSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-type SchemaT = z.infer<typeof formSchema>;
+type Schema1T = z.infer<typeof profileSchema>;
+type Schema2T = z.infer<typeof changePasswordSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const form = await validateFormData<SchemaT>(request, formSchema);
+  const formData = await request.formData();
+  const body = Object.fromEntries(formData);
 
-  if (!_.isEmpty(form.errors) || form.data === null) {
-    return json(form, { status: 400 });
+  if (body["_action"] === "updateProfile") {
+    const form = validateFormData<Schema1T>(body, profileSchema);
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
+
+    const data: profileDataT = {
+      user_id: parseInt(form.data.userId),
+      fullname: form.data.fullname || undefined,
+      email: form.data.email || undefined,
+      gender: form.data.gender === "MALE" ? "M" : form.data.gender === "FEMALE" ? "F" : undefined,
+      phone: form.data.phone || undefined,
+      info: form.data.info || undefined,
+      avatar: form.data.avatar || undefined,
+      is_public: form.data.isPublic === "on" ? true : false,
+      updated_at: new Date().toISOString(),
+    };
+    await updateProfile(data);
   }
+  if (body["_action"] === "updatePassword") {
+    const form = validateFormData<Schema2T>(body, changePasswordSchema);
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
 
-  const data: profileDataT = {
-    user_id: parseInt(form.data.userId),
-    fullname: form.data.fullname || undefined,
-    email: form.data.email || undefined,
-    gender: form.data.gender === "MALE" ? "M" : form.data.gender === "FEMALE" ? "F" : undefined,
-    phone: form.data.phone || undefined,
-    info: form.data.info || undefined,
-    avatar: form.data.avatar || undefined,
-    is_public: form.data.isPublic === "on" ? true : false,
-    updated_at: new Date().toISOString(),
-  };
-
-  await updateProfile(data);
+    const user = await login({ username: form.data.username, password: form.data.oldPassword });
+    if (!user) {
+      return json({ ...form, authError: "Invalid credentials" }, { status: 400 });
+    }
+    await updateUserPassword(form.data.username, await bcrypt.hash(form.data.newPassword, 10));
+  }
 
   return redirect("/profile");
 };
 
 type LoaderData = {
   profile: ProfileModelT;
+  username: UserModelT["username"];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -56,91 +81,175 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const profile = await getProfile(user.id);
 
-  return { profile };
+  return { profile, username: user.username };
 };
 
-type ActionDataT = FormValidationT<SchemaT> | undefined;
+type ActionDataT =
+  | (FormValidationT<Schema1T> &
+      FormValidationT<Schema2T> & {
+        authError?: string;
+      })
+  | undefined;
 
 const ProfileEditPage = () => {
-  const { profile } = useLoaderData() as LoaderData;
+  const { profile, username } = useLoaderData() as LoaderData;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
+  const options = ["Edit profile", "Account"];
+  const [selected, setSelected] = useState(options[0]);
+  const [revealChangePassword, setRevealChangePassword] = useState(false);
+
+  const handleClick = () => {
+    setRevealChangePassword(true);
+  };
+
+  useEffect(() => {
+    setRevealChangePassword(false);
+  }, [selected]);
 
   return (
     <AppLayout wide>
       <div className="form-page">
-        <h2 className="heading">Edit profile</h2>
         <div className="form-container">
-          <Form method="post" action="#" className="form" autoComplete="off">
-            <div className="form-fields">
-              <FormInput
-                text="Fullname"
-                label="fullname"
-                type="text"
-                defaultValue={profile.fullname || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.fullname}
-              />
-              <FormInput
-                text="Email"
-                label="email"
-                type="email"
-                defaultValue={profile.email || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.email}
-              />
-              <FormRadioGroup
-                text="Gender"
-                label="gender"
-                values={["MALE", "FEMALE"]}
-                defaultChecked={
-                  profile.gender === "M" ? "MALE" : profile.gender === "F" ? "FEMALE" : undefined
-                }
-                disabled={isSubmitting}
-                error={actionData?.errors?.gender}
-              />
-              <FormInput
-                text="Phone"
-                label="phone"
-                type="tel"
-                defaultValue={profile.phone || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.phone}
-              />
-              <FormInput
-                text="Avatar"
-                label="avatar"
-                type="text"
-                defaultValue={profile.avatar || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.avatar}
-              />
-              <FormTextarea
-                text="Info"
-                label="info"
-                defaultValue={profile.info || undefined}
-                disabled={isSubmitting}
-                error={actionData?.errors?.info}
-              />
-              <FormCheckbox
-                text="Public"
-                label="isPublic"
-                defaultChecked={profile.is_public}
-                disabled={isSubmitting}
-                error={actionData?.errors?.isPublic}
-              />
-            </div>
-            <div className="form-submit">
-              <input type="hidden" id="userId" name="userId" value={profile.user_id} />
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
-                ✖
-              </button>
-              <button className="action-button submit-button" type="submit" disabled={isSubmitting}>
-                SUBMIT
-              </button>
-            </div>
-          </Form>
+          <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
+          {selected === options[0] && (
+            <Form method="post" action="#" className="form" autoComplete="off">
+              <div className="form-fields">
+                <FormInput
+                  text="Fullname"
+                  label="fullname"
+                  type="text"
+                  defaultValue={profile.fullname || undefined}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.fullname}
+                />
+                <FormInput
+                  text="Email"
+                  label="email"
+                  type="email"
+                  defaultValue={profile.email || undefined}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.email}
+                />
+                <FormRadioGroup
+                  text="Gender"
+                  label="gender"
+                  values={["MALE", "FEMALE"]}
+                  defaultChecked={
+                    profile.gender === "M" ? "MALE" : profile.gender === "F" ? "FEMALE" : undefined
+                  }
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.gender}
+                />
+                <FormInput
+                  text="Phone"
+                  label="phone"
+                  type="tel"
+                  defaultValue={profile.phone || undefined}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.phone}
+                />
+                <FormInput
+                  text="Avatar"
+                  label="avatar"
+                  type="text"
+                  defaultValue={profile.avatar || undefined}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.avatar}
+                />
+                <FormTextarea
+                  text="Info"
+                  label="info"
+                  defaultValue={profile.info || undefined}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.info}
+                />
+                <FormCheckbox
+                  text="Public"
+                  label="isPublic"
+                  defaultChecked={profile.is_public}
+                  disabled={isSubmitting}
+                  error={actionData?.errors?.isPublic}
+                />
+              </div>
+              <div className="form-submit">
+                <input type="hidden" id="userId" name="userId" value={profile.user_id} />
+                <button className="form-reset" type="reset" disabled={isSubmitting}>
+                  ✖
+                </button>
+                <button
+                  className="action-button submit-button"
+                  type="submit"
+                  name="_action"
+                  value="updateProfile"
+                  disabled={isSubmitting}
+                >
+                  SUBMIT
+                </button>
+              </div>
+            </Form>
+          )}
+          {selected === options[1] && (
+            <Form method="post" action="#" className="form" autoComplete="off">
+              <div className="form-fields">
+                <FormInput
+                  text="Username"
+                  label="username"
+                  type="text"
+                  defaultValue={username}
+                  disabled
+                />
+              </div>
+              {revealChangePassword ? (
+                <>
+                  <div className="form-fields fields-separator">
+                    <FormInput
+                      text="Old password"
+                      label="oldPassword"
+                      type="password"
+                      disabled={isSubmitting}
+                      error={actionData?.errors?.oldPassword}
+                    />
+                  </div>
+                  <div className="form-fields">
+                    <FormInput
+                      text="New password"
+                      label="newPassword"
+                      type="password"
+                      disabled={isSubmitting}
+                      error={actionData?.errors?.newPassword}
+                    />
+                    <FormInput
+                      text="Confirm new password"
+                      label="confirmNewPassword"
+                      type="password"
+                      disabled={isSubmitting}
+                      error={actionData?.errors?.confirmNewPassword}
+                    />
+                  </div>
+                  <div className="form-submit">
+                    <input type="hidden" id="username" name="username" value={username} />
+                    <button className="form-reset" type="reset" disabled={isSubmitting}>
+                      ✖
+                    </button>
+                    <button
+                      className="action-button submit-button"
+                      type="submit"
+                      name="_action"
+                      value="updatePassword"
+                      disabled={isSubmitting}
+                    >
+                      SUBMIT
+                    </button>
+                    <div className="invalid">{actionData?.authError}</div>
+                  </div>
+                </>
+              ) : (
+                <ActionButton onClick={handleClick}>Change password</ActionButton>
+              )}
+            </Form>
+          )}
         </div>
       </div>
     </AppLayout>

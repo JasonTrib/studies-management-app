@@ -1,4 +1,4 @@
-import type { Department, User } from "@prisma/client";
+import type { Department, Password, User } from "@prisma/client";
 import { prisma } from "~/db.server";
 export type { User as UserModelT } from "@prisma/client";
 
@@ -116,6 +116,21 @@ export function createProfessor(data: professorUserDataT) {
       professor: {
         create: {
           title: data.title,
+        },
+      },
+    },
+  });
+}
+
+export function updateUserPassword(username: User["username"], password: Password["hash"]) {
+  return prisma.user.update({
+    where: {
+      username: username,
+    },
+    data: {
+      password: {
+        update: {
+          hash: password,
         },
       },
     },

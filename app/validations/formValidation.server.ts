@@ -8,10 +8,17 @@ export type FormValidationT<G> = {
   errors?: SchemaErrorsT<G>;
 };
 
-export async function validateFormData<SchemaT>(request: Request, schema: ZodSchema) {
+export async function extractAndValidateFormData<SchemaT>(request: Request, schema: ZodSchema) {
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
 
+  return validateFormData<SchemaT>(body, schema);
+}
+
+export function validateFormData<SchemaT>(
+  body: { [k: string]: FormDataEntryValue },
+  schema: ZodSchema,
+) {
   try {
     const data = schema.parse(body) as SchemaT;
 

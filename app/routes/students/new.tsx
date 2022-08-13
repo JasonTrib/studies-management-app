@@ -13,7 +13,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
-import { validateFormData } from "~/validations/formValidation.server";
+import { extractAndValidateFormData } from "~/validations/formValidation.server";
 import formSchema from "~/validations/schemas/studentSchema.server";
 
 export const links: LinksFunction = () => {
@@ -23,7 +23,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof formSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const form = await validateFormData<SchemaT>(request, formSchema);
+  const form = await extractAndValidateFormData<SchemaT>(request, formSchema);
 
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });
