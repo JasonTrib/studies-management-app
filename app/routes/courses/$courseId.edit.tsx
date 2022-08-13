@@ -14,13 +14,13 @@ import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
-import formSchema from "~/validations/schemas/courseSchema.server";
+import { courseSchema } from "~/validations/schemas/courseSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-type SchemaT = z.infer<typeof formSchema>;
+type SchemaT = z.infer<typeof courseSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const courseId = paramToInt(params.courseId);
@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const form = await extractAndValidateFormData<SchemaT>(request, formSchema);
+  const form = await extractAndValidateFormData<SchemaT>(request, courseSchema);
 
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });

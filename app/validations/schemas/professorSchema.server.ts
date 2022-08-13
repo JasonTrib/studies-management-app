@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const professorSchema = z
+export const newProfessorSchema = z
   .object({
     dep: z.enum(["IT", "GEO"]),
     username: z
@@ -22,5 +22,3 @@ const professorSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
-
-export default professorSchema;

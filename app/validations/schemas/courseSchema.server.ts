@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const courseSchema = z.object({
+export const courseSchema = z.object({
   dep: z.enum(["IT", "GEO"]),
   title: z
     .string()
@@ -16,5 +16,3 @@ const courseSchema = z.object({
   isPostgraduate: z.string().regex(/on/).optional(),
   isPublic: z.string().regex(/on/).optional(),
 });
-
-export default courseSchema;

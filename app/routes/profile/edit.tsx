@@ -21,15 +21,15 @@ import styles from "~/styles/form.css";
 import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import changePasswordSchema from "~/validations/schemas/changePasswordSchema.server";
-import profileSchema from "~/validations/schemas/profileSchema.server";
+import { editPasswordSchema } from "~/validations/schemas/userSchema.server";
+import { profileSchema } from "~/validations/schemas/profileSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
 type Schema1T = z.infer<typeof profileSchema>;
-type Schema2T = z.infer<typeof changePasswordSchema>;
+type Schema2T = z.infer<typeof editPasswordSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     await updateProfile(data);
   }
   if (body["_action"] === "updatePassword") {
-    const form = validateFormData<Schema2T>(body, changePasswordSchema);
+    const form = validateFormData<Schema2T>(body, editPasswordSchema);
     if (!_.isEmpty(form.errors) || form.data === null) {
       return json(form, { status: 400 });
     }

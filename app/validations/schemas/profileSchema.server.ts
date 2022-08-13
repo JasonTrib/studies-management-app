@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const profileSchema = z.object({
+export const profileSchema = z.object({
   userId: z.string().min(1),
   email: z.string().email().or(z.string().regex(/^$/)),
   fullname: z
@@ -16,5 +16,3 @@ const profileSchema = z.object({
   avatar: z.string().trim().optional(),
   isPublic: z.string().regex(/^on$/).optional(),
 });
-
-export default profileSchema;
