@@ -38,6 +38,10 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
+  column-gap: 24px;
+}
+.modal-container .modal .modal-actions > * {
+  flex: 1 1 auto;
 }
 
 /*# sourceMappingURL=modal.css.map */

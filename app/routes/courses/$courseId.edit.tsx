@@ -154,7 +154,7 @@ const CourseEditPage = () => {
             <Form method="post" action="#" autoComplete="off">
               <input type="hidden" id="courseId" name="courseId" value={course.id} />
               <button
-                className="action-button submit-button danger"
+                className="action-button submit-button danger full-width"
                 type="submit"
                 name="_action"
                 value="deleteCourse"
