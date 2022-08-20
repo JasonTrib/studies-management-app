@@ -15,7 +15,7 @@ const FollowCourseButton: FC<FollowCourseButtonT> = ({ courseId, variant }) => {
     <Form method="post" action={"#"}>
       <input type="hidden" id="courseId" name="courseId" value={courseId} />
       <input type="hidden" id="_action" name="_action" value={variant} />
-      <button className="action-button" type="submit" disabled={isBusy}>
+      <button className="action-button primary" type="submit" disabled={isBusy}>
         {_.startCase(variant)}
       </button>
     </Form>

@@ -188,8 +188,9 @@ export async function getCoursesAsProfessorExtended(
 }
 
 export async function getCourseExtended(courseId: Course["id"]) {
-  const profCourses = await getProfessorCoursesOnCourse(courseId);
   const course = await getCourse(courseId);
+  if (!course) return null;
+  const profCourses = await getProfessorCoursesOnCourse(courseId);
   const studentsRegisteredCount = await getStudentCoursesRegisteredCount(courseId);
   const studentsFollowingCount = await getStudentCoursesFollowingCount(courseId);
 

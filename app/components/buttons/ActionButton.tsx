@@ -7,7 +7,7 @@ type ActionButtonT = {
 
 const ActionButton: FC<ActionButtonT> = ({ children, onClick }) => {
   return (
-    <button className="action-button" onClick={onClick}>
+    <button className="action-button primary" onClick={onClick}>
       {children}
     </button>
   );

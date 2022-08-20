@@ -84,3 +84,9 @@ export function editCourse(data: Omit<courseDataT, "dep_id">) {
     },
   });
 }
+
+export function deleteCourse(id: Course["id"]) {
+  return prisma.course.delete({
+    where: { id },
+  });
+}

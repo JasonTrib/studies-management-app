@@ -3,22 +3,30 @@ import type { FC } from "react";
 import type { z } from "zod";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
-import type formSchema from "~/validations/schemas/courseSchema.server";
+import type { courseSchema } from "~/validations/schemas/courseSchema.server";
 import FormCheckbox from "./FormCheckbox";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 
-type SchemaT = z.infer<typeof formSchema>;
+type SchemaT = z.infer<typeof courseSchema>;
 
 type CourseFormType = {
   action: string;
+  _action?: string;
   dep: string;
   defaultData?: CourseModelT;
   disabled: boolean;
   errors?: SchemaErrorsT<SchemaT> | null;
 };
 
-const CourseForm: FC<CourseFormType> = ({ action, dep, defaultData, disabled, errors }) => {
+const CourseForm: FC<CourseFormType> = ({
+  action,
+  _action,
+  dep,
+  defaultData,
+  disabled,
+  errors,
+}) => {
   return (
     <Form method="post" action={action} className="form" autoComplete="off">
       <div className="form-fields">
@@ -72,7 +80,13 @@ const CourseForm: FC<CourseFormType> = ({ action, dep, defaultData, disabled, er
         <button className="form-reset" type="reset" disabled={disabled}>
           ✖
         </button>
-        <button className="action-button submit-button" type="submit" disabled={disabled}>
+        <button
+          className="action-button primary submit-button"
+          type="submit"
+          disabled={disabled}
+          name="_action"
+          value={_action}
+        >
           SUBMIT
         </button>
       </div>

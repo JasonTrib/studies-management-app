@@ -96,7 +96,7 @@ const ProfileEditPage = () => {
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
-  const options = ["Edit profile", "Account"];
+  const options = ["Profile", "Account"];
   const [selected, setSelected] = useState(options[0]);
   const [revealChangePassword, setRevealChangePassword] = useState(false);
 
@@ -179,7 +179,7 @@ const ProfileEditPage = () => {
                   ✖
                 </button>
                 <button
-                  className="action-button submit-button"
+                  className="action-button primary submit-button"
                   type="submit"
                   name="_action"
                   value="updateProfile"
@@ -234,7 +234,7 @@ const ProfileEditPage = () => {
                       ✖
                     </button>
                     <button
-                      className="action-button submit-button"
+                      className="action-button primary submit-button"
                       type="submit"
                       name="_action"
                       value="updatePassword"

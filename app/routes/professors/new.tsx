@@ -115,7 +115,11 @@ const ProfessorsNewPage = () => {
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
-              <button className="action-button submit-button" type="submit" disabled={isSubmitting}>
+              <button
+                className="action-button primary submit-button"
+                type="submit"
+                disabled={isSubmitting}
+              >
                 SUBMIT
               </button>
             </div>

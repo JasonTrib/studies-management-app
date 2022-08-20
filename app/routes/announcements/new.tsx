@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await createAnnouncement(data);
 
-  return redirect("/announcements");
+  return redirect(`/courses/${courseId}`);
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -118,7 +118,11 @@ const AnnouncementsNewPage = () => {
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
-              <button className="action-button submit-button" type="submit" disabled={isSubmitting}>
+              <button
+                className="action-button primary submit-button"
+                type="submit"
+                disabled={isSubmitting}
+              >
                 SUBMIT
               </button>
             </div>

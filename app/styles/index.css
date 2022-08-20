@@ -31,6 +31,7 @@
 .page-content {
   background-color: var(--color-bg-lightest);
   padding: 12px;
+  position: relative;
 }
 .page-content .content-feed {
   grid-area: "content-feed";

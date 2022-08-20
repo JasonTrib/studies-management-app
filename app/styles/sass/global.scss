@@ -3,6 +3,7 @@ body {
   margin: 0;
   height: 100vh;
   background-color: rgb(36, 39, 46);
+  color: var(--color-text-dark);
 }
 
 h1,
@@ -16,15 +17,18 @@ h3 {
   --color-bg-lightest: hsl(0, 0%, 97%);
   --color-shadow-light: hsla(0, 0%, 0%, 0.07);
   --color-shadow: hsla(0, 0%, 0%, 0.14);
-  --color-text-dark: hsl(0, 0%, 20%);
-  --color-text: hsl(0, 0%, 40%);
-  --color-text-light: hsl(0, 0%, 50%);
   --color-text-lighter: hsl(0, 0%, 67%);
+  --color-text-light: hsl(0, 0%, 50%);
+  --color-text: hsl(0, 0%, 40%);
+  --color-text-dark: hsl(0, 0%, 20%);
   --color-text-disabled: hsl(0, 0%, 83%);
-  --color-text-cyan-disabled: hsla(210, 90%, 60%, 0.5);
-  --color-text-cyan-hovered: hsl(200, 100%, 70%);
   --color-text-cyan: hsl(210, 90%, 60%);
   --color-text-cyan-dark: hsl(210, 80%, 40%);
+  --color-text-cyan-disabled: hsla(210, 90%, 60%, 0.5);
+  --color-text-cyan-hovered: hsl(200, 100%, 70%);
+  --color-button-red: hsl(350, 90%, 60%);
+  --color-button-red-disabled: hsla(350, 90%, 50%, 0.5);
+  --color-button-red-hovered: hsl(350, 90%, 70%);
 }
 
 .mr-12 {
