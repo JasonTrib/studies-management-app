@@ -1,3 +1,19 @@
+.announcements-list-item .list-item-heading {
+  display: flex;
+  justify-content: space-between;
+}
+.announcements-list-item .list-item-heading .delete {
+  display: flex;
+  align-items: center;
+}
+.announcements-list-item .list-item-heading .delete .icon {
+  cursor: pointer;
+  fill: var(--color-button-red);
+  place-self: baseline;
+}
+.announcements-list-item .list-item-heading .delete .icon:hover {
+  fill: var(--color-button-red-hovered);
+}
 .announcements-list-item .metadata {
   font-size: 11px;
   text-overflow: ellipsis;
@@ -22,10 +38,23 @@
   box-shadow: 0px 1px 0px var(--color-shadow);
   margin-bottom: 1px;
   padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
 }
-.announcement-container .heading h3 {
+.announcement-container .heading .title {
   color: var(--color-text-light);
   font-size: 24px;
+}
+.announcement-container .heading .delete {
+  display: flex;
+  align-items: center;
+}
+.announcement-container .heading .delete .icon {
+  cursor: pointer;
+  fill: var(--color-button-red);
+}
+.announcement-container .heading .delete .icon:hover {
+  fill: var(--color-button-red-hovered);
 }
 .announcement-container .content {
   padding: 12px 20px;

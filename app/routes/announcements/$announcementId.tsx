@@ -7,6 +7,7 @@ import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucement } from "~/DAO/announcementDAO.server";
 import {
   getIsProfessorFollowingCourse,
+  getIsProfessorLecturingCourse,
   getIsStudentFollowingCourse,
 } from "~/DAO/composites/composites.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
@@ -20,6 +21,7 @@ type LoaderData = {
   announcement: AnnouncementModelT & {
     course: CourseModelT;
   };
+  canDeleteAnn: boolean;
 };
 
 export const links: LinksFunction = () => {
@@ -41,9 +43,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (user === null) return logout(request);
 
   let isFollowing: boolean;
+  let canDeleteAnn = false;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
+      canDeleteAnn = true;
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);
@@ -53,6 +57,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!isFollowing) {
         throw new Response("Unauthorized", { status: 401 });
       }
+      canDeleteAnn = await getIsProfessorLecturingCourse(prof.id, announcement.course_id);
       break;
     case USER_ROLE.STUDENT:
       const student = await getStudentId(user.id);
@@ -67,18 +72,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
 
-  return json({ announcement });
+  return json({ announcement, canDeleteAnn });
 };
 
 const AnnouncementDetailsPage = () => {
-  const { announcement } = useLoaderData() as LoaderData;
+  const { announcement, canDeleteAnn } = useLoaderData() as LoaderData;
   return (
     <AppLayout wide>
       <>
         <div className="content-heading link">
           <Link to={`/courses/${announcement.course.id}`}>{announcement.course.title}</Link>
         </div>
-        <Announcement data={announcement} />
+        <Announcement data={announcement} showDelete={canDeleteAnn} />
       </>
     </AppLayout>
   );

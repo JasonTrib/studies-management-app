@@ -66,3 +66,9 @@ export function createAnnouncement(data: announcementDataT) {
     },
   });
 }
+
+export function deleteAnnouncement(id: Announcement["id"]) {
+  return prisma.announcement.delete({
+    where: { id },
+  });
+}

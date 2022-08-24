@@ -1,7 +1,10 @@
-import { Link } from "@remix-run/react";
+import { Form, Link, useTransition } from "@remix-run/react";
 import type { FC } from "react";
+import { useState } from "react";
+import DeleteIcon from "~/assets/DeleteIcon";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import Modal from "../Modal";
 
 type AnnouncementsListItemT = {
   id: AnnouncementModelT["id"];
@@ -9,19 +12,62 @@ type AnnouncementsListItemT = {
   body: AnnouncementModelT["body"];
   course: CourseModelT["title"];
   date: string;
+  deletable?: boolean;
+  landingRoute?: string;
 };
 
-const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({ id, title, body, course, date }) => {
+const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
+  id,
+  title,
+  body,
+  course,
+  date,
+  deletable,
+  landingRoute,
+}) => {
+  const transition = useTransition();
+  const isSubmitting = transition.state === "submitting";
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   return (
     <div className="container-item announcements-list-item">
-      <div className="title link">
-        <Link to={`/announcements/${id}`}>{title}</Link>
+      <div className="list-item-heading">
+        <div className="title link">
+          <Link to={`/announcements/${id}`}>{title}</Link>
+        </div>
+        {deletable && (
+          <div className="delete">
+            <DeleteIcon className="icon" width={20} height={20} onClick={openModal} />
+          </div>
+        )}
       </div>
       <div className="body ellipsis-3">{body}</div>
       <div className="metadata">
         <span className="date mr-12">{date}</span>
         <span className="course">{course}</span>
       </div>
+      {deletable && (
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          <div className="modal-heading">Are you sure you want to delete this announcement?</div>
+          <div className="modal-actions">
+            <Form method="post" action={`/announcements/delete/${id}`} autoComplete="off">
+              <input type="hidden" id="redirectTo" name="redirectTo" value={landingRoute} />
+              <button
+                className="action-button submit-button danger full-width"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                DELETE
+              </button>
+            </Form>
+            <button className="action-button submit-button" onClick={closeModal}>
+              CANCEL
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

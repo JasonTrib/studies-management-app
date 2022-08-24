@@ -37,7 +37,7 @@
   box-shadow: 0px 1px 0 var(--color-shadow);
   cursor: default;
 }
-.container-blueprint .content .container-item:last-child {
+.container-blueprint .content .container-item:last-of-type {
   box-shadow: none;
   margin-bottom: 0;
 }

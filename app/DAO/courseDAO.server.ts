@@ -1,5 +1,5 @@
 import { prisma } from "~/db.server";
-import type { Course } from "@prisma/client";
+import type { Announcement, Course } from "@prisma/client";
 export type { Course as CourseModelT } from "@prisma/client";
 
 export function getAllCourses() {
@@ -64,6 +64,21 @@ export function createCourse(data: courseDataT) {
       is_elective: data.is_elective,
       is_postgraduate: data.is_postgraduate,
       is_public: data.is_public,
+    },
+  });
+}
+
+export function getCourseIdFromAnnoucement(annId: Announcement["id"]) {
+  return prisma.course.findFirst({
+    where: {
+      announcements: {
+        some: {
+          id: annId,
+        },
+      },
+    },
+    select: {
+      id: true,
     },
   });
 }

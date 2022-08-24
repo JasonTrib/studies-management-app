@@ -26,9 +26,10 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
+import modalStyles from "~/styles/modal.css";
 
 export const links: LinksFunction = () => {
-  return [...CourseLinks()];
+  return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
 };
 type LoaderData = {
   course: CourseModelT & {
@@ -46,7 +47,7 @@ type LoaderData = {
       };
     }[];
   isFollowingCourse: boolean;
-  canCreateAnn: boolean;
+  canModAnns: boolean;
   canEditCourse: boolean;
 };
 
@@ -101,14 +102,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   let announcements;
-  let canCreateAnn = false;
+  let canModAnns = false;
   let canEditCourse = false;
   let isFollowingCourse = false;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
       canEditCourse = true;
-      canCreateAnn = true;
+      canModAnns = true;
       isFollowingCourse = true;
       announcements = await getAnnoucementsOfCourse(courseId);
       break;
@@ -116,8 +117,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const prof = await getProfessorId(user.id);
       if (!prof) throw new Error();
 
-      canCreateAnn = await getIsProfessorLecturingCourse(prof.id, courseId);
-      if (canCreateAnn) {
+      canModAnns = await getIsProfessorLecturingCourse(prof.id, courseId);
+      if (canModAnns) {
         isFollowingCourse = true;
       } else {
         isFollowingCourse = await getIsProfessorFollowingCourse(prof.id, courseId);
@@ -139,11 +140,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
 
-  return json({ course, announcements, isFollowingCourse, canEditCourse, canCreateAnn });
+  return json({ course, announcements, isFollowingCourse, canEditCourse, canModAnns });
 };
 
 const CourseDetailsPage = () => {
-  const { course, announcements, isFollowingCourse, canEditCourse, canCreateAnn } =
+  const { course, announcements, isFollowingCourse, canEditCourse, canModAnns } =
     useLoaderData() as LoaderData;
 
   return (
@@ -161,14 +162,14 @@ const CourseDetailsPage = () => {
             data={announcements}
             noResults={"No announcements found"}
             Button={
-              canCreateAnn ? (
+              canModAnns ? (
                 <NewAnnouncementButton courseId={course.id} />
               ) : (
                 <FollowCourseButton variant="unfollow" courseId={course.id} />
               )
             }
           >
-            <AnnouncementsList />
+            <AnnouncementsList deletable={canModAnns} landingRoute={`/courses/${course.id}`} />
           </Container>
         ) : (
           <Container

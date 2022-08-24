@@ -152,7 +152,6 @@ const CourseEditPage = () => {
           </div>
           <div className="modal-actions">
             <Form method="post" action="#" autoComplete="off">
-              <input type="hidden" id="courseId" name="courseId" value={course.id} />
               <button
                 className="action-button submit-button danger full-width"
                 type="submit"

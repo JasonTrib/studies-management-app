@@ -8,9 +8,11 @@ type AnnouncementsListT = {
   data?: (AnnouncementModelT & {
     course: CourseModelT;
   })[];
+  deletable?: boolean;
+  landingRoute?: string;
 };
 
-const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [] }) => {
+const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [], deletable, landingRoute }) => {
   return (
     <>
       {data.map((x) => (
@@ -21,6 +23,8 @@ const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [] }) => {
           body={x.body}
           date={formatDate(new Date(x.updated_at))}
           course={x.course.title}
+          deletable={deletable}
+          landingRoute={landingRoute}
         />
       ))}
     </>

@@ -41,7 +41,7 @@
       box-shadow: 0px 1px 0 var(--color-shadow);
       cursor: default;
 
-      &:last-child {
+      &:last-of-type {
         box-shadow: none;
         margin-bottom: 0;
       }
