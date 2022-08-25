@@ -10,7 +10,7 @@ import FormInput from "~/components/form/FormInput";
 import FormTabs from "~/components/form/FormTabs";
 import Modal from "~/components/Modal";
 import type { courseDataT, CourseModelT } from "~/DAO/courseDAO.server";
-import { deleteCourse, editCourse, getCourse } from "~/DAO/courseDAO.server";
+import { editCourse, getCourse } from "~/DAO/courseDAO.server";
 import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -60,11 +60,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     await editCourse(data);
   }
   if (body["_action"] === "assignCourse") {
-  }
-  if (body["_action"] === "deleteCourse") {
-    await deleteCourse(courseId);
-
-    return redirect("/courses");
   }
 
   return redirect(`/courses/${courseId}`);
@@ -151,12 +146,10 @@ const CourseEditPage = () => {
             Are you sure you want to <b>permanently</b> delete this course?
           </div>
           <div className="modal-actions">
-            <Form method="post" action="#" autoComplete="off">
+            <Form method="post" action={`/courses/${course.id}/delete`} autoComplete="off">
               <button
                 className="action-button submit-button danger full-width"
                 type="submit"
-                name="_action"
-                value="deleteCourse"
                 disabled={isSubmitting}
               >
                 DELETE
