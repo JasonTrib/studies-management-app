@@ -3,24 +3,20 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
 import AppLayout from "~/components/AppLayout";
-import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucement } from "~/DAO/announcementDAO.server";
 import {
   getIsProfessorFollowingCourse,
   getIsProfessorLecturingCourse,
   getIsStudentFollowingCourse,
 } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
-type LoaderData = {
-  announcement: AnnouncementModelT & {
-    course: CourseModelT;
-  };
+type LoaderDataT = {
+  announcement: Exclude<Awaited<ReturnType<typeof getAnnoucement>>, null>;
   canDeleteAnn: boolean;
 };
 
@@ -76,7 +72,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const AnnouncementDetailsPage = () => {
-  const { announcement, canDeleteAnn } = useLoaderData() as LoaderData;
+  const { announcement, canDeleteAnn } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout wide>
       <>

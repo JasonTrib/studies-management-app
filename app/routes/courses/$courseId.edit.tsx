@@ -9,9 +9,8 @@ import CourseForm from "~/components/form/CourseForm";
 import FormInput from "~/components/form/FormInput";
 import FormTabs from "~/components/form/FormTabs";
 import Modal from "~/components/Modal";
-import type { courseDataT, CourseModelT } from "~/DAO/courseDAO.server";
+import type { courseDataT } from "~/DAO/courseDAO.server";
 import { editCourse, getCourse } from "~/DAO/courseDAO.server";
-import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import modalStyles from "~/styles/modal.css";
@@ -65,9 +64,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect(`/courses/${courseId}`);
 };
 
-type LoaderData = {
-  dep: DepartmentModelT["title_id"];
-  course: CourseModelT;
+type LoaderDataT = {
+  dep: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["dep_id"];
+  course: Exclude<Awaited<ReturnType<typeof getCourse>>, null>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -98,7 +97,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const CourseEditPage = () => {
-  const { dep, course } = useLoaderData() as LoaderData;
+  const { dep, course } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";

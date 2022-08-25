@@ -2,11 +2,10 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import type { DepartmentModelT } from "~/DAO/departmentDAO.server";
 import { getDepartment } from "~/DAO/departmentDAO.server";
 
-type LoaderData = {
-  department: DepartmentModelT;
+type LoaderDataT = {
+  department: Exclude<Awaited<ReturnType<typeof getDepartment>>, null>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -25,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const DepartmentDetailsPage = () => {
-  const { department } = useLoaderData() as LoaderData;
+  const { department } = useLoaderData() as LoaderDataT;
 
   return (
     <AppLayout>

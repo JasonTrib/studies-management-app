@@ -43,6 +43,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect("/students");
 };
 
+type LoaderDataT = {
+  dep: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["dep_id"];
+};
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
@@ -61,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const StudentNewPage = () => {
-  const { dep } = useLoaderData();
+  const { dep } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";

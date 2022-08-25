@@ -2,20 +2,11 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import type { ProfileModelT } from "~/DAO/profileDAO.server";
-import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { getRegistrarProfile } from "~/DAO/registrarDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
-type LoaderData = {
-  registrar:
-    | (RegistrarModelT & {
-        user: {
-          profile: ProfileModelT | null;
-          dep_id: string;
-        };
-      })
-    | null;
+type LoaderDataT = {
+  registrar: Exclude<Awaited<ReturnType<typeof getRegistrarProfile>>, null>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -25,7 +16,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   const registrar = await getRegistrarProfile(id);
-
   if (!registrar) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -34,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const RegistrarDetailsPage = () => {
-  const { registrar } = useLoaderData() as LoaderData;
+  const { registrar } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout>
       <div>

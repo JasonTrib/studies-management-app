@@ -7,7 +7,6 @@ import Box, { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
-import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
@@ -15,20 +14,22 @@ import {
   getCoursesEnrolled,
   getCoursesLecturing,
 } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/index.css";
 import { logout, requireUser } from "~/utils/session.server";
 
-export type LoaderData = {
-  announcements: (AnnouncementModelT & {
-    course: CourseModelT;
-  })[];
-  coursesRegistered: CourseModelT[];
-  userRole: UserModelT["role"];
+export type LoaderDataT = {
+  announcements: Awaited<
+    ReturnType<
+      | typeof getAnnoucements
+      | typeof getAnnouncementsFollowedAsProfessor
+      | typeof getAnnouncementsFollowedAsStudent
+    >
+  >;
+  coursesRegistered: Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>;
+  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
 };
 
 export const links: LinksFunction = () => {
@@ -68,7 +69,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Index() {
-  const { announcements, coursesRegistered, userRole } = useLoaderData() as LoaderData;
+  const { announcements, coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
   const isStudent = userRole === USER_ROLE.STUDENT;
   const annTitle = isPriviledged ? "Announcements" : "My announcements";

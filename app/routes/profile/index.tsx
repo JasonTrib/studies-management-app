@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import { logout, requireUser } from "~/utils/session.server";
 
-type LoaderDataT = {
+type LoaderDataTT = {
   user: Exclude<Awaited<ReturnType<typeof requireUser>>, null>;
 };
 
@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const ProfileIndexPage = () => {
-  const { user } = useLoaderData() as LoaderDataT;
+  const { user } = useLoaderData() as LoaderDataTT;
 
   return (
     <AppLayout>

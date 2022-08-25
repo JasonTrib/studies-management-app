@@ -5,17 +5,18 @@ import AppLayout from "~/components/AppLayout";
 import { links as ContainerLinks } from "~/components/Container";
 import MyCoursesTable from "~/components/courses/MyCoursesTable";
 import Table, { links as TableLinks } from "~/components/Table";
-import { getCoursesLecturing, getCoursesEnrolled } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
+import { getCoursesEnrolled, getCoursesLecturing } from "~/DAO/composites/composites.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { logout, requireUser } from "~/utils/session.server";
 
-type LoaderData = {
-  coursesRegistered: CourseModelT[];
-  userRole: UserModelT["role"];
+type LoaderDataT = {
+  coursesRegistered: Exclude<
+    Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>,
+    null
+  >;
+  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
 };
 
 export const links: LinksFunction = () => {
@@ -49,7 +50,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const MyCoursesPage = () => {
-  const { coursesRegistered, userRole } = useLoaderData() as LoaderData;
+  const { coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
 
   let noResults;
   switch (userRole) {

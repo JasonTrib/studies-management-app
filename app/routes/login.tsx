@@ -34,6 +34,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   return createUserSession(`${user.id}`, redirectTo);
 };
 
+export type LoaderDataT = {
+  redirectTo: string;
+};
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const redirectTo = new URL(request.url).searchParams.toString();
 
@@ -48,7 +52,7 @@ type ActionDataT =
 
 const LoginPage = () => {
   const actionData = useActionData() as ActionDataT;
-  const { redirectTo } = useLoaderData();
+  const { redirectTo } = useLoaderData() as LoaderDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 

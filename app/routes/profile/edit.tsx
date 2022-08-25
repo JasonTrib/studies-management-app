@@ -1,6 +1,5 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import _ from "lodash";
@@ -13,16 +12,15 @@ import FormInput from "~/components/form/FormInput";
 import FormRadioGroup from "~/components/form/FormRadioGroup";
 import FormTabs from "~/components/form/FormTabs";
 import FormTextarea from "~/components/form/FormTextarea";
-import type { profileDataT, ProfileModelT } from "~/DAO/profileDAO.server";
+import type { profileDataT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { updateUserPassword } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
 import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import { editPasswordSchema } from "~/validations/schemas/userSchema.server";
 import { profileSchema } from "~/validations/schemas/profileSchema.server";
+import { editPasswordSchema } from "~/validations/schemas/userSchema.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -70,9 +68,9 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect("/profile");
 };
 
-type LoaderData = {
-  profile: ProfileModelT;
-  username: UserModelT["username"];
+type LoaderDataT = {
+  profile: Exclude<Awaited<ReturnType<typeof getProfile>>, null>;
+  username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -80,6 +78,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (user === null) return logout(request);
 
   const profile = await getProfile(user.id);
+  if (!profile) {
+    throw new Response("Not Found", { status: 404 });
+  }
 
   return { profile, username: user.username };
 };
@@ -92,7 +93,7 @@ type ActionDataT =
   | undefined;
 
 const ProfileEditPage = () => {
-  const { profile, username } = useLoaderData() as LoaderData;
+  const { profile, username } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";

@@ -2,18 +2,11 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import type { ProfileModelT } from "~/DAO/profileDAO.server";
-import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { getStudentProfile } from "~/DAO/studentDAO.server";
 import { paramToInt } from "~/utils/paramToInt";
 
-type LoaderData = {
-  student: StudentModelT & {
-    user: {
-      profile: ProfileModelT | null;
-      dep_id: string;
-    };
-  };
+type LoaderDataT = {
+  student: Exclude<Awaited<ReturnType<typeof getStudentProfile>>, null>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -23,7 +16,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   const student = await getStudentProfile(id);
-
   if (!student) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -32,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const StudentDetailsPage = () => {
-  const { student } = useLoaderData() as LoaderData;
+  const { student } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout>
       <div>

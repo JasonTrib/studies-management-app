@@ -8,7 +8,6 @@ import FollowCourseButton from "~/components/buttons/FollowCourseButton";
 import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
-import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucementsOfCourse } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsOnProfessorFollowedCourse,
@@ -18,12 +17,10 @@ import {
   getIsProfessorLecturingCourse,
   getIsStudentFollowingCourse,
 } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { followProfessorCourse, unfollowProfessorCourse } from "~/DAO/professorCourseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { followStudentCourse, unfollowStudentCourse } from "~/DAO/studentCourseDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
 import { paramToInt } from "~/utils/paramToInt";
@@ -32,24 +29,18 @@ import { logout, requireUser } from "~/utils/session.server";
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
 };
-type LoaderData = {
-  course: CourseModelT & {
-    students_registered: number;
-    students_following: number;
-    professors: {
-      id: number;
-      fullname: string;
-    }[];
-  };
-  announcements: AnnouncementModelT &
-    {
-      course: {
-        title: string;
-      };
-    }[];
+type LoaderDataT = {
+  course: Exclude<Awaited<ReturnType<typeof getCourseExtended>>, null>;
+  announcements: Awaited<
+    ReturnType<
+      | typeof getAnnoucementsOfCourse
+      | typeof getAnnouncementsOnProfessorFollowedCourse
+      | typeof getAnnouncementsOnStudentFollowedCourse
+    >
+  >;
+  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
   isFollowingCourse: boolean;
   canModAnns: boolean;
-  userRole: UserModelT["role"];
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -150,7 +141,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const CourseDetailsPage = () => {
   const { course, announcements, isFollowingCourse, userRole, canModAnns } =
-    useLoaderData() as LoaderData;
+    useLoaderData() as LoaderDataT;
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   return (

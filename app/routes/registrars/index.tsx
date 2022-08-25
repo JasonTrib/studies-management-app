@@ -2,11 +2,10 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import type { RegistrarModelT } from "~/DAO/registrarDAO.server";
 import { getAllRegistrars } from "~/DAO/registrarDAO.server";
 
-type LoaderData = {
-  registrars: RegistrarModelT[];
+type LoaderDataT = {
+  registrars: Awaited<ReturnType<typeof getAllRegistrars>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -15,7 +14,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const RegistrarIndexPage = () => {
-  const { registrars } = useLoaderData() as LoaderData;
+  const { registrars } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout>
       <div>RegistrarIndexPage</div>

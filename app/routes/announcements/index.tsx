@@ -4,22 +4,24 @@ import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Container, { links as ContainerLinks } from "~/components/Container";
-import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import { getAnnoucements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
   getAnnouncementsFollowedAsStudent,
 } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { logout, requireUser } from "~/utils/session.server";
 
-export type LoaderData = {
-  announcements: (AnnouncementModelT & {
-    course: CourseModelT;
-  })[];
+export type LoaderDataT = {
+  announcements: Awaited<
+    ReturnType<
+      | typeof getAnnoucements
+      | typeof getAnnouncementsFollowedAsProfessor
+      | typeof getAnnouncementsFollowedAsStudent
+    >
+  >;
 };
 
 export const links: LinksFunction = () => {
@@ -56,7 +58,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const AnnouncementIndexPage = () => {
-  const { announcements } = useLoaderData() as LoaderData;
+  const { announcements } = useLoaderData() as LoaderDataT;
 
   return (
     <AppLayout>

@@ -10,16 +10,20 @@ import {
   getCoursesAsStudentExtended,
   getCoursesExtended,
 } from "~/DAO/composites/composites.server";
-import type { CourseModelT } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { logout, requireUser } from "~/utils/session.server";
 
-type LoaderData = {
-  courses: CourseModelT[];
-  userRole: UserModelT["role"];
+type LoaderDataT = {
+  courses: Awaited<
+    ReturnType<
+      | typeof getCoursesExtended
+      | typeof getCoursesAsProfessorExtended
+      | typeof getCoursesAsStudentExtended
+    >
+  >;
+  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
 };
 
 export const links: LinksFunction = () => {
@@ -54,7 +58,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const CourseIndexPage = () => {
-  const { courses, userRole } = useLoaderData() as LoaderData;
+  const { courses, userRole } = useLoaderData() as LoaderDataT;
 
   return (
     <AppLayout wide>

@@ -11,7 +11,7 @@ type CourseT = {
     students_following: number;
     professors: {
       id: number;
-      fullname: string;
+      fullname: string | null | undefined;
     }[];
   };
   canEdit?: boolean;

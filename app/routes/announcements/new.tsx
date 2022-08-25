@@ -49,6 +49,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect(`/courses/${courseId}`);
 };
 
+type LoaderDataT = {
+  courseId: number;
+};
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   const courseId = paramToInt(new URL(request.url).searchParams.get("course") ?? undefined);
   if (courseId == null) {
@@ -82,7 +86,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const AnnouncementsNewPage = () => {
-  const { courseId } = useLoaderData();
+  const { courseId } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
