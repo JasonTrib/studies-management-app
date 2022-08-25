@@ -7,7 +7,7 @@ import { formatDate } from "~/utils/dateUtils";
 import Modal from "../Modal";
 import modalStyles from "~/styles/modal.css";
 import { Form, useTransition } from "@remix-run/react";
-import DeleteIcon from "~/assets/DeleteIcon";
+import DeleteIcon from "~/components/icons/DeleteIcon";
 
 type AnnouncementT = {
   data: AnnouncementModelT;

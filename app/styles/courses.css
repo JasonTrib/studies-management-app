@@ -1,3 +1,7 @@
+.courses-list-item .icon {
+  margin-left: 4px;
+  fill: var(--color-text);
+}
 .courses-list-item .professors {
   color: var(--color-text-light);
   font-size: 13px;
@@ -48,6 +52,10 @@
 }
 .course-container .content .footer .data .instructor {
   color: var(--color-text-cyan-dark);
+}
+.course-container .content .footer .data .dot-separator {
+  margin: 0 8px;
+  color: var(--color-text-dark);
 }
 .course-container .content .footer .data .semester {
   color: var(--color-text-lighter);

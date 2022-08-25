@@ -33,6 +33,13 @@ table .cell-checkbox .checkbox-large {
   width: 16px;
   height: 16px;
 }
+table .course {
+  display: flex;
+}
+table .course .icon {
+  margin-left: 4px;
+  fill: var(--color-text);
+}
 table .instructors {
   font-size: 14px;
   color: var(--color-text-cyan-dark);

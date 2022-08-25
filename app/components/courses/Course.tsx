@@ -50,9 +50,8 @@ const Course: FC<CourseT> = ({ data, canEdit }) => {
               ))}
             </div>
             <div>
-              <span className="mr-12">
-                {data.is_postgraduate ? "Postgraduate" : "Undergraduate"}
-              </span>
+              <span>{data.is_postgraduate ? "Postgraduate" : "Undergraduate"}</span>
+              <span className="dot-separator">•</span>
               <span className="semester">semester: {data.semester}</span>
             </div>
           </div>

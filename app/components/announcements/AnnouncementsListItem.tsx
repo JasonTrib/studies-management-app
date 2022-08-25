@@ -1,7 +1,7 @@
 import { Form, Link, useTransition } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
-import DeleteIcon from "~/assets/DeleteIcon";
+import DeleteIcon from "~/components/icons/DeleteIcon";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import Modal from "../Modal";

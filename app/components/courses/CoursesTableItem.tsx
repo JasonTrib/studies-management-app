@@ -2,10 +2,12 @@ import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import React, { useState } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import GradIcon from "~/components/icons/GradIcon";
 
 type CoursesTableItemT = {
   id: CourseModelT["id"];
   title: CourseModelT["title"];
+  isPostgraduate: boolean;
   professors: {
     id: number;
     fullname: string;
@@ -20,8 +22,9 @@ type CoursesTableItemT = {
 const CoursesTableItem: FC<CoursesTableItemT> = ({
   id,
   title,
-  semester,
+  isPostgraduate,
   professors,
+  semester,
   isFollowing,
   isEnrolled,
   isLecturing,
@@ -32,8 +35,11 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
 
   return (
     <tr>
-      <td className="link">
-        <Link to={`/courses/${id}`}>{title}</Link>
+      <td>
+        <div className="course link">
+          <Link to={`/courses/${id}`}>{title}</Link>
+          {isPostgraduate && <GradIcon className="icon" width={20} height={20} />}
+        </div>
       </td>
       <td className="instructors">
         {!!professors.length && (

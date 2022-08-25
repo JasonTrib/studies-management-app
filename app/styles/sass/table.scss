@@ -42,6 +42,15 @@ table {
     }
   }
 
+  .course {
+    display: flex;
+
+    .icon {
+      margin-left: 4px;
+      fill: var(--color-text);
+    }
+  }
+
   .instructors {
     font-size: 14px;
     color: var(--color-text-cyan-dark);

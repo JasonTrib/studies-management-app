@@ -19,8 +19,9 @@ const CoursesList: FC<CoursesListT> = ({ data = [] }) => {
           key={x.id}
           id={x.id}
           title={x.title}
-          semester={x.semester}
+          isPostgraduate={x.is_postgraduate}
           professors={x.professors || []}
+          semester={x.semester}
         />
       ))}
     </>

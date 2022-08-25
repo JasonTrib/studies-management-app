@@ -48,6 +48,7 @@
   color: var(--color-text-cyan);
   font-size: 16px;
   margin-bottom: 4px;
+  display: flex;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
