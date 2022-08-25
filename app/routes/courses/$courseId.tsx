@@ -23,10 +23,11 @@ import { followProfessorCourse, unfollowProfessorCourse } from "~/DAO/professorC
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { followStudentCourse, unfollowStudentCourse } from "~/DAO/studentCourseDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
+import modalStyles from "~/styles/modal.css";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
-import modalStyles from "~/styles/modal.css";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
@@ -48,7 +49,7 @@ type LoaderData = {
     }[];
   isFollowingCourse: boolean;
   canModAnns: boolean;
-  canEditCourse: boolean;
+  userRole: UserModelT["role"];
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -103,12 +104,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let announcements;
   let canModAnns = false;
-  let canEditCourse = false;
   let isFollowingCourse = false;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
-      canEditCourse = true;
       canModAnns = true;
       isFollowingCourse = true;
       announcements = await getAnnoucementsOfCourse(courseId);
@@ -140,20 +139,31 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
 
-  return json({ course, announcements, isFollowingCourse, canEditCourse, canModAnns });
+  return json({
+    course,
+    announcements,
+    isFollowingCourse,
+    userRole: user.role,
+    canModAnns,
+  });
 };
 
 const CourseDetailsPage = () => {
-  const { course, announcements, isFollowingCourse, canEditCourse, canModAnns } =
+  const { course, announcements, isFollowingCourse, userRole, canModAnns } =
     useLoaderData() as LoaderData;
+  const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   return (
     <AppLayout wide>
       <>
         <div className="content-heading link">
-          <Link to={`/my-courses`}>My courses</Link>
+          {isPriviledged ? (
+            <Link to={`/courses`}>Courses</Link>
+          ) : (
+            <Link to={`/my-courses`}>My courses</Link>
+          )}
         </div>
-        <Course data={course} canEdit={canEditCourse} />
+        <Course data={course} canEdit={isPriviledged} />
       </>
       <>
         {isFollowingCourse ? (
