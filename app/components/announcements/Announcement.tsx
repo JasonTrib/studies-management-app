@@ -46,7 +46,7 @@ const Announcement: FC<AnnouncementT> = ({ data, showDelete }) => {
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
           <div className="modal-heading">Are you sure you want to delete this announcement?</div>
           <div className="modal-actions">
-            <Form method="post" action={`/announcements/delete/${data.id}`} autoComplete="off">
+            <Form method="post" action={`/announcements/${data.id}/delete`} autoComplete="off">
               <input
                 type="hidden"
                 id="redirectTo"

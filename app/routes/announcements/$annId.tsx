@@ -29,7 +29,7 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const id = paramToInt(params.announcementId);
+  const id = paramToInt(params.annId);
   if (id == null) {
     throw new Response("Not Found", { status: 404 });
   }
