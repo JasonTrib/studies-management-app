@@ -5,7 +5,7 @@ import type { CourseModelT } from "~/DAO/courseDAO.server";
 import GradIcon from "~/components/icons/GradIcon";
 
 type CoursesTableItemT = {
-  id: CourseModelT["id"];
+  courseId: CourseModelT["id"];
   title: CourseModelT["title"];
   isPostgraduate: boolean;
   professors: {
@@ -20,7 +20,7 @@ type CoursesTableItemT = {
 };
 
 const CoursesTableItem: FC<CoursesTableItemT> = ({
-  id,
+  courseId,
   title,
   isPostgraduate,
   professors,
@@ -37,7 +37,7 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
     <tr>
       <td>
         <div className="course link">
-          <Link to={`/courses/${id}`}>{title}</Link>
+          <Link to={`/courses/${courseId}`}>{title}</Link>
           {isPostgraduate && <GradIcon className="icon" width={20} height={20} />}
         </div>
       </td>

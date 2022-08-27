@@ -29,6 +29,40 @@ export function getUser(id: User["id"]) {
   });
 }
 
+export function getDepartmentStudents(dep: Department["full_title"]) {
+  return prisma.user.findMany({
+    where: {
+      AND: [
+        { dep_id: dep },
+        {
+          role: {
+            equals: "STUDENT",
+          },
+        },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          is_public: true,
+        },
+      },
+      student: {
+        select: {
+          id: true,
+          enrollment_year: true,
+          studies_status: true,
+        },
+      },
+    },
+  });
+}
+
 export function getUserAnnouncements(id: User["id"]) {
   return prisma.user.findUnique({
     where: { id },

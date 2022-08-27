@@ -1,4 +1,4 @@
-import type { Course, Department, Professor, Student } from "@prisma/client";
+import type { Course, Department, Gender, Professor, Student, User } from "@prisma/client";
 import { getAllAnnoucements } from "../announcementDAO.server";
 import { getCourse, getCourses } from "../courseDAO.server";
 import {
@@ -12,6 +12,7 @@ import {
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
 import {
+  getAllStudentCoursesEnrolled,
   getStudentCourseAnnouncements,
   getStudentCourseAnnouncementsCount,
   getStudentCourses,
@@ -20,6 +21,7 @@ import {
   getStudentCoursesFollowingCount,
   getStudentCoursesRegisteredCount,
 } from "../studentCourseDAO.server";
+import { getDepartmentStudents } from "../userDAO.server";
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
   const coursesFollowed = await getStudentCoursesFollowing(studentId);
@@ -260,4 +262,39 @@ export async function getIsProfessorLecturingCourse(
   const count = await getProfessorCourseLecturingCount(profId, courseId);
 
   return !!count;
+}
+
+export async function getStudentUsersExtended(dep: Department["full_title"], userId?: User["id"]) {
+  const students = await getDepartmentStudents(dep);
+  const studentCoursesEnrolled = await getAllStudentCoursesEnrolled();
+
+  const studentUsersExtended = students.map((studentUser) => {
+    const coursesEnrolledNumber = studentCoursesEnrolled.reduce(
+      (prev, curr) => (studentUser.student?.id === curr.student_id ? prev + 1 : prev),
+      0,
+    );
+
+    const profile = (
+      studentUser.profile?.is_public || (userId !== undefined && userId === studentUser.id)
+        ? { ...studentUser.profile }
+        : { email: studentUser.profile?.email, is_public: studentUser.profile?.is_public }
+    ) as {
+      fullname?: string | null;
+      email: string | null;
+      gender?: Gender | null;
+      is_public: boolean;
+    };
+
+    return {
+      ...studentUser,
+      isCurrent: userId !== undefined && userId === studentUser.id,
+      student: {
+        ...(studentUser.student as Exclude<typeof studentUser.student, null>),
+        coursesNumber: coursesEnrolledNumber,
+      },
+      profile: profile,
+    };
+  });
+
+  return studentUsersExtended;
 }

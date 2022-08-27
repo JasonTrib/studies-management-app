@@ -7,7 +7,7 @@ import type { CourseModelT } from "~/DAO/courseDAO.server";
 import Modal from "../Modal";
 
 type AnnouncementsListItemT = {
-  id: AnnouncementModelT["id"];
+  annId: AnnouncementModelT["id"];
   title: AnnouncementModelT["title"];
   body: AnnouncementModelT["body"];
   course: CourseModelT["title"];
@@ -17,7 +17,7 @@ type AnnouncementsListItemT = {
 };
 
 const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
-  id,
+  annId,
   title,
   body,
   course,
@@ -35,7 +35,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
     <div className="container-item announcements-list-item">
       <div className="list-item-heading">
         <div className="title link">
-          <Link to={`/announcements/${id}`}>{title}</Link>
+          <Link to={`/announcements/${annId}`}>{title}</Link>
         </div>
         {deletable && (
           <div className="delete">
@@ -52,7 +52,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
           <div className="modal-heading">Are you sure you want to delete this announcement?</div>
           <div className="modal-actions">
-            <Form method="post" action={`/announcements/${id}/delete`} autoComplete="off">
+            <Form method="post" action={`/announcements/${annId}/delete`} autoComplete="off">
               <input type="hidden" id="redirectTo" name="redirectTo" value={landingRoute} />
               <button
                 className="action-button submit-button danger full-width"

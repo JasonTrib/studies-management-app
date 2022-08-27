@@ -7,6 +7,10 @@ table {
     .col-small {
       width: 50px;
     }
+
+    .col-medium {
+      width: 150px;
+    }
   }
 
   th,
@@ -22,10 +26,19 @@ table {
   th {
     background-color: hsl(0, 0%, 90%);
     color: var(--color-text-dark);
+    vertical-align: middle;
+  }
+
+  tr {
+    background-color: white;
+
+    &.current {
+      background-color: hsl(60, 100%, 90%);
+    }
   }
 
   td {
-    background-color: white;
+    vertical-align: top;
   }
 
   .table-center {
@@ -49,6 +62,27 @@ table {
       margin-left: 4px;
       fill: var(--color-text);
     }
+  }
+
+  .username {
+    display: flex;
+
+    .icon {
+      margin-right: 4px;
+      fill: var(--color-text);
+
+      &.gender-male {
+        fill: hsl(220, 80%, 70%);
+      }
+
+      &.gender-female {
+        fill: hsl(300, 80%, 70%);
+      }
+    }
+  }
+
+  .empty {
+    background-color: hsla(0, 0%, 90%, 0.5);
   }
 
   .instructors {

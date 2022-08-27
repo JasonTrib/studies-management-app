@@ -6,6 +6,9 @@ table {
 table colgroup .col-small {
   width: 50px;
 }
+table colgroup .col-medium {
+  width: 150px;
+}
 table th,
 table td {
   color: var(--color-text);
@@ -18,9 +21,16 @@ table td {
 table th {
   background-color: hsl(0deg, 0%, 90%);
   color: var(--color-text-dark);
+  vertical-align: middle;
+}
+table tr {
+  background-color: white;
+}
+table tr.current {
+  background-color: hsl(60deg, 100%, 90%);
 }
 table td {
-  background-color: white;
+  vertical-align: top;
 }
 table .table-center {
   text-align: center;
@@ -39,6 +49,22 @@ table .course {
 table .course .icon {
   margin-left: 4px;
   fill: var(--color-text);
+}
+table .username {
+  display: flex;
+}
+table .username .icon {
+  margin-right: 4px;
+  fill: var(--color-text);
+}
+table .username .icon.gender-male {
+  fill: hsl(220deg, 80%, 70%);
+}
+table .username .icon.gender-female {
+  fill: hsl(300deg, 80%, 70%);
+}
+table .empty {
+  background-color: hsla(0deg, 0%, 90%, 0.5);
 }
 table .instructors {
   font-size: 14px;

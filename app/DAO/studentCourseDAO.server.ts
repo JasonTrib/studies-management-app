@@ -12,6 +12,17 @@ export function getStudentCourses(studentId: Student["id"]) {
   });
 }
 
+export function getAllStudentCoursesEnrolled() {
+  return prisma.studentCourse.findMany({
+    where: {
+      is_enrolled: true,
+    },
+    select: {
+      student_id: true,
+    },
+  });
+}
+
 export function getStudentCoursesEnrolled(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {

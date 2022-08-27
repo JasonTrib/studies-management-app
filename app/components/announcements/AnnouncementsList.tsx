@@ -18,7 +18,7 @@ const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [], deletable, landi
       {data.map((x) => (
         <AnnouncementsListItem
           key={x.id}
-          id={x.id}
+          annId={x.id}
           title={x.title}
           body={x.body}
           date={formatDate(new Date(x.updated_at))}
