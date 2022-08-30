@@ -1,33 +1,36 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import { getAllProfessors } from "~/DAO/professorDAO.server";
+import ProfessorsTable from "~/components/ProfessorsTable";
+import Table, { links as TableLinks } from "~/components/Table";
+import { getProfessorUsersExtended } from "~/DAO/composites/composites.server";
+import { logout, requireUser } from "~/utils/session.server";
+
+export const links: LinksFunction = () => {
+  return [...TableLinks()];
+};
 
 type LoaderDataT = {
-  professors: Awaited<ReturnType<typeof getAllProfessors>>;
+  professorUsers: Awaited<ReturnType<typeof getProfessorUsersExtended>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const professors = await getAllProfessors();
-  return json({ professors });
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  const professorUsers = await getProfessorUsersExtended(user.dep_id, user.id);
+
+  return json({ professorUsers });
 };
 
 const ProfessorsIndexPage = () => {
-  const { professors } = useLoaderData() as LoaderDataT;
+  const { professorUsers } = useLoaderData() as LoaderDataT;
   return (
-    <AppLayout>
-      <div>ProfessorsIndexPage</div>
-      <div>
-        <h2>list of professors</h2>
-        <ul>
-          {professors.map((x) => (
-            <li key={x.id}>
-              <Link to={`/professors/${x.id}`}>{x.title}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <AppLayout wide>
+      <Table data={professorUsers} noResults={"No professors found."}>
+        <ProfessorsTable />
+      </Table>
     </AppLayout>
   );
 };

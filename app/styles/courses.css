@@ -55,7 +55,7 @@
 }
 .course-container .content .footer .data .dot-separator {
   margin: 0 8px;
-  color: var(--color-text-dark);
+  color: var(--color-text-lighter);
 }
 .course-container .content .footer .data .semester {
   color: var(--color-text-lighter);

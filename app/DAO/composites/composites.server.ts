@@ -21,7 +21,11 @@ import {
   getStudentCoursesFollowingCount,
   getStudentCoursesRegisteredCount,
 } from "../studentCourseDAO.server";
-import { getDepartmentStudents } from "../userDAO.server";
+import {
+  getDepartmentProfessors,
+  getDepartmentRegistrars,
+  getDepartmentStudents,
+} from "../userDAO.server";
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
   const coursesFollowed = await getStudentCoursesFollowing(studentId);
@@ -262,6 +266,75 @@ export async function getIsProfessorLecturingCourse(
   const count = await getProfessorCourseLecturingCount(profId, courseId);
 
   return !!count;
+}
+
+export async function getRegistrarUsersExtended(
+  dep: Department["full_title"],
+  userId?: User["id"],
+) {
+  const registrars = await getDepartmentRegistrars(dep);
+
+  const registrarUsersExtended = registrars.map((registrar) => {
+    const profile = (
+      registrar.profile?.is_public || (userId !== undefined && userId === registrar.id)
+        ? { ...registrar.profile }
+        : { email: registrar.profile?.email, is_public: registrar.profile?.is_public }
+    ) as {
+      fullname?: string | null;
+      email: string | null;
+      gender?: Gender | null;
+      is_public: boolean;
+    };
+
+    return {
+      ...registrar,
+      isCurrent: userId !== undefined && userId === registrar.id,
+      registrar: {
+        ...(registrar.registrar as Exclude<typeof registrar.registrar, null>),
+      },
+      profile: profile,
+    };
+  });
+
+  return registrarUsersExtended;
+}
+
+export async function getProfessorUsersExtended(
+  dep: Department["full_title"],
+  userId?: User["id"],
+) {
+  const professors = await getDepartmentProfessors(dep);
+  const profCoursesEnrolled = await getAllProfessorCoursesLectured();
+
+  const professorUsersExtended = professors.map((profUser) => {
+    const coursesEnrolledNumber = profCoursesEnrolled.reduce(
+      (prev, curr) => (profUser.professor?.id === curr.prof_id ? prev + 1 : prev),
+      0,
+    );
+
+    const profile = (
+      profUser.profile?.is_public || (userId !== undefined && userId === profUser.id)
+        ? { ...profUser.profile }
+        : { email: profUser.profile?.email, is_public: profUser.profile?.is_public }
+    ) as {
+      fullname?: string | null;
+      email: string | null;
+      gender?: Gender | null;
+      is_public: boolean;
+    };
+
+    return {
+      ...profUser,
+      isCurrent: userId !== undefined && userId === profUser.id,
+      professor: {
+        ...(profUser.professor as Exclude<typeof profUser.professor, null>),
+        coursesNumber: coursesEnrolledNumber,
+      },
+      profile: profile,
+    };
+  });
+
+  return professorUsersExtended;
 }
 
 export async function getStudentUsersExtended(dep: Department["full_title"], userId?: User["id"]) {

@@ -1,31 +1,36 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import { getAllRegistrars } from "~/DAO/registrarDAO.server";
+import RegistrarsTable from "~/components/RegistrarsTable";
+import Table, { links as TableLinks } from "~/components/Table";
+import { getRegistrarUsersExtended } from "~/DAO/composites/composites.server";
+import { logout, requireUser } from "~/utils/session.server";
+
+export const links: LinksFunction = () => {
+  return [...TableLinks()];
+};
 
 type LoaderDataT = {
-  registrars: Awaited<ReturnType<typeof getAllRegistrars>>;
+  registrarUsers: Awaited<ReturnType<typeof getRegistrarUsersExtended>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const registrars = await getAllRegistrars();
-  return json({ registrars });
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
+  const registrarUsers = await getRegistrarUsersExtended(user.dep_id, user.id);
+
+  return json({ registrarUsers });
 };
 
 const RegistrarIndexPage = () => {
-  const { registrars } = useLoaderData() as LoaderDataT;
+  const { registrarUsers } = useLoaderData() as LoaderDataT;
   return (
-    <AppLayout>
-      <div>RegistrarIndexPage</div>
-      <div>
-        <h2>list of registrars</h2>
-        {registrars.map((x) => (
-          <li key={x.id}>
-            <Link to={`/registrars/${x.id}`}>{x.title}</Link>
-          </li>
-        ))}
-      </div>
+    <AppLayout wide>
+      <Table data={registrarUsers} noResults={"No registrars found."}>
+        <RegistrarsTable />
+      </Table>
     </AppLayout>
   );
 };

@@ -29,6 +29,72 @@ export function getUser(id: User["id"]) {
   });
 }
 
+export function getDepartmentRegistrars(dep: Department["full_title"]) {
+  return prisma.user.findMany({
+    where: {
+      AND: [
+        { dep_id: dep },
+        {
+          role: {
+            equals: "REGISTRAR",
+          },
+        },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          is_public: true,
+        },
+      },
+      registrar: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
+export function getDepartmentProfessors(dep: Department["full_title"]) {
+  return prisma.user.findMany({
+    where: {
+      AND: [
+        { dep_id: dep },
+        {
+          role: {
+            equals: "PROFESSOR",
+          },
+        },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          is_public: true,
+        },
+      },
+      professor: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
 export function getDepartmentStudents(dep: Department["full_title"]) {
   return prisma.user.findMany({
     where: {

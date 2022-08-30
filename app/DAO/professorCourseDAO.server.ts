@@ -24,6 +24,17 @@ export function getAllProfessorCourses() {
   });
 }
 
+export function getAllProfessorCoursesLecturing() {
+  return prisma.professorCourse.findMany({
+    where: {
+      is_lecturing: true,
+    },
+    select: {
+      prof_id: true,
+    },
+  });
+}
+
 export function getAllProfessorCoursesLectured() {
   return prisma.professorCourse.findMany({
     where: {

@@ -33,14 +33,15 @@ const Container: FC<ContainerT> = ({
   moreLink,
   Button,
   children,
+  ...props
 }) => {
   const slicedData = data.slice(0, maxItems);
   const moreExist = data.length > slicedData.length;
 
-  const childrenWithProps = (data: any[]) =>
+  const childrenWithProps = (data: any[], props: any) =>
     React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
-        return React.cloneElement(child, { data });
+        return React.cloneElement(child, { data, ...props });
       }
       return child;
     });
@@ -54,7 +55,7 @@ const Container: FC<ContainerT> = ({
       {slicedData.length === 0 && noResults && <div className="no-results">{noResults}</div>}
       {slicedData.length > 0 && (
         <div className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "no-shadow"}`}>
-          {childrenWithProps(slicedData)}
+          {childrenWithProps(slicedData, props)}
         </div>
       )}
       {moreExist && (

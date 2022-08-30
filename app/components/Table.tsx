@@ -24,11 +24,11 @@ export const links: LinksFunction = () => {
   ];
 };
 
-const Table: FC<TableT> = ({ data = [], noResults, userRole, children }) => {
-  const childrenWithProps = (data: any[], userRole: any) =>
+const Table: FC<TableT> = ({ data = [], noResults, children, ...props }) => {
+  const childrenWithProps = (data: any[], props: any) =>
     React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
-        return React.cloneElement(child, { data, userRole });
+        return React.cloneElement(child, { data, ...props });
       }
       return child;
     });
@@ -40,7 +40,7 @@ const Table: FC<TableT> = ({ data = [], noResults, userRole, children }) => {
           <h3>{noResults}</h3>
         </div>
       ) : (
-        childrenWithProps(data, userRole)
+        childrenWithProps(data, props)
       )}
     </>
   );

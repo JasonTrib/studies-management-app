@@ -1,29 +1,29 @@
 import type { FC } from "react";
-import type { getStudentUsersExtended } from "~/DAO/composites/composites.server";
+import type { getProfessorUsersExtended } from "~/DAO/composites/composites.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import UsersTableItem from "./UsersTableItem";
 
-type StudentsTableT = {
-  data?: Awaited<ReturnType<typeof getStudentUsersExtended>>;
+type ProfessorsTableT = {
+  data?: Awaited<ReturnType<typeof getProfessorUsersExtended>>;
+  usersType?: UserModelT["role"];
 };
 
-const StudentsTable: FC<StudentsTableT> = ({ data = [] }) => {
+const ProfessorsTable: FC<ProfessorsTableT> = ({ data = [] }) => {
   return (
     <table>
       <colgroup>
         <col />
         <col />
         <col />
-        <col className="col-small" />
-        <col className="col-medium" />
+        <col />
         <col className="col-small" />
       </colgroup>
       <thead>
         <tr>
           <th>User</th>
           <th>Full name</th>
+          <th>Title</th>
           <th>Email</th>
-          <th>Enrollment year</th>
-          <th>Studies status</th>
           <th>Courses</th>
         </tr>
       </thead>
@@ -32,13 +32,12 @@ const StudentsTable: FC<StudentsTableT> = ({ data = [] }) => {
           <UsersTableItem
             key={x.id}
             username={x.username}
-            studentId={x.student.id}
+            profId={x.professor.id}
             gender={x.profile?.gender}
             fullname={x.profile?.fullname}
             email={x.profile?.email}
-            enrollmentYear={x.student.enrollment_year}
-            studiesStatus={x.student.studies_status}
-            courseNumber={x.student.coursesNumber}
+            title={x.professor.title}
+            courseNumber={x.professor.coursesNumber}
             isCurrent={x.isCurrent}
           />
         ))}
@@ -47,4 +46,4 @@ const StudentsTable: FC<StudentsTableT> = ({ data = [] }) => {
   );
 };
 
-export default StudentsTable;
+export default ProfessorsTable;
