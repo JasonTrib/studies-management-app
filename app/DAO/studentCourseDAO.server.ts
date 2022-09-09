@@ -94,7 +94,7 @@ export function getStudentCourseAnnouncementsCount(
   });
 }
 
-export function getStudentCoursesRegisteredCount(courseId: Course["id"]) {
+export function getStudentCoursesRegisteredCountGivenCourse(courseId: Course["id"]) {
   return prisma.studentCourse.count({
     where: {
       course_id: courseId,
@@ -103,10 +103,28 @@ export function getStudentCoursesRegisteredCount(courseId: Course["id"]) {
   });
 }
 
-export function getStudentCoursesFollowingCount(courseId: Course["id"]) {
+export function getStudentCoursesFollowingCountGivenCourse(courseId: Course["id"]) {
   return prisma.studentCourse.count({
     where: {
       course_id: courseId,
+      is_following: true,
+    },
+  });
+}
+
+export function getStudentCoursesRegisteredCount(studentId: Student["id"]) {
+  return prisma.studentCourse.count({
+    where: {
+      student_id: studentId,
+      is_enrolled: true,
+    },
+  });
+}
+
+export function getStudentCoursesFollowingCount(studentId: Student["id"]) {
+  return prisma.studentCourse.count({
+    where: {
+      student_id: studentId,
       is_following: true,
     },
   });

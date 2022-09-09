@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     const data: Omit<courseDataT, "dep_id"> = {
       id: courseId,
       title: form.data.title,
-      description: form.data.description || undefined,
+      description: form.data.description,
       semester: form.data.semester,
       is_elective: form.data.isElective === "on" ? true : false,
       is_postgraduate: form.data.isPostgraduate === "on" ? true : false,

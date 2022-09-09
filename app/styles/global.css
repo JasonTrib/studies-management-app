@@ -43,6 +43,10 @@ h3 {
   padding-top: 100px;
 }
 
+.font-300 {
+  font-weight: 300;
+}
+
 .full-width {
   width: 100%;
 }
@@ -63,6 +67,13 @@ h3 {
 .link-simple a:hover {
   text-decoration: underline;
   color: inherit;
+}
+
+.svg-link a {
+  fill: var(--color-text-cyan);
+}
+.svg-link a:hover {
+  fill: var(--color-text-cyan-dark);
 }
 
 .ellipsis-3 {

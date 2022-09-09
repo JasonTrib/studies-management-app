@@ -8,7 +8,9 @@ import {
   getProfessorCourseLecturingCount,
   getProfessorCourses,
   getProfessorCoursesFollowing,
+  getProfessorCoursesFollowingCount,
   getProfessorCoursesLecturing,
+  getProfessorCoursesLecturingCount,
   getProfessorCoursesOnCourse,
 } from "../professorCourseDAO.server";
 import {
@@ -19,12 +21,16 @@ import {
   getStudentCoursesEnrolled,
   getStudentCoursesFollowing,
   getStudentCoursesFollowingCount,
+  getStudentCoursesFollowingCountGivenCourse,
   getStudentCoursesRegisteredCount,
+  getStudentCoursesRegisteredCountGivenCourse,
 } from "../studentCourseDAO.server";
 import {
   getDepartmentProfessors,
   getDepartmentRegistrars,
   getDepartmentStudents,
+  getProfessorUserProfile,
+  getStudentUserProfile,
 } from "../userDAO.server";
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
@@ -197,8 +203,8 @@ export async function getCourseExtended(courseId: Course["id"]) {
   const course = await getCourse(courseId);
   if (!course) return null;
   const profCourses = await getProfessorCoursesOnCourse(courseId);
-  const studentsRegisteredCount = await getStudentCoursesRegisteredCount(courseId);
-  const studentsFollowingCount = await getStudentCoursesFollowingCount(courseId);
+  const studentsRegisteredCount = await getStudentCoursesRegisteredCountGivenCourse(courseId);
+  const studentsFollowingCount = await getStudentCoursesFollowingCountGivenCourse(courseId);
 
   const courseExtended = {
     ...course,
@@ -370,4 +376,40 @@ export async function getStudentUsersExtended(dep: Department["full_title"], use
   });
 
   return studentUsersExtended;
+}
+
+export async function getProfessorUserExtended(userId: User["id"]) {
+  const user = await getProfessorUserProfile(userId);
+  if (!user?.professor?.id) return null;
+  const coursesFollowing = await getProfessorCoursesFollowingCount(user.professor.id);
+  const coursesLecturing = await getProfessorCoursesLecturingCount(user.professor.id);
+
+  const userExtended = {
+    ...user,
+    professor: {
+      ...user?.professor,
+      coursesFollowingNumber: coursesFollowing,
+      coursesLecturingNumber: coursesLecturing,
+    },
+  };
+
+  return userExtended;
+}
+
+export async function getStudentUserExtended(userId: User["id"]) {
+  const user = await getStudentUserProfile(userId);
+  if (!user?.student?.id) return null;
+  const coursesFollowing = await getStudentCoursesFollowingCount(user.student.id);
+  const coursesEnrolled = await getStudentCoursesRegisteredCount(user.student.id);
+
+  const userExtended = {
+    ...user,
+    student: {
+      ...user?.student,
+      coursesFollowingNumber: coursesFollowing,
+      coursesEnrolledNumber: coursesEnrolled,
+    },
+  };
+
+  return userExtended;
 }

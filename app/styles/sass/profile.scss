@@ -1,0 +1,105 @@
+.profile-container {
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  margin-bottom: 16px;
+
+  .profile-heading {
+    display: flex;
+    border-bottom: 1px solid var(--color-shadow);
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+
+    .profile-avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 64px;
+      height: 64px;
+      background-color: var(--color-bg-lightest);
+      box-shadow: 0px 0px 0px 1px var(--color-shadow);
+      border-radius: 1000px;
+
+      .icon {
+        fill: var(--color-text);
+
+        &.gender-male {
+          fill: hsl(220, 80%, 70%);
+        }
+
+        &.gender-female {
+          fill: hsl(300, 80%, 70%);
+        }
+      }
+    }
+
+    .profile-identity {
+      flex-grow: 1;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      padding-left: 12px;
+
+      .fullname {
+        font-size: 21px;
+        color: var(--color-text);
+      }
+
+      .username {
+        font-size: 16px;
+        color: var(--color-text-lighter);
+      }
+    }
+  }
+
+  .profile-info-section {
+    .profile-info-title {
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 4px;
+    }
+
+    &.section-separator {
+      border-bottom: 1px solid var(--color-shadow);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .info-list {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+
+      .field {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: var(--color-text);
+        fill: var(--color-text);
+        height: 28px;
+
+        &:nth-child(4n),
+        &:nth-child(4n - 1) {
+          background-color: hsl(0deg 0% 95%);
+        }
+      }
+    }
+  }
+}
+
+.about-me-section {
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  padding: 16px;
+
+  .title {
+    font-size: 19px;
+    font-weight: 300;
+    color: var(--color-text-light);
+  }
+
+  .content {
+    margin-top: 8px;
+    color: var(--color-text);
+    white-space: pre-line;
+  }
+}

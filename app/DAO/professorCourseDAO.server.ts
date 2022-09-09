@@ -196,6 +196,24 @@ export function getProfessorCourseLecturingCount(profId: Professor["id"], course
   });
 }
 
+export function getProfessorCoursesLecturingCount(profId: Professor["id"]) {
+  return prisma.professorCourse.count({
+    where: {
+      prof_id: profId,
+      is_lecturing: true,
+    },
+  });
+}
+
+export function getProfessorCoursesFollowingCount(profId: Professor["id"]) {
+  return prisma.professorCourse.count({
+    where: {
+      prof_id: profId,
+      is_following: true,
+    },
+  });
+}
+
 export function assignProfessorCourse(profId: Professor["id"], courseId: Course["id"]) {
   return prisma.professorCourse.upsert({
     where: {

@@ -41,12 +41,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 
     const data: profileDataT = {
       user_id: parseInt(form.data.userId),
-      fullname: form.data.fullname || undefined,
-      email: form.data.email || undefined,
+      fullname: form.data.fullname,
+      email: form.data.email,
       gender: form.data.gender === "MALE" ? "M" : form.data.gender === "FEMALE" ? "F" : undefined,
-      phone: form.data.phone || undefined,
-      info: form.data.info || undefined,
-      avatar: form.data.avatar || undefined,
+      phone: form.data.phone,
+      info: form.data.info,
+      avatar: form.data.avatar,
       is_public: form.data.isPublic === "on" ? true : false,
       updated_at: new Date().toISOString(),
     };

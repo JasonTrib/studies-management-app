@@ -129,6 +129,103 @@ export function getDepartmentStudents(dep: Department["full_title"]) {
   });
 }
 
+export function getRegistrarUserProfile(id: User["id"]) {
+  return prisma.user.findUnique({
+    where: { id: id },
+    select: {
+      id: true,
+      username: true,
+      department: {
+        select: {
+          full_title: true,
+        },
+      },
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          phone: true,
+          info: true,
+          is_public: true,
+          created_at: true,
+        },
+      },
+      registrar: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
+export function getProfessorUserProfile(id: User["id"]) {
+  return prisma.user.findUnique({
+    where: { id: id },
+    select: {
+      id: true,
+      username: true,
+      department: {
+        select: {
+          full_title: true,
+        },
+      },
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          phone: true,
+          info: true,
+          is_public: true,
+          created_at: true,
+        },
+      },
+      professor: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
+export function getStudentUserProfile(id: User["id"]) {
+  return prisma.user.findUnique({
+    where: { id: id },
+    select: {
+      id: true,
+      username: true,
+      department: {
+        select: {
+          full_title: true,
+        },
+      },
+      profile: {
+        select: {
+          fullname: true,
+          email: true,
+          gender: true,
+          phone: true,
+          info: true,
+          is_public: true,
+          created_at: true,
+        },
+      },
+      student: {
+        select: {
+          id: true,
+          enrollment_year: true,
+          studies_status: true,
+        },
+      },
+    },
+  });
+}
+
 export function getUserAnnouncements(id: User["id"]) {
   return prisma.user.findUnique({
     where: { id },
