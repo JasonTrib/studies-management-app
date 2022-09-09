@@ -20,8 +20,8 @@ const RegistrarsTable: FC<RegistrarsTableT> = ({ data = [] }) => {
       <thead>
         <tr>
           <th>User</th>
-          <th>Full name</th>
           <th>Title</th>
+          <th>Full name</th>
           <th>Email</th>
         </tr>
       </thead>
@@ -29,8 +29,8 @@ const RegistrarsTable: FC<RegistrarsTableT> = ({ data = [] }) => {
         {data.map((x) => (
           <UsersTableItem
             key={x.id}
+            userId={x.id}
             username={x.username}
-            regId={x.registrar.id}
             gender={x.profile?.gender}
             fullname={x.profile?.fullname}
             email={x.profile?.email}

@@ -135,6 +135,7 @@ export function getRegistrarUserProfile(id: User["id"]) {
     select: {
       id: true,
       username: true,
+      role: true,
       department: {
         select: {
           full_title: true,
@@ -167,6 +168,7 @@ export function getProfessorUserProfile(id: User["id"]) {
     select: {
       id: true,
       username: true,
+      role: true,
       department: {
         select: {
           full_title: true,
@@ -199,6 +201,7 @@ export function getStudentUserProfile(id: User["id"]) {
     select: {
       id: true,
       username: true,
+      role: true,
       department: {
         select: {
           full_title: true,

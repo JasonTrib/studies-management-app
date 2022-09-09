@@ -76,6 +76,7 @@
         color: var(--color-text);
         fill: var(--color-text);
         height: 28px;
+        padding-left: 4px;
 
         &:nth-child(4n),
         &:nth-child(4n - 1) {

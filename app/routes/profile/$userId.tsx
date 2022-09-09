@@ -1,19 +1,20 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
-import CogIcon from "~/components/icons/CogIcon";
 import {
   getProfessorUserExtended,
   getStudentUserExtended,
 } from "~/DAO/composites/composites.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
-import { getRegistrarUserProfile } from "~/DAO/userDAO.server";
+import { getRegistrarUserProfile, getUser } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import profileStyles from "~/styles/profile.css";
 import { formatDate } from "~/utils/dateUtils";
+import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
@@ -28,8 +29,19 @@ type LoaderDataT = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await requireUser(request);
-  if (user === null) return logout(request);
+  const id = paramToInt(params.userId);
+  if (id == null) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const activeUser = await requireUser(request);
+  if (activeUser === null) return logout(request);
+  if (activeUser.id === id) return redirect("/profile");
+
+  const user = await getUser(id);
+  if (!user) {
+    throw new Response("Not Found", { status: 404 });
+  }
 
   let userExtended;
   switch (user.role) {
@@ -48,19 +60,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   if (!userExtended) throw new Error();
 
-  return { user: userExtended, userRole: user.role };
+  return { user: userExtended, userRole: activeUser.role };
 };
 
-const ProfileIndexPage = () => {
-  const { user, userRole } = useLoaderData() as LoaderDataT;
-  const isReg = userRole === "REGISTRAR";
-  const isProf = userRole === "PROFESSOR";
-  const isStud = userRole === "STUDENT";
+const UserProfilePage = () => {
+  const { user } = useLoaderData() as LoaderDataT;
+  const isReg = user.role === "REGISTRAR";
+  const isProf = user.role === "PROFESSOR";
+  const isStud = user.role === "STUDENT";
 
   let avatarColor = "";
-  const gender = user.profile?.gender;
-  if (gender === "M") avatarColor = "gender-male";
-  if (gender === "F") avatarColor = "gender-female";
+  if (user.profile?.is_public) {
+    const gender = user.profile?.gender;
+    if (gender === "M") avatarColor = "gender-male";
+    if (gender === "F") avatarColor = "gender-female";
+  }
 
   return (
     <AppLayout wide>
@@ -71,15 +85,12 @@ const ProfileIndexPage = () => {
               <AvatarIcon width={40} height={40} className={`icon ${avatarColor}`} />
             </div>
             <div className="profile-identity">
-              <div className="fullname">{user.profile?.fullname || "-"}</div>
+              {user.profile?.is_public ? (
+                <div className="fullname">{user.profile?.fullname || "-"}</div>
+              ) : (
+                <div className="fullname">-</div>
+              )}
               <div className="username">{user.username}</div>
-            </div>
-            <div className="profile-action">
-              <span className="svg-link">
-                <Link to="edit">
-                  <CogIcon />
-                </Link>
-              </span>
             </div>
           </div>
           <div className="profile-info-section section-separator">
@@ -95,12 +106,10 @@ const ProfileIndexPage = () => {
               {isProf && (
                 <>
                   <div className="field font-300">Title</div>
-                  <div className="field">{user.professor.title}</div>
+                  <div className="field">{user.professor?.title}</div>
                   <div className="field font-300">Courses following</div>
                   <div className="field">{user.professor.coursesFollowingNumber}</div>
-                  <div className="field font-300 link-simple">
-                    <Link to="/my-courses">Courses lecturing ↗</Link>
-                  </div>
+                  <div className="field font-300 link-simple">Courses lecturing</div>
                   <div className="field">{user.professor.coursesLecturingNumber}</div>
                 </>
               )}
@@ -112,9 +121,7 @@ const ProfileIndexPage = () => {
                   <div className="field">{user.student?.enrollment_year}</div>
                   <div className="field font-300">Courses following</div>
                   <div className="field">{user.student?.coursesFollowingNumber}</div>
-                  <div className="field font-300 link-simple">
-                    <Link to="/my-courses">Courses enrolled ↗</Link>
-                  </div>
+                  <div className="field font-300 link-simple">Courses enrolled</div>
                   <div className="field">{user.student?.coursesEnrolledNumber}</div>
                 </>
               )}
@@ -123,9 +130,17 @@ const ProfileIndexPage = () => {
           <div className="profile-info-section">
             <div className="info-list">
               <div className="field font-300">Email</div>
-              <div className="field">{user.profile?.email || "-"}</div>
+              {user.profile?.is_public ? (
+                <div className="field">{user.profile?.email || "-"}</div>
+              ) : (
+                <div className="field">-</div>
+              )}
               <div className="field font-300">Phone</div>
-              <div className="field">{user.profile?.phone || "-"}</div>
+              {user.profile?.is_public ? (
+                <div className="field">{user.profile?.phone || "-"}</div>
+              ) : (
+                <div className="field">-</div>
+              )}
               <div className="field font-300">Profile is public</div>
               <div className="field">
                 {user.profile?.is_public ? (
@@ -141,13 +156,15 @@ const ProfileIndexPage = () => {
             </div>
           </div>
         </div>
-        <div className="about-me-section">
-          <div className="title">About me</div>
-          {user.profile?.info && <div className="content">{user.profile?.info}</div>}
-        </div>
+        {user.profile?.is_public && user.profile?.info && (
+          <div className="about-me-section">
+            <div className="title">About me</div>
+            <div className="content">{user.profile?.info}</div>
+          </div>
+        )}
       </>
     </AppLayout>
   );
 };
 
-export default ProfileIndexPage;
+export default UserProfilePage;

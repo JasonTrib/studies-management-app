@@ -31,11 +31,12 @@ const StudentsTable: FC<StudentsTableT> = ({ data = [] }) => {
         {data.map((x) => (
           <UsersTableItem
             key={x.id}
+            userId={x.id}
             username={x.username}
-            studentId={x.student.id}
             gender={x.profile?.gender}
             fullname={x.profile?.fullname}
             email={x.profile?.email}
+            isPublic={x.profile.is_public}
             enrollmentYear={x.student.enrollment_year}
             studiesStatus={x.student.studies_status}
             courseNumber={x.student.coursesNumber}
