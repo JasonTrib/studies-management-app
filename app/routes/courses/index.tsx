@@ -62,7 +62,7 @@ const CourseIndexPage = () => {
 
   return (
     <AppLayout wide>
-      <Table data={courses} noResults={"No courses found."} userRole={userRole}>
+      <Table data={courses} noResultsMsg={"No courses found."} userRole={userRole}>
         <CoursesTable />
       </Table>
     </AppLayout>

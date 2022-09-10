@@ -2,6 +2,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 16px;
+  box-shadow: 0 0 12px var(--color-shadow-light);
 
   colgroup {
     .col-small {
@@ -17,15 +18,16 @@ table {
   td {
     color: var(--color-text);
     padding: 8px;
-    border: 1px solid hsl(0, 0%, 80%);
+    border: 1px solid hsl(0, 0%, 92%);
     max-width: 100px;
     vertical-align: baseline;
     overflow: hidden;
   }
 
   th {
-    background-color: hsl(0, 0%, 90%);
-    color: var(--color-text-dark);
+    background-color: hsl(0, 0%, 92%);
+    color: var(--color-text);
+    border: 1px solid hsl(0deg, 0%, 83%);
     vertical-align: middle;
   }
 
@@ -82,7 +84,11 @@ table {
   }
 
   .empty {
-    background-color: hsla(0, 0%, 90%, 0.5);
+    background-color: hsla(0, 0%, 92%, 0.5);
+  }
+
+  .low-grade {
+    color: var(--color-text-lighter);
   }
 
   .instructors {

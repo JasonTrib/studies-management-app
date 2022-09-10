@@ -84,6 +84,41 @@ export async function getCoursesEnrolled(studentId: Student["id"]) {
   return coursesEnrolled;
 }
 
+export async function getCoursesEnrolledWithGradeAccess(
+  studentId: Student["id"],
+  activeUserId: User["id"],
+) {
+  const studentCoursesRaw = await getStudentCoursesEnrolled(studentId);
+  const professorCoursesRaw = await getAllProfessorCoursesLectured();
+
+  const studentCourses = studentCoursesRaw.map((x) => ({
+    ...x.course,
+    grade: x.grade,
+    isEnrolled: x.is_enrolled,
+    isFollowing: x.is_following,
+  }));
+  const profCourses = studentCourses.flatMap((studentCourse) =>
+    professorCoursesRaw.filter((professorCourse) => professorCourse.course_id === studentCourse.id),
+  );
+
+  const coursesEnrolled = studentCourses.map((course) => {
+    const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
+
+    return {
+      ...course,
+      grade: professors.some((prof) => prof.professor.user_id === activeUserId)
+        ? course.grade
+        : null,
+      professors: professors.map((prof) => ({
+        id: prof.professor.id,
+        fullname: prof.professor.user.profile?.fullname,
+      })),
+    };
+  });
+
+  return coursesEnrolled;
+}
+
 export async function getCoursesLecturing(profId: Professor["id"]) {
   const profCoursesRaw = await getProfessorCoursesLecturing(profId);
   const allProfsCoursesRaw = await getAllProfessorCoursesLectured();

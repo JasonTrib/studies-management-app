@@ -10,7 +10,7 @@ import tableStyles from "~/styles/table.css";
 
 type TableT = {
   data?: any[];
-  noResults?: string;
+  noResultsMsg?: string;
   userRole?: UserModelT["role"];
 };
 
@@ -24,7 +24,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-const Table: FC<TableT> = ({ data = [], noResults, children, ...props }) => {
+const Table: FC<TableT> = ({ data = [], noResultsMsg, children, ...props }) => {
   const childrenWithProps = (data: any[], props: any) =>
     React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
@@ -35,9 +35,9 @@ const Table: FC<TableT> = ({ data = [], noResults, children, ...props }) => {
 
   return (
     <>
-      {data.length === 0 && noResults ? (
+      {data.length === 0 && noResultsMsg ? (
         <div className="table-no-results">
-          <h3>{noResults}</h3>
+          <h3>{noResultsMsg}</h3>
         </div>
       ) : (
         childrenWithProps(data, props)

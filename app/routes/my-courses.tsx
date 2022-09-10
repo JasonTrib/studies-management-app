@@ -52,23 +52,23 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const MyCoursesPage = () => {
   const { coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
 
-  let noResults;
+  let noResultsMsg;
   switch (userRole) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
-      noResults = `No courses can exist for "${userRole}" user.`;
+      noResultsMsg = `No courses can exist for "${userRole}" user.`;
       break;
     case USER_ROLE.PROFESSOR:
-      noResults = "No courses found that you are lecturing.";
+      noResultsMsg = "No courses found that you are lecturing.";
       break;
     case USER_ROLE.STUDENT:
-      noResults = "No courses found that you are enrolled in.";
+      noResultsMsg = "No courses found that you are enrolled in.";
       break;
   }
 
   return (
     <AppLayout wide>
-      <Table data={coursesRegistered} noResults={noResults} userRole={userRole}>
+      <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userRole}>
         <MyCoursesTable />
       </Table>
     </AppLayout>

@@ -10,24 +10,23 @@
   align-items: center;
   padding: 8px 12px;
   color: var(--color-text-light);
+  box-shadow: 0px 1px 0px var(--color-shadow);
+  margin-bottom: 1px;
+}
+.container-blueprint .heading.no-content {
+  box-shadow: none;
+  margin-bottom: 0px;
 }
 .container-blueprint .heading h3 {
   font-size: 21px;
 }
-.container-blueprint .no-heading {
-  height: 8px;
-}
-.container-blueprint .no-results {
+.container-blueprint .no-results-msg {
   padding: 8px 12px;
   color: var(--color-text-lighter);
   font-style: italic;
-  box-shadow: 0px -1px 0px var(--color-shadow);
-  margin-top: 1px;
 }
 .container-blueprint .content {
   padding: 0 12px 8px;
-  box-shadow: 0px -1px 0px var(--color-shadow);
-  margin-top: 1px;
 }
 .container-blueprint .content .container-item {
   background-color: white;
@@ -58,10 +57,10 @@
   font-size: 13px;
   margin-bottom: 4px;
 }
-.container-blueprint .no-shadow {
-  box-shadow: none;
+.container-blueprint .content.padding-top {
+  padding-top: 8px;
 }
-.container-blueprint .no-padding-bot {
+.container-blueprint .content.no-padding-bot {
   padding-bottom: 0;
 }
 .container-blueprint .more {

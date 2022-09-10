@@ -10,7 +10,7 @@ import coursesStyles from "~/styles/courses.css";
 type ContainerT = {
   title?: string;
   data?: any[];
-  noResults?: string;
+  noResultsMsg?: string;
   maxItems?: number;
   moreLink?: string;
   Button?: JSX.Element;
@@ -28,7 +28,7 @@ export const links: LinksFunction = () => {
 const Container: FC<ContainerT> = ({
   title,
   data = [],
-  noResults,
+  noResultsMsg,
   maxItems,
   moreLink,
   Button,
@@ -37,6 +37,7 @@ const Container: FC<ContainerT> = ({
 }) => {
   const slicedData = data.slice(0, maxItems);
   const moreExist = data.length > slicedData.length;
+  const noContent = !!noResultsMsg || data.length > 0;
 
   const childrenWithProps = (data: any[], props: any) =>
     React.Children.map(children, (child) => {
@@ -48,13 +49,19 @@ const Container: FC<ContainerT> = ({
 
   return (
     <div className="container-blueprint">
-      <div className={`${title ? "heading" : "no-heading"}`}>
-        <h3>{title}</h3>
-        {Button}
-      </div>
-      {slicedData.length === 0 && noResults && <div className="no-results">{noResults}</div>}
+      {title && (
+        <div className={`heading ${noContent ? "" : "no-content"}`}>
+          <h3>{title}</h3>
+          {Button}
+        </div>
+      )}
+      {slicedData.length === 0 && noResultsMsg && (
+        <div className="no-results-msg">{noResultsMsg}</div>
+      )}
       {slicedData.length > 0 && (
-        <div className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "no-shadow"}`}>
+        <div
+          className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "padding-top"}`}
+        >
           {childrenWithProps(slicedData, props)}
         </div>
       )}

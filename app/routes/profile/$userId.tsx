@@ -2,13 +2,21 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import { links as ContainerLinks } from "~/components/Container";
+import MyCoursesTable from "~/components/courses/MyCoursesTable";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
+import Table, { links as TableLinks } from "~/components/Table";
 import {
+  getCoursesEnrolled,
+  getCoursesEnrolledWithGradeAccess,
+  getCoursesLecturing,
   getProfessorUserExtended,
   getStudentUserExtended,
 } from "~/DAO/composites/composites.server";
+import { getProfessorId } from "~/DAO/professorDAO.server";
+import { getStudentId } from "~/DAO/studentDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import { getRegistrarUserProfile, getUser } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
@@ -18,7 +26,7 @@ import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: profileStyles }];
+  return [{ rel: "stylesheet", href: profileStyles }, ...ContainerLinks(), ...TableLinks()];
 };
 
 type LoaderDataT = {
@@ -26,6 +34,9 @@ type LoaderDataT = {
     Exclude<Awaited<ReturnType<typeof getProfessorUserExtended>>, null> &
     Exclude<Awaited<ReturnType<typeof getStudentUserExtended>>, null>;
   userRole: UserModelT["role"];
+  courses: Exclude<Awaited<ReturnType<typeof getCoursesLecturing>>, null> &
+    Exclude<Awaited<ReturnType<typeof getCoursesEnrolled>>, null> &
+    Exclude<Awaited<ReturnType<typeof getCoursesEnrolledWithGradeAccess>>, null>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -44,6 +55,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   let userExtended;
+  let coursesRegistered;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
@@ -51,20 +63,36 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       break;
     case USER_ROLE.PROFESSOR:
       userExtended = await getProfessorUserExtended(user.id);
+      const prof = await getProfessorId(user.id);
+      if (!prof) throw new Error();
+      coursesRegistered = await getCoursesLecturing(prof.id);
       break;
     case USER_ROLE.STUDENT:
       userExtended = await getStudentUserExtended(user.id);
+      const student = await getStudentId(user.id);
+      if (!student) throw new Error();
+      switch (activeUser.role) {
+        case USER_ROLE.SUPERADMIN:
+        case USER_ROLE.REGISTRAR:
+          coursesRegistered = await getCoursesEnrolled(student.id);
+          break;
+        case USER_ROLE.PROFESSOR:
+          coursesRegistered = await getCoursesEnrolledWithGradeAccess(student.id, activeUser.id);
+          break;
+      }
       break;
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
   if (!userExtended) throw new Error();
 
-  return { user: userExtended, userRole: activeUser.role };
+  return { user: userExtended, userRole: activeUser.role, courses: coursesRegistered };
 };
 
 const UserProfilePage = () => {
-  const { user } = useLoaderData() as LoaderDataT;
+  const { user, userRole, courses } = useLoaderData() as LoaderDataT;
+  const activeUserHasPriviledge =
+    userRole === "PROFESSOR" || userRole === "REGISTRAR" || userRole === "SUPERADMIN";
   const isReg = user.role === "REGISTRAR";
   const isProf = user.role === "PROFESSOR";
   const isStud = user.role === "STUDENT";
@@ -75,6 +103,7 @@ const UserProfilePage = () => {
     if (gender === "M") avatarColor = "gender-male";
     if (gender === "F") avatarColor = "gender-female";
   }
+  const noResultsMsg = "User hasn't registered to any courses";
 
   return (
     <AppLayout wide>
@@ -161,6 +190,13 @@ const UserProfilePage = () => {
             <div className="title">About me</div>
             <div className="content">{user.profile?.info}</div>
           </div>
+        )}
+        {isProf || (isStud && activeUserHasPriviledge) ? (
+          <Table data={courses} noResultsMsg={noResultsMsg} userRole={user.role}>
+            <MyCoursesTable />
+          </Table>
+        ) : (
+          <></>
         )}
       </>
     </AppLayout>

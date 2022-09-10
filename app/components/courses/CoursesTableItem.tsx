@@ -54,7 +54,12 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
         )}
       </td>
       {semester && <td className="semester table-center">{semester}</td>}
-      {grade !== undefined && <td className="table-center">{grade !== null ? grade : "-"} </td>}
+      {grade !== undefined &&
+        (grade !== null ? (
+          <td className={`table-center ${grade < 5 ? "low-grade" : ""}`}>{grade}</td>
+        ) : (
+          <td className="table-center empty" />
+        ))}
       {isFollowing !== undefined && (
         <td className="table-center cell-checkbox">
           {isFollowing && (

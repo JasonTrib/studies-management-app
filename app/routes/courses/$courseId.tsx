@@ -161,7 +161,7 @@ const CourseDetailsPage = () => {
           <Container
             title={`Course announcements`}
             data={announcements}
-            noResults={"No announcements found"}
+            noResultsMsg={"No announcements found"}
             Button={
               canModAnns ? (
                 <NewAnnouncementButton courseId={course.id} />

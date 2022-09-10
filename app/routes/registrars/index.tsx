@@ -28,7 +28,7 @@ const RegistrarIndexPage = () => {
   const { registrarUsers } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout wide>
-      <Table data={registrarUsers} noResults={"No registrars found."}>
+      <Table data={registrarUsers} noResultsMsg={"No registrars found."}>
         <RegistrarsTable />
       </Table>
     </AppLayout>

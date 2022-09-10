@@ -39,7 +39,7 @@ const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole }) => {
         {data.map((x) => (
           <CoursesTableItem
             key={x.id}
-            id={x.id}
+            courseId={x.id}
             title={x.title}
             isPostgraduate={x.is_postgraduate}
             professors={x.professors}

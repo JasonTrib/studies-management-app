@@ -86,7 +86,7 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
         <div className="page-content">
           {wide ? (
             <div className="wide-content-feed">
-              <div className="mb-32">{offsprings[0]}</div>
+              <div>{offsprings[0]}</div>
               <div className="content-feed">
                 <div className="main-feed">{offsprings[1]}</div>
                 <div className="side-feed">{offsprings[2]}</div>

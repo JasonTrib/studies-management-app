@@ -10,28 +10,27 @@
     align-items: center;
     padding: 8px 12px;
     color: var(--color-text-light);
+    box-shadow: 0px 1px 0px var(--color-shadow);
+    margin-bottom: 1px;
+
+    &.no-content {
+      box-shadow: none;
+      margin-bottom: 0px;
+    }
 
     h3 {
       font-size: 21px;
     }
   }
 
-  .no-heading {
-    height: 8px;
-  }
-
-  .no-results {
+  .no-results-msg {
     padding: 8px 12px;
     color: var(--color-text-lighter);
     font-style: italic;
-    box-shadow: 0px -1px 0px var(--color-shadow);
-    margin-top: 1px;
   }
 
   .content {
     padding: 0 12px 8px;
-    box-shadow: 0px -1px 0px var(--color-shadow);
-    margin-top: 1px;
 
     .container-item {
       background-color: white;
@@ -66,14 +65,14 @@
         margin-bottom: 4px;
       }
     }
-  }
 
-  .no-shadow {
-    box-shadow: none;
-  }
+    &.padding-top {
+      padding-top: 8px;
+    }
 
-  .no-padding-bot {
-    padding-bottom: 0;
+    &.no-padding-bot {
+      padding-bottom: 0;
+    }
   }
 
   .more {

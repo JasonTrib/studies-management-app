@@ -28,7 +28,7 @@ const StudentIndexPage = () => {
   const { studentUsers } = useLoaderData() as LoaderDataT;
   return (
     <AppLayout wide>
-      <Table data={studentUsers} noResults={"No students found."}>
+      <Table data={studentUsers} noResultsMsg={"No students found."}>
         <StudentsTable />
       </Table>
     </AppLayout>

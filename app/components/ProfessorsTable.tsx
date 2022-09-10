@@ -36,6 +36,7 @@ const ProfessorsTable: FC<ProfessorsTableT> = ({ data = [] }) => {
             gender={x.profile?.gender}
             fullname={x.profile?.fullname}
             email={x.profile?.email}
+            isPublic={x.profile.is_public}
             title={x.professor.title}
             courseNumber={x.professor.coursesNumber}
             isCurrent={x.isCurrent}

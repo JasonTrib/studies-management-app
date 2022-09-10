@@ -34,6 +34,7 @@ const RegistrarsTable: FC<RegistrarsTableT> = ({ data = [] }) => {
             gender={x.profile?.gender}
             fullname={x.profile?.fullname}
             email={x.profile?.email}
+            isPublic={x.profile.is_public}
             title={x.registrar.title}
             isCurrent={x.isCurrent}
           />
