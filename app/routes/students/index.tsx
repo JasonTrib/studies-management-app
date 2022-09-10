@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import StudentsTable from "~/components/StudentsTable";
+import StudentsTable from "~/components/users/StudentsTable";
 import Table, { links as TableLinks } from "~/components/Table";
 import { getStudentUsersExtended } from "~/DAO/composites/composites.server";
 import { logout, requireUser } from "~/utils/session.server";

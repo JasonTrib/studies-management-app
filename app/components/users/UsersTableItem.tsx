@@ -4,7 +4,7 @@ import type { ProfessorModelT } from "~/DAO/professorDAO.server";
 import type { ProfileModelT } from "~/DAO/profileDAO.server";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
-import AvatarIcon from "./icons/AvatarIcon";
+import AvatarIcon from "~/components/icons/AvatarIcon";
 
 type UsersTableItemT = {
   userId: UserModelT["id"];
