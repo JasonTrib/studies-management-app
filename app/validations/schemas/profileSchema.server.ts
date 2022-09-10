@@ -13,6 +13,5 @@ export const profileSchema = z.object({
     .trim()
     .regex(/^\d{10}$|^$/, "Phone must be 10 digits long"),
   info: z.string().trim(),
-  avatar: z.string().trim().optional(),
   isPublic: z.string().regex(/^on$/).optional(),
 });

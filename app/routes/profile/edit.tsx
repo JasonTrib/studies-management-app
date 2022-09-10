@@ -46,7 +46,6 @@ export const action: ActionFunction = async ({ request, params }) => {
       gender: form.data.gender === "MALE" ? "M" : form.data.gender === "FEMALE" ? "F" : undefined,
       phone: form.data.phone,
       info: form.data.info,
-      avatar: form.data.avatar,
       is_public: form.data.isPublic === "on" ? true : false,
       updated_at: new Date().toISOString(),
     };
@@ -150,14 +149,6 @@ const ProfileEditPage = () => {
                   defaultValue={profile.phone || undefined}
                   disabled={isSubmitting}
                   error={actionData?.errors?.phone}
-                />
-                <FormInput
-                  text="Avatar"
-                  label="avatar"
-                  type="text"
-                  defaultValue={profile.avatar || undefined}
-                  disabled={isSubmitting}
-                  error={actionData?.errors?.avatar}
                 />
                 <FormTextarea
                   text="Info"

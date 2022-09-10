@@ -89,9 +89,12 @@ async function upsertProfiles() {
       update: {},
       create: {
         id: profiles[i].id,
+        user_id: profiles[i].userId,
         fullname: profiles[i].fullname,
         email: profiles[i].email,
-        user_id: profiles[i].userId,
+        gender: profiles[i].gender,
+        phone: profiles[i].phone,
+        is_public: profiles[i].isPublic,
       },
     });
   }
@@ -278,9 +281,12 @@ async function createProfiles() {
     await prisma.profile.create({
       data: {
         // id: profiles[i].id,
+        user_id: profiles[i].userId,
         fullname: profiles[i].fullname,
         email: profiles[i].email,
-        user_id: profiles[i].userId,
+        gender: profiles[i].gender,
+        phone: profiles[i].phone,
+        is_public: profiles[i].isPublic,
       },
     });
   }

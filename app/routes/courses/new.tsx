@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     dep_id: form.data.dep,
     title: form.data.title,
     description: form.data.description || undefined,
-    semester: form.data.semester,
+    semester: parseInt(form.data.semester),
     is_elective: form.data.isElective === "on" ? true : false,
     is_postgraduate: form.data.isPostgraduate === "on" ? true : false,
     is_public: form.data.isPublic === "on" ? true : false,

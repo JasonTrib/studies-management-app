@@ -42,7 +42,6 @@ model Profile {
   gender     Gender?
   phone      String?
   info       String?
-  avatar     String?
   is_public  Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -118,7 +117,7 @@ model Course {
   id              Int      @id @default(autoincrement())
   title           String   @unique
   description     String?  @db.VarChar(2000)
-  semester        String
+  semester        Int
   is_elective     Boolean
   is_postgraduate Boolean
   is_public       Boolean  @default(false)

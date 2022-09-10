@@ -15,7 +15,6 @@ export type profileDataT = {
   gender?: "M" | "F";
   phone?: string;
   info?: string;
-  avatar?: string;
   is_public: boolean;
   updated_at: string;
 };
@@ -29,7 +28,6 @@ export function updateProfile(data: profileDataT) {
       gender: data.gender,
       phone: data.phone,
       info: data.info,
-      avatar: data.avatar,
       is_public: data.is_public,
       updated_at: data.updated_at,
     },

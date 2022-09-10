@@ -47,7 +47,7 @@ export type courseDataT = {
   dep_id: string;
   title: string;
   description?: string;
-  semester: string;
+  semester: number;
   is_elective: boolean;
   is_postgraduate: boolean;
   is_public: boolean;
