@@ -187,7 +187,7 @@ const ProfileEditPage = () => {
               <div className="form-fields">
                 <FormInput
                   text="Username"
-                  label="username"
+                  label="_username"
                   type="text"
                   defaultValue={username}
                   disabled
