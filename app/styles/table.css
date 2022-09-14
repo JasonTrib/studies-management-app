@@ -97,6 +97,7 @@ table .semester {
   background-color: white;
   box-shadow: 0 0 12px var(--color-shadow-light);
   padding: 8px 12px;
+  margin-bottom: 16px;
 }
 .table-no-results h3 {
   color: var(--color-text-lighter);

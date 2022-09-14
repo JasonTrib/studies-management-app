@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import { useRef, useState } from "react";
-import type { z } from "zod";
+import { z } from "zod";
 import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
 import FormInput from "~/components/form/FormInput";
@@ -15,6 +15,10 @@ import ProfessorsTableShort from "~/components/users/ProfessorsTableShort";
 import { getProfessorUserShortExtended } from "~/DAO/composites/composites.server";
 import type { courseDataT } from "~/DAO/courseDAO.server";
 import { editCourse, getCourse } from "~/DAO/courseDAO.server";
+import {
+  assignProfessorToCourse,
+  unregisterProfessorFromCourse,
+} from "~/DAO/professorCourseDAO.server";
 import { getProfessors } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -63,21 +67,35 @@ export const action: ActionFunction = async ({ request, params }) => {
     };
 
     await editCourse(data);
+
+    return redirect(`/courses/${courseId}`);
   }
   if (body["_action"] === "unregisterProf") {
-    console.log("unregisterProf");
-    console.log("body", body);
+    const unregisterLecturerSchema = z.object({
+      profId: z.string().regex(/^\d+$/, "Invalid id"),
+    });
+    type SchemaT2 = z.infer<typeof unregisterLecturerSchema>;
+    const form = validateFormData<SchemaT2>(body, unregisterLecturerSchema);
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
 
-    return redirect(`/courses/${courseId}/edit`);
+    await unregisterProfessorFromCourse(parseInt(form.data.profId), courseId);
   }
   if (body["_action"] === "assignProf") {
-    console.log("assignProf");
-    console.log("body", body);
+    const assignLecturerSchema = z.object({
+      assignLecturer: z.string().regex(/^\d+$/, "Invalid id"),
+    });
+    type SchemaT3 = z.infer<typeof assignLecturerSchema>;
+    const form = validateFormData<SchemaT3>(body, assignLecturerSchema);
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
 
-    return redirect(`/courses/${courseId}/edit`);
+    await assignProfessorToCourse(parseInt(form.data.assignLecturer), courseId);
   }
 
-  return redirect(`/courses/${courseId}`);
+  return null;
 };
 
 type LoaderDataT = {
@@ -120,6 +138,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return { dep: user.dep_id, course, professorsLecturing, profsNotLecturing };
 };
 
+const MAX_LECTURERS_PER_COURSE = 3;
+
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const CourseEditPage = () => {
@@ -140,7 +160,7 @@ const CourseEditPage = () => {
   };
   const closeModal2 = () => setIsOpen2(false);
   const hasAvailableProfs = profsNotLecturing.length === 0;
-  const hasTooManyLecturers = professorsLecturing.length >= 3;
+  const hasTooManyLecturers = professorsLecturing.length >= MAX_LECTURERS_PER_COURSE;
 
   return (
     <AppLayout wide>
@@ -161,7 +181,7 @@ const CourseEditPage = () => {
         {selected === options[1] && (
           <div className="form-container wide">
             <div className="form">
-              <Table data={professorsLecturing} noResultsMsg={"undefined"}>
+              <Table data={professorsLecturing} noResultsMsg={"Course has no lecturers"}>
                 <ProfessorsTableShort openModal={openModal2} />
               </Table>
               <div className="select-profs">
@@ -179,7 +199,9 @@ const CourseEditPage = () => {
                     />
                   </div>
                   <button
-                    className="action-button primary submit-button full-width"
+                    className={`action-button ${
+                      hasTooManyLecturers || hasAvailableProfs ? "" : "primary"
+                    } submit-button full-width`}
                     disabled={isSubmitting}
                     type="submit"
                     name="_action"
@@ -204,7 +226,7 @@ const CourseEditPage = () => {
                   disabled
                 />
               </div>
-              <button className="action-button danger" onClick={openModal}>
+              <button className="action-button submit-button danger" onClick={openModal}>
                 DELETE
               </button>
             </div>
@@ -243,6 +265,7 @@ const CourseEditPage = () => {
               disabled={isSubmitting}
               name="_action"
               value={"unregisterProf"}
+              onClick={closeModal2}
             >
               REMOVE
             </button>

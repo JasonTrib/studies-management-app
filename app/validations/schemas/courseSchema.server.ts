@@ -6,7 +6,7 @@ export const courseSchema = z.object({
     .string()
     .trim()
     .min(1, "Title must be provided")
-    .regex(/^[\w ]*$/, "Invalid input"),
+    .regex(/^[\w\- ]*$/, "Invalid input"),
   description: z.string().trim().min(1, "Description must be provided"),
   semester: z
     .string()

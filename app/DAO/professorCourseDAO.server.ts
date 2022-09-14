@@ -296,6 +296,28 @@ export function unfollowProfessorCourse(profId: Professor["id"], courseId: Cours
   });
 }
 
+export function assignProfessorToCourse(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.create({
+    data: {
+      prof_id: profId,
+      course_id: courseId,
+      is_following: true,
+      is_lecturing: true,
+    },
+  });
+}
+
+export function unregisterProfessorFromCourse(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.delete({
+    where: {
+      prof_id_course_id: {
+        prof_id: profId,
+        course_id: courseId,
+      },
+    },
+  });
+}
+
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
 function getProfessorCourseAnnouncementsGenerous(profId: Professor["id"], courseId: Course["id"]) {
   return prisma.professorCourse.findMany({
