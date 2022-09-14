@@ -5,6 +5,7 @@ import type { ProfileModelT } from "~/DAO/profileDAO.server";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import AvatarIcon from "~/components/icons/AvatarIcon";
+import DeleteIcon from "../icons/DeleteIcon";
 
 type UsersTableItemT = {
   userId: UserModelT["id"];
@@ -17,7 +18,9 @@ type UsersTableItemT = {
   enrollmentYear?: StudentModelT["enrollment_year"];
   studiesStatus?: StudentModelT["studies_status"];
   courseNumber?: number;
-  isCurrent: boolean;
+  isCurrent?: boolean;
+  openModal?: (profId: number) => void;
+  profId?: number;
 };
 
 const UsersTableItem: FC<UsersTableItemT> = ({
@@ -32,6 +35,8 @@ const UsersTableItem: FC<UsersTableItemT> = ({
   studiesStatus,
   courseNumber,
   isCurrent,
+  openModal,
+  profId,
 }) => {
   const show = isCurrent || isPublic;
   let avatarColor = "";
@@ -46,12 +51,22 @@ const UsersTableItem: FC<UsersTableItemT> = ({
           <Link to={`/profile/${userId}`}>{username}</Link>
         </div>
       </td>
-      {title && <td> {title}</td>}
+      {title && <td>{title}</td>}
       {show && fullname ? <td>{fullname}</td> : <td className="empty" />}
-      {show && email ? <td>{email}</td> : <td className="empty" />}
+      {email !== undefined && (show && email ? <td>{email}</td> : <td className="empty" />)}
       {enrollmentYear && <td className="table-center">{enrollmentYear}</td>}
       {studiesStatus && <td className="table-center"> {studiesStatus}</td>}
       {typeof courseNumber === "number" && <td className="table-center">{courseNumber}</td>}
+      {openModal && (
+        <td className="table-center action-cell">
+          <DeleteIcon
+            height={20}
+            width={20}
+            className="icon"
+            onClick={() => profId && openModal(profId)}
+          />
+        </td>
+      )}
     </tr>
   );
 };

@@ -12,6 +12,7 @@ import {
   getProfessorCoursesLecturing,
   getProfessorCoursesLecturingCount,
   getProfessorCoursesOnCourse,
+  getProfessorCoursesWithProfile,
 } from "../professorCourseDAO.server";
 import {
   getAllStudentCoursesEnrolled,
@@ -447,4 +448,22 @@ export async function getStudentUserExtended(userId: User["id"]) {
   };
 
   return userExtended;
+}
+
+export async function getProfessorUserShortExtended(courseId: Course["id"]) {
+  const profCourses = await getProfessorCoursesWithProfile(courseId);
+
+  const profsShortExtended = profCourses.map((profCourse) => {
+    return {
+      id: profCourse.professor.user_id,
+      username: profCourse.professor.user.username,
+      profile: profCourse.professor.user.profile,
+      professor: {
+        id: profCourse.professor.id,
+        title: profCourse.professor.title,
+      },
+    };
+  });
+
+  return profsShortExtended;
 }

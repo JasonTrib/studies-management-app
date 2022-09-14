@@ -12,6 +12,23 @@ export function getProfessor(id: Professor["id"]) {
   });
 }
 
+export function getProfessors(depId: Department["title_id"]) {
+  return prisma.professor.findMany({
+    where: {
+      user: {
+        dep_id: depId,
+      },
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+  });
+}
+
 export function getProfessorsProfile(depId: Department["title_id"]) {
   return prisma.professor.findMany({
     where: {

@@ -89,7 +89,6 @@ export function getProfessorCoursesOnCourse(courseId: Course["id"]) {
       is_lecturing: true,
     },
     include: {
-      course: true,
       professor: {
         include: {
           user: {
@@ -97,6 +96,34 @@ export function getProfessorCoursesOnCourse(courseId: Course["id"]) {
               profile: {
                 select: {
                   fullname: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+export function getProfessorCoursesWithProfile(courseId: Course["id"]) {
+  return prisma.professorCourse.findMany({
+    where: {
+      course_id: courseId,
+      is_lecturing: true,
+    },
+    include: {
+      course: true,
+      professor: {
+        include: {
+          user: {
+            select: {
+              username: true,
+              profile: {
+                select: {
+                  fullname: true,
+                  gender: true,
+                  is_public: true,
                 },
               },
             },

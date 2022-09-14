@@ -37,6 +37,20 @@ table td {
 table .table-center {
   text-align: center;
 }
+table .action-cell {
+  position: relative;
+}
+table .action-cell .icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  fill: var(--color-button-red);
+  cursor: pointer;
+}
+table .action-cell .icon:hover {
+  fill: var(--color-button-red-hovered);
+}
 table .cell-checkbox {
   padding: 0;
   vertical-align: middle;

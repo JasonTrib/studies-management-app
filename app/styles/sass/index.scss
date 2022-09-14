@@ -84,21 +84,25 @@
   .form-container {
     width: 420px;
 
-    .form-tabs {
-      display: flex;
-      justify-content: center;
-      column-gap: 24px;
+    &.wide {
+      width: 640px;
+    }
+  }
 
-      .tab-option {
-        cursor: pointer;
+  .form-tabs {
+    display: flex;
+    justify-content: center;
+    column-gap: 24px;
 
-        &.selected {
-          border-bottom: 2px solid var(--color-text-cyan-dark);
-        }
+    .tab-option {
+      cursor: pointer;
 
-        &:hover {
-          color: var(--color-text-cyan-dark);
-        }
+      &.selected {
+        border-bottom: 2px solid var(--color-text-cyan-dark);
+      }
+
+      &:hover {
+        color: var(--color-text-cyan-dark);
       }
     }
   }

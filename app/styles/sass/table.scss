@@ -47,6 +47,23 @@ table {
     text-align: center;
   }
 
+  .action-cell {
+    position: relative;
+
+    .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: var(--color-button-red);
+      cursor: pointer;
+
+      &:hover {
+        fill: var(--color-button-red-hovered);
+      }
+    }
+  }
+
   .cell-checkbox {
     padding: 0;
     vertical-align: middle;

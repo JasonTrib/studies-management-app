@@ -4,12 +4,21 @@ type FormSelectT = {
   text: string;
   label: string;
   values: string[];
+  optionsText?: string[];
   defaultValue?: string | number;
   disabled?: boolean;
   error?: string;
 };
 
-const FormSelect: FC<FormSelectT> = ({ text, label, values, defaultValue, disabled, error }) => {
+const FormSelect: FC<FormSelectT> = ({
+  text,
+  label,
+  values,
+  optionsText,
+  defaultValue,
+  disabled,
+  error,
+}) => {
   return (
     <div className="field">
       <label className="label" htmlFor={label}>
@@ -21,9 +30,9 @@ const FormSelect: FC<FormSelectT> = ({ text, label, values, defaultValue, disabl
           defaultValue={defaultValue}
           className={`field-input select ${error ? "invalid-input" : ""}`}
         >
-          {values.map((value) => (
+          {values.map((value, idx) => (
             <option key={value} value={value}>
-              {value}
+              {optionsText?.[idx] || value}
             </option>
           ))}
         </select>
