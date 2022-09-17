@@ -3,7 +3,7 @@ import type { FC } from "react";
 import React from "react";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import announcementsStyles from "~/styles/announcements.css";
-import butttonStyles from "~/styles/button.css";
+import buttonStyles from "~/styles/button.css";
 import containerStyles from "~/styles/container.css";
 import coursesStyles from "~/styles/courses.css";
 import tableStyles from "~/styles/table.css";
@@ -20,7 +20,7 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: tableStyles },
     { rel: "stylesheet", href: coursesStyles },
     { rel: "stylesheet", href: announcementsStyles },
-    { rel: "stylesheet", href: butttonStyles },
+    { rel: "stylesheet", href: buttonStyles },
   ];
 };
 

@@ -1,6 +1,7 @@
 import { Form, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { FC } from "react";
+import ActionButton from "./ActionButton";
 
 type FollowCourseButtonT = {
   courseId: number;
@@ -15,9 +16,9 @@ const FollowCourseButton: FC<FollowCourseButtonT> = ({ courseId, variant }) => {
     <Form method="post" action={"#"}>
       <input type="hidden" id="courseId" name="courseId" value={courseId} />
       <input type="hidden" id="_action" name="_action" value={variant} />
-      <button className="action-button primary" type="submit" disabled={isBusy}>
+      <ActionButton type="submit" disabled={isBusy} size="md">
         {_.startCase(variant)}
-      </button>
+      </ActionButton>
     </Form>
   );
 };

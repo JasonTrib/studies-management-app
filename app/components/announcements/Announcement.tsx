@@ -1,13 +1,14 @@
 import type { LinksFunction } from "@remix-run/node";
+import { Form, useTransition } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
+import DeleteIcon from "~/components/icons/DeleteIcon";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import styles from "~/styles/announcements.css";
-import { formatDate } from "~/utils/dateUtils";
-import Modal from "../Modal";
 import modalStyles from "~/styles/modal.css";
-import { Form, useTransition } from "@remix-run/react";
-import DeleteIcon from "~/components/icons/DeleteIcon";
+import { formatDate } from "~/utils/dateUtils";
+import ActionButton from "../buttons/ActionButton";
+import Modal from "../Modal";
 
 type AnnouncementT = {
   data: AnnouncementModelT;
@@ -53,17 +54,13 @@ const Announcement: FC<AnnouncementT> = ({ data, showDelete }) => {
                 name="redirectTo"
                 value={`/courses/${data.course_id}`}
               />
-              <button
-                className="action-button submit-button danger full-width"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
                 DELETE
-              </button>
+              </ActionButton>
             </Form>
-            <button className="action-button submit-button" onClick={closeModal}>
+            <ActionButton onClick={closeModal} variant="cancel" size="lg">
               CANCEL
-            </button>
+            </ActionButton>
           </div>
         </Modal>
       )}

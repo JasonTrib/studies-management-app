@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
+import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import FormSelect from "~/components/form/FormSelect";
 import type { professorUserDataT } from "~/DAO/userDAO.server";
@@ -119,13 +120,9 @@ const ProfessorsNewPage = () => {
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
-              <button
-                className="action-button primary submit-button"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <ActionButton type="submit" disabled={isSubmitting}>
                 SUBMIT
-              </button>
+              </ActionButton>
             </div>
           </Form>
         </div>

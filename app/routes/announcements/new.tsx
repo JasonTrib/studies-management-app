@@ -5,6 +5,7 @@ import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/re
 import _ from "lodash";
 import type { z } from "zod";
 import AppLayout from "~/components/AppLayout";
+import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
 import type { announcementDataT } from "~/DAO/announcementDAO.server";
@@ -122,13 +123,9 @@ const AnnouncementsNewPage = () => {
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
-              <button
-                className="action-button primary submit-button"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <ActionButton type="submit" disabled={isSubmitting}>
                 SUBMIT
-              </button>
+              </ActionButton>
             </div>
           </Form>
         </div>

@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
+import ActionButton from "./buttons/ActionButton";
 
 type AppLayoutT = {
   wide?: boolean;
@@ -35,9 +36,9 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
         </div>
         <div style={{ position: "absolute", top: "8px", right: "8px" }}>
           <form action="/logout" method="post">
-            <button type="submit" className="button">
+            <ActionButton type="submit" variant="cancel" size="md">
               Logout
-            </button>
+            </ActionButton>
           </form>
         </div>
       </div>

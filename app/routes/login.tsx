@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
+import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import styles from "~/styles/form.css";
 import { createUserSession, login } from "~/utils/session.server";
@@ -82,13 +83,9 @@ const LoginPage = () => {
               <button className="form-reset" type="reset" disabled={isSubmitting}>
                 ✖
               </button>
-              <button
-                className="action-button primary submit-button"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <ActionButton type="submit" disabled={isSubmitting}>
                 SUBMIT
-              </button>
+              </ActionButton>
               <div className="invalid">{actionData?.authError}</div>
             </div>
           </Form>

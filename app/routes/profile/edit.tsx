@@ -170,15 +170,14 @@ const ProfileEditPage = () => {
                 <button className="form-reset" type="reset" disabled={isSubmitting}>
                   ✖
                 </button>
-                <button
-                  className="action-button primary submit-button"
+                <ActionButton
                   type="submit"
                   name="_action"
                   value="updateProfile"
                   disabled={isSubmitting}
                 >
                   SUBMIT
-                </button>
+                </ActionButton>
               </div>
             </Form>
           )}
@@ -225,15 +224,14 @@ const ProfileEditPage = () => {
                     <button className="form-reset" type="reset" disabled={isSubmitting}>
                       ✖
                     </button>
-                    <button
-                      className="action-button primary submit-button"
+                    <ActionButton
                       type="submit"
                       name="_action"
                       value="updatePassword"
                       disabled={isSubmitting}
                     >
                       SUBMIT
-                    </button>
+                    </ActionButton>
                     <div className="invalid">{actionData?.authError}</div>
                   </div>
                 </>

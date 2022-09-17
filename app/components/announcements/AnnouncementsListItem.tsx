@@ -4,6 +4,7 @@ import { useState } from "react";
 import DeleteIcon from "~/components/icons/DeleteIcon";
 import type { AnnouncementModelT } from "~/DAO/announcementDAO.server";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
+import ActionButton from "../buttons/ActionButton";
 import Modal from "../Modal";
 
 type AnnouncementsListItemT = {
@@ -54,17 +55,13 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
           <div className="modal-actions">
             <Form method="post" action={`/announcements/${annId}/delete`} autoComplete="off">
               <input type="hidden" id="redirectTo" name="redirectTo" value={landingRoute} />
-              <button
-                className="action-button submit-button danger full-width"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
                 DELETE
-              </button>
+              </ActionButton>
             </Form>
-            <button className="action-button submit-button" onClick={closeModal}>
+            <ActionButton onClick={closeModal} variant="cancel" size="lg">
               CANCEL
-            </button>
+            </ActionButton>
           </div>
         </Modal>
       )}

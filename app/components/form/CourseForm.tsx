@@ -4,6 +4,7 @@ import type { z } from "zod";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
 import type { courseSchema } from "~/validations/schemas/courseSchema.server";
+import ActionButton from "../buttons/ActionButton";
 import FormCheckbox from "./FormCheckbox";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
@@ -80,15 +81,9 @@ const CourseForm: FC<CourseFormType> = ({
         <button className="form-reset" type="reset" disabled={disabled}>
           ✖
         </button>
-        <button
-          className="action-button primary submit-button"
-          type="submit"
-          disabled={disabled}
-          name="_action"
-          value={_action}
-        >
+        <ActionButton type="submit" disabled={disabled} name="_action" value={_action}>
           SUBMIT
-        </button>
+        </ActionButton>
       </div>
     </Form>
   );

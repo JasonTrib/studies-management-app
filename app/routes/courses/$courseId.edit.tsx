@@ -5,6 +5,7 @@ import _ from "lodash";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import AppLayout from "~/components/AppLayout";
+import ActionButton from "~/components/buttons/ActionButton";
 import CourseForm from "~/components/form/CourseForm";
 import FormInput from "~/components/form/FormInput";
 import FormSelect from "~/components/form/FormSelect";
@@ -198,17 +199,16 @@ const CourseEditPage = () => {
                       error={actionData?.errors?.title}
                     />
                   </div>
-                  <button
-                    className={`action-button ${
-                      hasTooManyLecturers || hasAvailableProfs ? "" : "primary"
-                    } submit-button full-width`}
-                    disabled={isSubmitting}
+                  <ActionButton
                     type="submit"
+                    disabled={isSubmitting}
                     name="_action"
                     value={"assignProf"}
+                    variant={hasTooManyLecturers || hasAvailableProfs ? "cancel" : "primary"}
+                    fullwidth
                   >
                     ASSIGN
-                  </button>
+                  </ActionButton>
                 </Form>
               </div>
             </div>
@@ -226,9 +226,9 @@ const CourseEditPage = () => {
                   disabled
                 />
               </div>
-              <button className="action-button submit-button danger" onClick={openModal}>
+              <ActionButton onClick={openModal} variant="danger">
                 DELETE
-              </button>
+              </ActionButton>
             </div>
           </div>
         )}
@@ -239,17 +239,19 @@ const CourseEditPage = () => {
         </div>
         <div className="modal-actions">
           <Form method="post" action={`/courses/${course.id}/delete`} autoComplete="off">
-            <button
-              className="action-button submit-button danger full-width"
+            <ActionButton
               type="submit"
               disabled={isSubmitting}
+              variant="danger"
+              size="lg"
+              fullwidth
             >
               DELETE
-            </button>
+            </ActionButton>
           </Form>
-          <button className="action-button submit-button" onClick={closeModal}>
+          <ActionButton onClick={closeModal} variant="cancel" size="lg">
             CANCEL
-          </button>
+          </ActionButton>
         </div>
       </Modal>
       <Modal isOpen={isOpen2} setIsOpen={setIsOpen2}>
@@ -259,20 +261,21 @@ const CourseEditPage = () => {
         <div className="modal-actions">
           <Form method="post" action={`/courses/${course.id}/edit`} autoComplete="off">
             <input type="hidden" id="profId" name="profId" value={profIdRef.current || ""} />
-            <button
-              className="action-button submit-button danger full-width"
+            <ActionButton
               type="submit"
               disabled={isSubmitting}
               name="_action"
               value={"unregisterProf"}
               onClick={closeModal2}
+              variant="danger"
+              fullwidth
             >
               REMOVE
-            </button>
+            </ActionButton>
           </Form>
-          <button className="action-button submit-button" onClick={closeModal2}>
+          <ActionButton variant="cancel" size="lg" onClick={closeModal2}>
             CANCEL
-          </button>
+          </ActionButton>
         </div>
       </Modal>
     </AppLayout>

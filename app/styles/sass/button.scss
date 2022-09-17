@@ -1,10 +1,8 @@
 .action-button {
   border-radius: 4px;
-  font-size: 14px;
   color: hsl(0, 0%, 40%);
   border: 1px solid hsl(0, 0%, 80%);
   background-color: hsl(0, 0%, 90%);
-  height: 28px;
   font-weight: 600;
   letter-spacing: 0.5px;
   flex-shrink: 0;
@@ -53,9 +51,19 @@
       background-color: var(--color-button-red-disabled);
     }
   }
-}
 
-.submit-button {
-  height: 40px;
-  font-size: 17px;
+  &.btn-lg {
+    height: 40px;
+    font-size: 17px;
+  }
+
+  &.btn-md {
+    height: 28px;
+    font-size: 14px;
+  }
+
+  &.btn-sm {
+    height: 20px;
+    font-size: 11px;
+  }
 }
