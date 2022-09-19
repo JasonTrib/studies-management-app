@@ -52,7 +52,7 @@ const Announcement: FC<AnnouncementT> = ({ data, showDelete }) => {
                 type="hidden"
                 id="redirectTo"
                 name="redirectTo"
-                value={`/courses/${data.course_id}`}
+                value={`/courses/${data.course_id}/announcements`}
               />
               <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
                 DELETE

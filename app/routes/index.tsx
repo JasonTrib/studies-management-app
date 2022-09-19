@@ -77,7 +77,15 @@ export default function Index() {
   return (
     <AppLayout>
       <>
-        <Container title={annTitle} data={announcements} noResultsMsg={"No announcements found"}>
+        <Container
+          title={annTitle}
+          data={announcements}
+          noResultsMsg={"No announcements found"}
+          maxItems={8}
+          footerLink={{
+            directTo: "/announcements",
+          }}
+        >
           <AnnouncementsList />
         </Container>
       </>
@@ -89,7 +97,9 @@ export default function Index() {
             data={coursesRegistered}
             noResultsMsg={"No courses found"}
             maxItems={6}
-            moreLink={"/my-courses"}
+            footerLink={{
+              directTo: "/my-courses",
+            }}
             Button={isStudent ? <RegisterToCourseButton /> : undefined}
           >
             <CoursesList />

@@ -5,7 +5,6 @@ import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
-import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
 import { getAnnoucementsOfCourse } from "~/DAO/announcementDAO.server";
@@ -28,19 +27,6 @@ import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
-};
-type LoaderDataT = {
-  course: Exclude<Awaited<ReturnType<typeof getCourseExtended>>, null>;
-  announcements: Awaited<
-    ReturnType<
-      | typeof getAnnoucementsOfCourse
-      | typeof getAnnouncementsOnProfessorFollowedCourse
-      | typeof getAnnouncementsOnStudentFollowedCourse
-    >
-  >;
-  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
-  isFollowingCourse: boolean;
-  canModAnns: boolean;
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -77,6 +63,20 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   return null;
+};
+
+type LoaderDataT = {
+  course: Exclude<Awaited<ReturnType<typeof getCourseExtended>>, null>;
+  announcements: Awaited<
+    ReturnType<
+      | typeof getAnnoucementsOfCourse
+      | typeof getAnnouncementsOnProfessorFollowedCourse
+      | typeof getAnnouncementsOnStudentFollowedCourse
+    >
+  >;
+  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
+  isFollowingCourse: boolean;
+  canModAnns: boolean;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -162,15 +162,17 @@ const CourseDetailsPage = () => {
             title={`Course announcements`}
             data={announcements}
             noResultsMsg={"No announcements found"}
+            maxItems={6}
+            footerLink={{
+              text: "View all...",
+              directTo: `/courses/${course.id}/announcements`,
+              fixed: true,
+            }}
             Button={
-              canModAnns ? (
-                <NewAnnouncementButton courseId={course.id} />
-              ) : (
-                <FollowCourseButton variant="unfollow" courseId={course.id} />
-              )
+              canModAnns ? <></> : <FollowCourseButton variant="unfollow" courseId={course.id} />
             }
           >
-            <AnnouncementsList deletable={canModAnns} landingRoute={`/courses/${course.id}`} />
+            <AnnouncementsList />
           </Container>
         ) : (
           <Container

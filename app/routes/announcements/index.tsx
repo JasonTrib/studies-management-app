@@ -57,16 +57,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json({ announcements });
 };
 
-const AnnouncementIndexPage = () => {
+const AnnouncementsIndexPage = () => {
   const { announcements } = useLoaderData() as LoaderDataT;
 
   return (
-    <AppLayout>
+    <AppLayout wide>
       <Container title="Announcements" data={announcements}>
-        <AnnouncementsList />
+        <AnnouncementsList untrimmed />
       </Container>
     </AppLayout>
   );
 };
 
-export default AnnouncementIndexPage;
+export default AnnouncementsIndexPage;

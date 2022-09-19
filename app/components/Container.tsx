@@ -12,7 +12,11 @@ type ContainerT = {
   data?: any[];
   noResultsMsg?: string;
   maxItems?: number;
-  moreLink?: string;
+  footerLink?: {
+    text?: string;
+    directTo: string;
+    fixed?: boolean;
+  };
   Button?: JSX.Element;
 };
 
@@ -30,13 +34,13 @@ const Container: FC<ContainerT> = ({
   data = [],
   noResultsMsg,
   maxItems,
-  moreLink,
+  footerLink,
   Button,
   children,
   ...props
 }) => {
   const slicedData = data.slice(0, maxItems);
-  const moreExist = data.length > slicedData.length;
+  const showMore = footerLink?.fixed || data.length > slicedData.length;
   const noContent = !!noResultsMsg || data.length > 0;
 
   const childrenWithProps = (data: any[], props: any) =>
@@ -60,14 +64,14 @@ const Container: FC<ContainerT> = ({
       )}
       {slicedData.length > 0 && (
         <div
-          className={`content ${moreExist ? "no-padding-bot" : ""} ${title ? "" : "padding-top"}`}
+          className={`content ${showMore ? "no-padding-bot" : ""} ${title ? "" : "padding-top"}`}
         >
           {childrenWithProps(slicedData, props)}
         </div>
       )}
-      {moreExist && (
+      {showMore && (
         <div className="more link">
-          <Link to={`${moreLink || "#"}`}>More...</Link>
+          <Link to={`${footerLink?.directTo}`}>{footerLink?.text || "More..."}</Link>
         </div>
       )}
     </div>

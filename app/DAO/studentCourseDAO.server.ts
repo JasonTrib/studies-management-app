@@ -81,6 +81,16 @@ export function getStudentCourseAnnouncements(studentId: Student["id"], courseId
   });
 }
 
+export function getStudentCourseFollowing(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.findFirst({
+    where: {
+      student_id: studentId,
+      course_id: courseId,
+      is_following: true,
+    },
+  });
+}
+
 export function getStudentCourseAnnouncementsCount(
   studentId: Student["id"],
   courseId: Course["id"],

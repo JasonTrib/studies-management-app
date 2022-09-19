@@ -16,6 +16,7 @@ type AnnouncementsListItemT = {
   date: string;
   deletable?: boolean;
   landingRoute?: string;
+  untrimmed?: boolean;
 };
 
 const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
@@ -27,6 +28,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
   date,
   deletable,
   landingRoute,
+  untrimmed,
 }) => {
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
@@ -46,7 +48,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
           </div>
         )}
       </div>
-      <div className="body ellipsis-3">{body}</div>
+      <div className={`body ${untrimmed ? "" : "ellipsis-3"}`}>{body}</div>
       <div className="metadata">
         <span className="date mr-12">{date}</span>
         <span className="course">{courseTitle}</span>

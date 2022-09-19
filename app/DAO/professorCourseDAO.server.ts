@@ -200,6 +200,16 @@ export function getProfessorCourseAnnouncements(profId: Professor["id"], courseI
   });
 }
 
+export function getProfessorCourseFollowing(profId: Professor["id"], courseId: Course["id"]) {
+  return prisma.professorCourse.findFirst({
+    where: {
+      prof_id: profId,
+      course_id: courseId,
+      is_following: true,
+    },
+  });
+}
+
 export function getProfessorCourseAnnouncementsCount(
   profId: Professor["id"],
   courseId: Course["id"],

@@ -27,8 +27,6 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof newAnnouncementSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const url = new URL(request.url);
-  //   const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
   const courseId = paramToInt(params.courseId);
   if (courseId == null) {
     throw new Response("Not Found", { status: 404 });
@@ -48,7 +46,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await createAnnouncement(data);
 
-  return redirect(`/courses/${courseId}`);
+  return redirect(`/courses/${courseId}/announcements`);
 };
 
 type LoaderDataT = {
@@ -56,7 +54,6 @@ type LoaderDataT = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  //   const courseId = paramToInt(new URL(request.url).searchParams.get("course") ?? undefined);
   const courseId = paramToInt(params.courseId);
   if (courseId == null) {
     return redirect("/announcements");

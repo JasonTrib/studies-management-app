@@ -10,9 +10,15 @@ type AnnouncementsListT = {
   })[];
   deletable?: boolean;
   landingRoute?: string;
+  untrimmed?: boolean;
 };
 
-const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [], deletable, landingRoute }) => {
+const AnnouncementsList: FC<AnnouncementsListT> = ({
+  data = [],
+  deletable,
+  landingRoute,
+  untrimmed,
+}) => {
   return (
     <>
       {data.map((x) => (
@@ -26,6 +32,7 @@ const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [], deletable, landi
           courseTitle={x.course.title}
           deletable={deletable}
           landingRoute={landingRoute}
+          untrimmed={untrimmed}
         />
       ))}
     </>
