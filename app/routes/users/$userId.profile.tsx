@@ -47,7 +47,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const activeUser = await requireUser(request);
   if (activeUser === null) return logout(request);
-  if (activeUser.id === id) return redirect("/profile");
+  if (activeUser.id === id) return redirect("/my-profile");
 
   const user = await getUser(id);
   if (!user) {

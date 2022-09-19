@@ -46,7 +46,7 @@ const Course: FC<CourseT> = ({ data, canEdit }) => {
               {data.professors.map((prof, i) => (
                 <React.Fragment key={prof.id}>
                   <span className="instructor link-simple">
-                    <Link to={`/professors/${prof.id}`}>{prof.fullname}</Link>
+                    <Link to={`users/professors/${prof.id}`}>{prof.fullname}</Link>
                   </span>
                   {i < data.professors.length - 1 && " - "}
                 </React.Fragment>

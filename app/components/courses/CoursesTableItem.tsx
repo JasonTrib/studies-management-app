@@ -46,7 +46,7 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
           <span className="link-simple">
             {professors.map((prof, i) => (
               <React.Fragment key={prof.id}>
-                <Link to={`/professors/${prof.id}`}>{prof.fullname}</Link>
+                <Link to={`/users/professors/${prof.id}`}>{prof.fullname}</Link>
                 {i < professors.length - 1 && " - "}
               </React.Fragment>
             ))}

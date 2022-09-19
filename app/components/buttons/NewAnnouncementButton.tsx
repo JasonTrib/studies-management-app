@@ -8,7 +8,7 @@ type NewAnnouncementButtonT = {
 
 const NewAnnouncementButton: FC<NewAnnouncementButtonT> = ({ courseId }) => {
   return (
-    <Link to={`/announcements/new?course=${courseId}`}>
+    <Link to={`/courses/${courseId}/announcements/new`}>
       <ActionButton>+ New</ActionButton>
     </Link>
   );

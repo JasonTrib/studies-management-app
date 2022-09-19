@@ -28,7 +28,8 @@ type SchemaT = z.infer<typeof newAnnouncementSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const url = new URL(request.url);
-  const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
+  //   const courseId = paramToInt(url.searchParams.get("course") ?? undefined);
+  const courseId = paramToInt(params.courseId);
   if (courseId == null) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -55,7 +56,8 @@ type LoaderDataT = {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const courseId = paramToInt(new URL(request.url).searchParams.get("course") ?? undefined);
+  //   const courseId = paramToInt(new URL(request.url).searchParams.get("course") ?? undefined);
+  const courseId = paramToInt(params.courseId);
   if (courseId == null) {
     return redirect("/announcements");
   }
@@ -99,7 +101,7 @@ const AnnouncementsNewPage = () => {
         <div className="form-container">
           <Form
             method="post"
-            action={`/announcements/new?course=${courseId}`}
+            action={`/courses/${courseId}/announcements/new`}
             className="form"
             autoComplete="off"
           >

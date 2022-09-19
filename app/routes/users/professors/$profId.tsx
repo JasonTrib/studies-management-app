@@ -14,5 +14,5 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return redirect(`/profile/${prof.user_id}`);
+  return redirect(`/users/${prof.user_id}/profile`);
 };

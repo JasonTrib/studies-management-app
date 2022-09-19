@@ -25,13 +25,14 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const id = paramToInt(params.annId);
-  if (id == null) {
+  const annId = paramToInt(params.annId);
+  const courseId = paramToInt(params.courseId);
+  if (annId == null) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const announcement = await getAnnoucement(id);
-  if (!announcement) {
+  const announcement = await getAnnoucement(annId);
+  if (!announcement || announcement.course_id !== courseId) {
     throw new Response("Not Found", { status: 404 });
   }
 

@@ -22,7 +22,8 @@ const AnnouncementsList: FC<AnnouncementsListT> = ({ data = [], deletable, landi
           title={x.title}
           body={x.body}
           date={formatDate(new Date(x.updated_at))}
-          course={x.course.title}
+          courseId={x.course_id}
+          courseTitle={x.course.title}
           deletable={deletable}
           landingRoute={landingRoute}
         />

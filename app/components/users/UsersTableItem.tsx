@@ -48,7 +48,7 @@ const UsersTableItem: FC<UsersTableItemT> = ({
       <td>
         <div className="username link">
           <AvatarIcon className={`icon ${avatarColor}`} width={20} height={20} />
-          <Link to={`/profile/${userId}`}>{username}</Link>
+          <Link to={`/users/${userId}/profile`}>{username}</Link>
         </div>
       </td>
       {title && <td>{title}</td>}

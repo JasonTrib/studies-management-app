@@ -11,7 +11,8 @@ type AnnouncementsListItemT = {
   annId: AnnouncementModelT["id"];
   title: AnnouncementModelT["title"];
   body: AnnouncementModelT["body"];
-  course: CourseModelT["title"];
+  courseId: CourseModelT["id"];
+  courseTitle: CourseModelT["title"];
   date: string;
   deletable?: boolean;
   landingRoute?: string;
@@ -21,7 +22,8 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
   annId,
   title,
   body,
-  course,
+  courseId,
+  courseTitle,
   date,
   deletable,
   landingRoute,
@@ -36,7 +38,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
     <div className="container-item announcements-list-item">
       <div className="list-item-heading">
         <div className="title link">
-          <Link to={`/announcements/${annId}`}>{title}</Link>
+          <Link to={`/courses/${courseId}/announcements/${annId}`}>{title}</Link>
         </div>
         {deletable && (
           <div className="delete">
@@ -47,7 +49,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
       <div className="body ellipsis-3">{body}</div>
       <div className="metadata">
         <span className="date mr-12">{date}</span>
-        <span className="course">{course}</span>
+        <span className="course">{courseTitle}</span>
       </div>
       {deletable && (
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>

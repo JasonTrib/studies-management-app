@@ -48,19 +48,22 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
             <Link to="/departments">Departments</Link>
           </div>
           <div>
-            <Link to="/registrars">Registrars</Link>
+            <Link to="/users">Users</Link>
           </div>
           <div>
-            <Link to="/professors/new">New professor</Link>
+            <Link to="/users/registrars">Registrars</Link>
           </div>
           <div>
-            <Link to="/professors">Professors</Link>
+            <Link to="/users/professors/new">New professor</Link>
           </div>
           <div>
-            <Link to="/students/new">New student</Link>
+            <Link to="/users/professors">Professors</Link>
           </div>
           <div>
-            <Link to="/students">Students</Link>
+            <Link to="/users/students/new">New student</Link>
+          </div>
+          <div>
+            <Link to="/users/students">Students</Link>
           </div>
           <div>
             <Link to="/courses/new">New course</Link>
@@ -72,16 +75,13 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
             <Link to="/my-courses">My courses</Link>
           </div>
           <div>
-            <Link to="/announcements/new">New announcement</Link>
-          </div>
-          <div>
             <Link to="/announcements">Announcements</Link>
           </div>
           <div>
-            <Link to="/profile/edit">Edit profile</Link>
+            <Link to="/my-profile/edit">Edit profile</Link>
           </div>
           <div>
-            <Link to="/profile">Profile</Link>
+            <Link to="/my-profile">My profile</Link>
           </div>
         </div>
         <div className="page-content">
