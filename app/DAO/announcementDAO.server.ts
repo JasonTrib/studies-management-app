@@ -4,6 +4,11 @@ export type { Announcement as AnnouncementModelT } from "@prisma/client";
 
 export function getAllAnnoucements() {
   return prisma.announcement.findMany({
+    orderBy: [
+      {
+        created_at: "desc",
+      },
+    ],
     include: {
       course: true,
     },
@@ -17,6 +22,11 @@ export function getAnnoucements(depId: Department["title_id"]) {
         dep_id: depId,
       },
     },
+    orderBy: [
+      {
+        created_at: "desc",
+      },
+    ],
     include: {
       course: true,
     },
@@ -37,6 +47,11 @@ export function getAnnoucementsOfCourse(courseId: Course["id"]) {
     where: {
       course_id: courseId,
     },
+    orderBy: [
+      {
+        created_at: "desc",
+      },
+    ],
     include: {
       course: {
         select: {
