@@ -253,6 +253,36 @@ export function getProfessors(depId: Department["title_id"]) {
   });
 }
 
+export function getRegistrarsCount(depId: Department["title_id"]) {
+  return prisma.registrar.count({
+    where: {
+      user: {
+        dep_id: depId,
+      },
+    },
+  });
+}
+
+export function getProfessorsCount(depId: Department["title_id"]) {
+  return prisma.professor.count({
+    where: {
+      user: {
+        dep_id: depId,
+      },
+    },
+  });
+}
+
+export function getStudentsCount(depId: Department["title_id"]) {
+  return prisma.student.count({
+    where: {
+      user: {
+        dep_id: depId,
+      },
+    },
+  });
+}
+
 export type studentUserDataT = {
   dep_id: string;
   username: string;
