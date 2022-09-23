@@ -16,6 +16,7 @@ import type { profileDataT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import { updateUserPassword } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
+import { bc_myprofile_edit } from "~/utils/breadcrumbs";
 import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -68,6 +69,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_myprofile_edit>>;
   profile: Exclude<Awaited<ReturnType<typeof getProfile>>, null>;
   username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
 };
@@ -80,8 +82,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!profile) {
     throw new Response("Not Found", { status: 404 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_myprofile_edit(path);
 
-  return { profile, username: user.username };
+  return { breadcrumbData, profile, username: user.username };
 };
 
 type ActionDataT =
@@ -92,7 +96,7 @@ type ActionDataT =
   | undefined;
 
 const ProfileEditPage = () => {
-  const { profile, username } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, profile, username } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
@@ -109,7 +113,7 @@ const ProfileEditPage = () => {
   }, [selected]);
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <div className="form-container">
           <FormTabs tabs={options} selected={selected} setSelected={setSelected} />

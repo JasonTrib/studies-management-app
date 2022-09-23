@@ -12,9 +12,11 @@ import {
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
+import { bc_anns } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 
 export type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_anns>>;
   announcements: Awaited<
     ReturnType<
       | typeof getAnnouncements
@@ -53,15 +55,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_anns(path);
 
-  return json({ announcements });
+  return json({ breadcrumbData, announcements });
 };
 
 const AnnouncementsIndexPage = () => {
-  const { announcements } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, announcements } = useLoaderData() as LoaderDataT;
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <Container title="Announcements" data={announcements}>
         <AnnouncementsList untrimmed />
       </Container>

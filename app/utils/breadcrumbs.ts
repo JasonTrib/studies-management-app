@@ -173,3 +173,38 @@ export const bc_users_studs_new = async (path: string) => {
 
   return crumbBuilder(pathSegs, textSegs);
 };
+
+export const bc_myprofile = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [{ text: "My profile", isLink: true }];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_myprofile_edit = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "My profile", isLink: true },
+    { text: "Edit", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_mycourses = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [{ text: "My courses", isLink: true }];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_anns = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [{ text: "All announcements", isLink: true }];
+
+  return crumbBuilder(pathSegs, textSegs);
+};

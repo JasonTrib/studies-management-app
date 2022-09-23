@@ -18,8 +18,10 @@ type AppLayoutT = {
 
 const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, children }) => {
   const [offsprings, setOffspings] = useState<JSX.Element[]>([]);
-  const derivedTitle = title || breadcrumbs?.[breadcrumbs.length - 1].text;
-  const showPageHeading = !!(derivedTitle || breadcrumbs);
+  const lastCrumb = breadcrumbs?.[breadcrumbs.length - 1].text;
+  const showBreadCrumbs = !!lastCrumb;
+  const derivedTitle = title || lastCrumb;
+  const showPageHeading = !!derivedTitle;
 
   useEffect(() => {
     if (children) {
@@ -97,27 +99,29 @@ const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, children }) => {
         <div className="page">
           {showPageHeading && (
             <div className="page-heading">
-              <div className="breadcrumbs">
-                <div className="svg-link link">
-                  <Link to="/">
-                    <HomeIcon className="home-icon" width={14} height={14} />
-                    <span>Home</span>
-                  </Link>
+              {showBreadCrumbs && (
+                <div className="breadcrumbs">
+                  <div className="svg-link link">
+                    <Link to="/">
+                      <HomeIcon className="home-icon" width={14} height={14} />
+                      <span>Home</span>
+                    </Link>
+                  </div>
+                  <ChevronRightIcon className="icon" />
+                  {breadcrumbs?.slice(0, -1).map((crumb) => (
+                    <React.Fragment key={crumb.seg}>
+                      {crumb.isLink ? (
+                        <span className="link">
+                          <Link to={`${crumb.seg}`}>{crumb.text}</Link>
+                        </span>
+                      ) : (
+                        crumb.text
+                      )}
+                      <ChevronRightIcon className="icon" />
+                    </React.Fragment>
+                  ))}
                 </div>
-                <ChevronRightIcon className="icon" />
-                {breadcrumbs?.slice(0, -1).map((crumb) => (
-                  <React.Fragment key={crumb.seg}>
-                    {crumb.isLink ? (
-                      <span className="link">
-                        <Link to={`${crumb.seg}`}>{crumb.text}</Link>
-                      </span>
-                    ) : (
-                      crumb.text
-                    )}
-                    <ChevronRightIcon className="icon" />
-                  </React.Fragment>
-                ))}
-              </div>
+              )}
               <div className="title">{derivedTitle}</div>
             </div>
           )}

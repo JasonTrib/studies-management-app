@@ -13,6 +13,7 @@ import type { UserModelT } from "~/DAO/userDAO.server";
 import { getRegistrarUserProfile } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import profileStyles from "~/styles/profile.css";
+import { bc_myprofile } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
 import { logout, requireUser } from "~/utils/session.server";
 
@@ -21,6 +22,7 @@ export const links: LinksFunction = () => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_myprofile>>;
   user: Exclude<Awaited<ReturnType<typeof getRegistrarUserProfile>>, null> &
     Exclude<Awaited<ReturnType<typeof getProfessorUserExtended>>, null> &
     Exclude<Awaited<ReturnType<typeof getStudentUserExtended>>, null>;
@@ -48,11 +50,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   if (!userExtended) throw new Error();
 
-  return { user: userExtended, userRole: user.role };
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_myprofile(path);
+
+  return { breadcrumbData, user: userExtended, userRole: user.role };
 };
 
 const ProfileIndexPage = () => {
-  const { user, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, user, userRole } = useLoaderData() as LoaderDataT;
   const isReg = userRole === "REGISTRAR";
   const isProf = userRole === "PROFESSOR";
   const isStud = userRole === "STUDENT";
@@ -63,7 +68,7 @@ const ProfileIndexPage = () => {
   if (gender === "F") avatarColor = "gender-female";
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <>
         <div className="profile-container">
           <div className="profile-heading">

@@ -75,7 +75,7 @@ export default function Index() {
   const annTitle = isPriviledged ? "Announcements" : "My announcements";
 
   return (
-    <AppLayout>
+    <AppLayout title="Home">
       <>
         <Container
           title={annTitle}

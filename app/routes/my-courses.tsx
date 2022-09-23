@@ -9,9 +9,11 @@ import { getCoursesEnrolled, getCoursesLecturing } from "~/DAO/composites/compos
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
+import { bc_mycourses } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_mycourses>>;
   coursesRegistered: Exclude<
     Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>,
     null
@@ -45,12 +47,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_mycourses(path);
 
-  return json({ coursesRegistered, userRole: user.role });
+  return json({ breadcrumbData, coursesRegistered, userRole: user.role });
 };
 
 const MyCoursesPage = () => {
-  const { coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
 
   let noResultsMsg;
   switch (userRole) {
@@ -67,7 +71,7 @@ const MyCoursesPage = () => {
   }
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userRole}>
         <MyCoursesTable />
       </Table>
