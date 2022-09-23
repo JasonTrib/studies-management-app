@@ -13,9 +13,15 @@ import {
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
+import { bc_courses } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 
+export const links: LinksFunction = () => {
+  return [...ContainerLinks(), ...TableLinks()];
+};
+
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses>>;
   courses: Awaited<
     ReturnType<
       | typeof getCoursesExtended
@@ -24,10 +30,6 @@ type LoaderDataT = {
     >
   >;
   userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
-};
-
-export const links: LinksFunction = () => {
-  return [...ContainerLinks(), ...TableLinks()];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -53,15 +55,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses(path);
 
-  return json({ courses, userRole: user.role });
+  return json({ breadcrumbData, courses, userRole: user.role });
 };
 
 const CourseIndexPage = () => {
-  const { courses, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, courses, userRole } = useLoaderData() as LoaderDataT;
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <Table data={courses} noResultsMsg={"No courses found."} userRole={userRole}>
         <CoursesTable />
       </Table>

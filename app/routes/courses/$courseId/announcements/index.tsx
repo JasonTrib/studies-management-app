@@ -14,6 +14,7 @@ import { getStudentCourseFollowing } from "~/DAO/studentCourseDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
+import { bc_courses_id_anns } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
@@ -22,6 +23,7 @@ export const links: LinksFunction = () => {
 };
 
 export type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_id_anns>>;
   announcements: Awaited<ReturnType<typeof getAnnouncementsOfCourse>>;
   canModAnns: boolean;
 };
@@ -62,17 +64,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
   announcements = await getAnnouncementsOfCourse(courseId);
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses_id_anns(path);
 
-  return json({ announcements, canModAnns });
+  return json({ breadcrumbData, announcements, canModAnns });
 };
 
 const CourseAnnouncementsIndexPage = () => {
-  const { announcements, canModAnns } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, announcements, canModAnns } = useLoaderData() as LoaderDataT;
   const { courseId: courseIdRaw } = useParams();
   const courseId = parseInt(courseIdRaw || "");
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <Container
         title="Announcements"
         data={announcements}

@@ -24,6 +24,7 @@ import { getProfessors } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import modalStyles from "~/styles/modal.css";
+import { bc_courses_id_edit } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
@@ -100,6 +101,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_id_edit>>;
   dep: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["dep_id"];
   course: Exclude<Awaited<ReturnType<typeof getCourse>>, null>;
   professorsLecturing: Awaited<ReturnType<typeof getProfessorUserShortExtended>>;
@@ -135,8 +137,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       professorsLecturing.some((prof) => prof.id === curr.user_id) ? prev : [...prev, curr],
     [],
   );
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses_id_edit(path);
 
-  return { dep: user.dep_id, course, professorsLecturing, profsNotLecturing };
+  return { breadcrumbData, dep: user.dep_id, course, professorsLecturing, profsNotLecturing };
 };
 
 const MAX_LECTURERS_PER_COURSE = 3;
@@ -144,7 +148,8 @@ const MAX_LECTURERS_PER_COURSE = 3;
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const CourseEditPage = () => {
-  const { dep, course, professorsLecturing, profsNotLecturing } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, dep, course, professorsLecturing, profsNotLecturing } =
+    useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
@@ -164,7 +169,7 @@ const CourseEditPage = () => {
   const hasTooManyLecturers = professorsLecturing.length >= MAX_LECTURERS_PER_COURSE;
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
         {selected === options[0] && (

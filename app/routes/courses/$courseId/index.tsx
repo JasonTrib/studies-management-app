@@ -22,6 +22,7 @@ import { followStudentCourse, unfollowStudentCourse } from "~/DAO/studentCourseD
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
+import { bc_courses_id } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
@@ -66,6 +67,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_id>>;
   course: Exclude<Awaited<ReturnType<typeof getCourseExtended>>, null>;
   announcements: Awaited<
     ReturnType<
@@ -129,8 +131,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses_id(path);
 
   return json({
+    breadcrumbData,
     course,
     announcements,
     isFollowingCourse,
@@ -140,12 +145,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const CourseDetailsPage = () => {
-  const { course, announcements, isFollowingCourse, userRole, canModAnns } =
+  const { breadcrumbData, course, announcements, isFollowingCourse, userRole, canModAnns } =
     useLoaderData() as LoaderDataT;
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <>
         <div className="content-heading link">
           {isPriviledged ? (

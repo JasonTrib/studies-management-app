@@ -1,14 +1,17 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
-import type { courses_id_anns_id } from "~/utils/breadcrumbs";
 import ActionButton from "./buttons/ActionButton";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
 import HomeIcon from "./icons/HomeIcon";
 
 type AppLayoutT = {
   wide?: boolean;
-  breadcrumbs?: Awaited<ReturnType<typeof courses_id_anns_id>>;
+  breadcrumbs?: {
+    seg: string;
+    text: string;
+    isLink: boolean;
+  }[];
   title?: string;
   children?: JSX.Element[] | JSX.Element;
 };

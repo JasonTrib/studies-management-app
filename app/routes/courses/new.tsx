@@ -10,6 +10,7 @@ import type { courseDataT } from "~/DAO/courseDAO.server";
 import { createCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
+import { bc_courses_new } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -44,6 +45,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_new>>;
   dep: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["dep_id"];
 };
 
@@ -58,20 +60,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses_new(path);
 
-  return { dep: user.dep_id };
+  return { breadcrumbData, dep: user.dep_id };
 };
 
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const CoursesNewPage = () => {
-  const { dep } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, dep } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <h2 className="heading">New course</h2>
         <div className="form-container">

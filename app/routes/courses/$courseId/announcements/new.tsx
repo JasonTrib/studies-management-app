@@ -14,6 +14,7 @@ import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.serve
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
+import { bc_courses_id_anns_new } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
@@ -50,6 +51,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_id_anns_new>>;
   courseId: number;
 };
 
@@ -79,20 +81,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_courses_id_anns_new(path);
 
-  return { courseId };
+  return { breadcrumbData, courseId };
 };
 
 type ActionDataT = FormValidationT<SchemaT> | undefined;
 
 const AnnouncementsNewPage = () => {
-  const { courseId } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, courseId } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <h2 className="heading">New announcement</h2>
         <div className="form-container">

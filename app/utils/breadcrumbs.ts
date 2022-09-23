@@ -16,14 +16,81 @@ const crumbBuilder = (pathSegs: string[], textSegs: { text: string; isLink: bool
 // =========================
 // =========================
 
-export const courses_id_anns_id = async (path: string) => {
+export const bc_courses = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [{ text: "Courses", isLink: true }];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: "New course", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_id = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_id_edit = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+    { text: "Edit course", isLink: false },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_id_anns = async (path: string) => {
   const pathSegs = getPathSegs(path);
 
   const textSegs = [
     { text: "Courses", isLink: true },
     { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
     { text: "Announcements", isLink: true },
-    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: false },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_id_anns_id = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+    { text: "Announcements", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_courses_id_anns_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+    { text: "Announcements", isLink: true },
+    { text: "New announcement", isLink: true },
   ];
 
   return crumbBuilder(pathSegs, textSegs);

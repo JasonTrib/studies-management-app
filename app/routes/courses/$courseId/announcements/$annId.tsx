@@ -12,12 +12,12 @@ import {
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
-import { courses_id_anns_id } from "~/utils/breadcrumbs";
+import { bc_courses_id_anns_id } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderDataT = {
-  breadcrumbData: Awaited<ReturnType<typeof courses_id_anns_id>>;
+  breadcrumbData: Awaited<ReturnType<typeof bc_courses_id_anns_id>>;
   announcement: Exclude<Awaited<ReturnType<typeof getAnnouncement>>, null>;
   canDeleteAnn: boolean;
 };
@@ -71,7 +71,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Unauthorized", { status: 401 });
   }
   const path = new URL(request.url).pathname;
-  const breadcrumbData = await courses_id_anns_id(path);
+  const breadcrumbData = await bc_courses_id_anns_id(path);
 
   return json({ announcement, canDeleteAnn, breadcrumbData });
 };
