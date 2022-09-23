@@ -21,6 +21,7 @@ import type { UserModelT } from "~/DAO/userDAO.server";
 import { getRegistrarUserProfile, getUser } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import profileStyles from "~/styles/profile.css";
+import { bc_users_id_profile } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
@@ -30,6 +31,7 @@ export const links: LinksFunction = () => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_users_id_profile>>;
   user: Exclude<Awaited<ReturnType<typeof getRegistrarUserProfile>>, null> &
     Exclude<Awaited<ReturnType<typeof getProfessorUserExtended>>, null> &
     Exclude<Awaited<ReturnType<typeof getStudentUserExtended>>, null>;
@@ -86,11 +88,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   if (!userExtended) throw new Error();
 
-  return { user: userExtended, userRole: activeUser.role, courses: coursesRegistered };
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_users_id_profile(path);
+
+  return {
+    breadcrumbData,
+    user: userExtended,
+    userRole: activeUser.role,
+    courses: coursesRegistered,
+  };
 };
 
 const UserProfilePage = () => {
-  const { user, userRole, courses } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, user, userRole, courses } = useLoaderData() as LoaderDataT;
   const activeUserHasPriviledge =
     userRole === "PROFESSOR" || userRole === "REGISTRAR" || userRole === "SUPERADMIN";
   const isReg = user.role === "REGISTRAR";
@@ -106,7 +116,7 @@ const UserProfilePage = () => {
   const noResultsMsg = "User hasn't registered to any courses";
 
   return (
-    <AppLayout wide>
+    <AppLayout wide breadcrumbs={breadcrumbData}>
       <>
         <div className="profile-container">
           <div className="profile-heading">

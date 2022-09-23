@@ -5,6 +5,7 @@ import type { UserModelT } from "~/DAO/userDAO.server";
 import { getProfessorsCount, getRegistrarsCount, getStudentsCount } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import usersStyles from "~/styles/users.css";
+import { bc_users } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
@@ -12,6 +13,7 @@ export const links: LinksFunction = () => {
 };
 
 type LoaderDataT = {
+  breadcrumbData: Awaited<ReturnType<typeof bc_users>>;
   regCount: Awaited<ReturnType<typeof getRegistrarsCount>>;
   profCount: Awaited<ReturnType<typeof getProfessorsCount>>;
   studCount: Awaited<ReturnType<typeof getStudentsCount>>;
@@ -22,15 +24,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
 
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await bc_users(path);
   const regCount = await getRegistrarsCount(user.dep_id);
   const profCount = await getProfessorsCount(user.dep_id);
   const studCount = await getStudentsCount(user.dep_id);
 
-  return { regCount, profCount, studCount, userRole: user.role };
+  return { breadcrumbData, regCount, profCount, studCount, userRole: user.role };
 };
 
 const UsersIndexPage = () => {
-  const { regCount, profCount, studCount, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, regCount, profCount, studCount, userRole } =
+    useLoaderData() as LoaderDataT;
   const isSup = userRole === USER_ROLE.SUPERADMIN;
   const isReg = userRole === USER_ROLE.REGISTRAR;
   const data = [
@@ -40,7 +45,7 @@ const UsersIndexPage = () => {
   ];
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbData}>
       <>
         {data.map((x) => (
           <div className="users-container" key={x.title}>

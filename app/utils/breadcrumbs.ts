@@ -1,4 +1,5 @@
 import { getCourse } from "~/DAO/courseDAO.server";
+import { getUser } from "~/DAO/userDAO.server";
 
 const getPathSegs = (path: string) => path.split("/").filter((x) => x);
 const calcPath = (pathSegs: string[], idx: number) =>
@@ -52,7 +53,7 @@ export const bc_courses_id_edit = async (path: string) => {
   const textSegs = [
     { text: "Courses", isLink: true },
     { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
-    { text: "Edit course", isLink: false },
+    { text: "Edit course", isLink: true },
   ];
 
   return crumbBuilder(pathSegs, textSegs);
@@ -91,6 +92,83 @@ export const bc_courses_id_anns_new = async (path: string) => {
     { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
     { text: "Announcements", isLink: true },
     { text: "New announcement", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [{ text: "Users", isLink: true }];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_id_profile = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: (await getUser(parseInt(pathSegs[1])))?.username || "", isLink: false },
+    { text: "Profile", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_regs = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Registrars", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_profs = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Professors", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_profs_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Professors", isLink: true },
+    { text: "New professor", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_studs = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Students", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
+export const bc_users_studs_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Students", isLink: true },
+    { text: "New student", isLink: true },
   ];
 
   return crumbBuilder(pathSegs, textSegs);
