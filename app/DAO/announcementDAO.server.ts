@@ -2,7 +2,7 @@ import type { Announcement, Course, Department } from "@prisma/client";
 import { prisma } from "~/db.server";
 export type { Announcement as AnnouncementModelT } from "@prisma/client";
 
-export function getAllAnnoucements() {
+export function getAllAnnouncements() {
   return prisma.announcement.findMany({
     orderBy: [
       {
@@ -15,7 +15,7 @@ export function getAllAnnoucements() {
   });
 }
 
-export function getAnnoucements(depId: Department["title_id"]) {
+export function getAnnouncements(depId: Department["title_id"]) {
   return prisma.announcement.findMany({
     where: {
       course: {
@@ -33,7 +33,7 @@ export function getAnnoucements(depId: Department["title_id"]) {
   });
 }
 
-export function getAnnoucement(id: Announcement["id"]) {
+export function getAnnouncement(id: Announcement["id"]) {
   return prisma.announcement.findUnique({
     where: { id },
     include: {
@@ -42,7 +42,7 @@ export function getAnnoucement(id: Announcement["id"]) {
   });
 }
 
-export function getAnnoucementsOfCourse(courseId: Course["id"]) {
+export function getAnnouncementsOfCourse(courseId: Course["id"]) {
   return prisma.announcement.findMany({
     where: {
       course_id: courseId,

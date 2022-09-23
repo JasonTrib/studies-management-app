@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import AppLayout from "~/components/AppLayout";
 import Container, { links as ContainerLinks } from "~/components/Container";
-import { getAnnoucements } from "~/DAO/announcementDAO.server";
+import { getAnnouncements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
   getAnnouncementsFollowedAsStudent,
@@ -17,7 +17,7 @@ import { logout, requireUser } from "~/utils/session.server";
 export type LoaderDataT = {
   announcements: Awaited<
     ReturnType<
-      | typeof getAnnoucements
+      | typeof getAnnouncements
       | typeof getAnnouncementsFollowedAsProfessor
       | typeof getAnnouncementsFollowedAsStudent
     >
@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
-      announcements = await getAnnoucements(user.dep_id);
+      announcements = await getAnnouncements(user.dep_id);
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);

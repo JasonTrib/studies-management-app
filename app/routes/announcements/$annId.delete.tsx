@@ -2,7 +2,7 @@ import type { ActionFunction, LinksFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { deleteAnnouncement } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
-import { getCourseIdFromAnnoucement } from "~/DAO/courseDAO.server";
+import { getCourseIdFromAnnouncement } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       const prof = await getProfessorId(user.id);
       if (!prof) throw new Error();
 
-      const course = await getCourseIdFromAnnoucement(annId);
+      const course = await getCourseIdFromAnnouncement(annId);
       if (!course) throw new Error();
 
       const isLecturing = await getIsProfessorLecturingCourse(prof.id, course.id);

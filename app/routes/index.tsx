@@ -7,7 +7,7 @@ import Box, { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
-import { getAnnoucements } from "~/DAO/announcementDAO.server";
+import { getAnnouncements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
   getAnnouncementsFollowedAsStudent,
@@ -23,7 +23,7 @@ import { logout, requireUser } from "~/utils/session.server";
 export type LoaderDataT = {
   announcements: Awaited<
     ReturnType<
-      | typeof getAnnoucements
+      | typeof getAnnouncements
       | typeof getAnnouncementsFollowedAsProfessor
       | typeof getAnnouncementsFollowedAsStudent
     >
@@ -45,7 +45,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
-      announcements = await getAnnoucements(user.dep_id);
+      announcements = await getAnnouncements(user.dep_id);
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);

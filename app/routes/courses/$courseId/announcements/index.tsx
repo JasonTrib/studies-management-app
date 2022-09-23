@@ -6,7 +6,7 @@ import AppLayout from "~/components/AppLayout";
 import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import { links as CourseLinks } from "~/components/courses/Course";
-import { getAnnoucementsOfCourse } from "~/DAO/announcementDAO.server";
+import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
 import { getProfessorCourseFollowing } from "~/DAO/professorCourseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
@@ -22,7 +22,7 @@ export const links: LinksFunction = () => {
 };
 
 export type LoaderDataT = {
-  announcements: Awaited<ReturnType<typeof getAnnoucementsOfCourse>>;
+  announcements: Awaited<ReturnType<typeof getAnnouncementsOfCourse>>;
   canModAnns: boolean;
 };
 
@@ -61,7 +61,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
-  announcements = await getAnnoucementsOfCourse(courseId);
+  announcements = await getAnnouncementsOfCourse(courseId);
 
   return json({ announcements, canModAnns });
 };

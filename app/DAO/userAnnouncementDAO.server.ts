@@ -13,7 +13,7 @@ export function getUserAnnouncementsPosted(userId: User["id"]) {
   });
 }
 
-function getUserAnnoucement(userId: User["id"], annId: Announcement["id"]) {
+function getUserAnnouncement(userId: User["id"], annId: Announcement["id"]) {
   return prisma.userAnnouncement.findFirst({
     where: {
       user_id: userId,

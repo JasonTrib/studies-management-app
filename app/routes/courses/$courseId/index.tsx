@@ -7,7 +7,7 @@ import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
-import { getAnnoucementsOfCourse } from "~/DAO/announcementDAO.server";
+import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsOnProfessorFollowedCourse,
   getAnnouncementsOnStudentFollowedCourse,
@@ -69,7 +69,7 @@ type LoaderDataT = {
   course: Exclude<Awaited<ReturnType<typeof getCourseExtended>>, null>;
   announcements: Awaited<
     ReturnType<
-      | typeof getAnnoucementsOfCourse
+      | typeof getAnnouncementsOfCourse
       | typeof getAnnouncementsOnProfessorFollowedCourse
       | typeof getAnnouncementsOnStudentFollowedCourse
     >
@@ -101,7 +101,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     case USER_ROLE.REGISTRAR:
       canModAnns = true;
       isFollowingCourse = true;
-      announcements = await getAnnoucementsOfCourse(courseId);
+      announcements = await getAnnouncementsOfCourse(courseId);
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);

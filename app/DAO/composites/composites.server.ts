@@ -1,5 +1,5 @@
 import type { Course, Department, Gender, Professor, Student, User } from "@prisma/client";
-import { getAllAnnoucements } from "../announcementDAO.server";
+import { getAllAnnouncements } from "../announcementDAO.server";
 import { getCourse, getCourses } from "../courseDAO.server";
 import {
   getAllProfessorCoursesLectured,
@@ -36,7 +36,7 @@ import {
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
   const coursesFollowed = await getStudentCoursesFollowing(studentId);
-  const announcements = await getAllAnnoucements();
+  const announcements = await getAllAnnouncements();
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>
     announcements.filter((ann) => ann.course_id === course.course_id),
@@ -47,7 +47,7 @@ export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]
 
 export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"]) {
   const coursesFollowed = await getProfessorCoursesFollowing(profId);
-  const announcements = await getAllAnnoucements();
+  const announcements = await getAllAnnouncements();
 
   const announcementsFollowed = coursesFollowed.flatMap((course) =>
     announcements.filter((ann) => ann.course_id === course.course_id),

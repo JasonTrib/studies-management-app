@@ -12,13 +12,13 @@ import {
   getStudentCoursesFollowing,
 } from "~/DAO/studentCourseDAO.server";
 import { getUserAnnouncementsPosted } from "~/DAO/userAnnouncementDAO.server";
-import { getAllAnnoucements } from "../DAO/announcementDAO.server";
+import { getAllAnnouncements } from "../DAO/announcementDAO.server";
 import {
   getAllCourses,
   getCourses,
   getCourse,
-  getCoursesAnnoucements,
-  getCourseAnnoucements,
+  getCoursesAnnouncements,
+  getCourseAnnouncements,
 } from "../DAO/courseDAO.server";
 import {
   getAllProfessors,
@@ -79,9 +79,9 @@ export const logCourseDAO = async () => {
 };
 
 export const logAnnouncementDAO = async () => {
-  const allAnnouncements = await getAllAnnoucements();
-  const courseAnnouncements = await getCoursesAnnoucements("IT");
-  const courseAnnouncement = await getCourseAnnoucements(3);
+  const allAnnouncements = await getAllAnnouncements();
+  const courseAnnouncements = await getCoursesAnnouncements("IT");
+  const courseAnnouncement = await getCourseAnnouncements(3);
 
   console.log("~~~~~~~ allAnnouncements ~~~~~~~");
   console.log(allAnnouncements);

@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
 import AppLayout from "~/components/AppLayout";
-import { getAnnoucement } from "~/DAO/announcementDAO.server";
+import { getAnnouncement } from "~/DAO/announcementDAO.server";
 import {
   getIsProfessorFollowingCourse,
   getIsProfessorLecturingCourse,
@@ -12,11 +12,13 @@ import {
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
+import { courses_id_anns_id } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderDataT = {
-  announcement: Exclude<Awaited<ReturnType<typeof getAnnoucement>>, null>;
+  breadcrumbData: Awaited<ReturnType<typeof courses_id_anns_id>>;
+  announcement: Exclude<Awaited<ReturnType<typeof getAnnouncement>>, null>;
   canDeleteAnn: boolean;
 };
 
@@ -31,7 +33,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const announcement = await getAnnoucement(annId);
+  const announcement = await getAnnouncement(annId);
   if (!announcement || announcement.course_id !== courseId) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -68,14 +70,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const path = new URL(request.url).pathname;
+  const breadcrumbData = await courses_id_anns_id(path);
 
-  return json({ announcement, canDeleteAnn });
+  return json({ announcement, canDeleteAnn, breadcrumbData });
 };
 
 const AnnouncementDetailsPage = () => {
-  const { announcement, canDeleteAnn } = useLoaderData() as LoaderDataT;
+  const { announcement, canDeleteAnn, breadcrumbData } = useLoaderData() as LoaderDataT;
   return (
-    <AppLayout wide>
+    <AppLayout breadcrumbs={breadcrumbData} wide>
       <>
         <div className="content-heading link">
           <Link to={`/courses/${announcement.course.id}`}>{announcement.course.title}</Link>

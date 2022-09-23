@@ -1,15 +1,22 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import type { courses_id_anns_id } from "~/utils/breadcrumbs";
 import ActionButton from "./buttons/ActionButton";
+import ChevronRightIcon from "./icons/ChevronRightIcon";
+import HomeIcon from "./icons/HomeIcon";
 
 type AppLayoutT = {
   wide?: boolean;
+  breadcrumbs?: Awaited<ReturnType<typeof courses_id_anns_id>>;
+  title?: string;
   children?: JSX.Element[] | JSX.Element;
 };
 
-const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
+const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, children }) => {
   const [offsprings, setOffspings] = useState<JSX.Element[]>([]);
+  const derivedTitle = title || breadcrumbs?.[breadcrumbs.length - 1].text;
+  const showPageHeading = !!(derivedTitle || breadcrumbs);
 
   useEffect(() => {
     if (children) {
@@ -84,21 +91,49 @@ const AppLayout: FC<AppLayoutT> = ({ wide, children }) => {
             <Link to="/my-profile">My profile</Link>
           </div>
         </div>
-        <div className="page-content">
-          {wide ? (
-            <div className="wide-content-feed">
-              <div>{offsprings[0]}</div>
-              <div className="content-feed">
-                <div className="main-feed">{offsprings[1]}</div>
-                <div className="side-feed">{offsprings[2]}</div>
+        <div className="page">
+          {showPageHeading && (
+            <div className="page-heading">
+              <div className="breadcrumbs">
+                <div className="svg-link link">
+                  <Link to="/">
+                    <HomeIcon className="home-icon" width={14} height={14} />
+                    <span>Home</span>
+                  </Link>
+                </div>
+                <ChevronRightIcon className="icon" />
+                {breadcrumbs?.slice(0, -1).map((crumb) => (
+                  <React.Fragment key={crumb.seg}>
+                    {crumb.isLink ? (
+                      <span className="link">
+                        <Link to={`${crumb.seg}`}>{crumb.text}</Link>
+                      </span>
+                    ) : (
+                      crumb.text
+                    )}
+                    <ChevronRightIcon className="icon" />
+                  </React.Fragment>
+                ))}
               </div>
-            </div>
-          ) : (
-            <div className="content-feed">
-              <div className="main-feed">{offsprings[0]}</div>
-              <div className="side-feed">{offsprings[1]}</div>
+              <div className="title">{derivedTitle}</div>
             </div>
           )}
+          <div className="page-content">
+            {wide ? (
+              <div className="wide-content-feed">
+                <div>{offsprings[0]}</div>
+                <div className="content-feed">
+                  <div className="main-feed">{offsprings[1]}</div>
+                  <div className="side-feed">{offsprings[2]}</div>
+                </div>
+              </div>
+            ) : (
+              <div className="content-feed">
+                <div className="main-feed">{offsprings[0]}</div>
+                <div className="side-feed">{offsprings[1]}</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
