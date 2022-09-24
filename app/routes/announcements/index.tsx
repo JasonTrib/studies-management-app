@@ -66,7 +66,7 @@ const AnnouncementsIndexPage = () => {
 
   return (
     <AppLayout wide breadcrumbs={breadcrumbData}>
-      <Container title="Announcements" data={announcements}>
+      <Container data={announcements}>
         <AnnouncementsList untrimmed />
       </Container>
     </AppLayout>

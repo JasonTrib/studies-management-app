@@ -67,8 +67,18 @@ const ProfileIndexPage = () => {
   if (gender === "M") avatarColor = "gender-male";
   if (gender === "F") avatarColor = "gender-female";
 
+  const headingActions = (): JSX.Element | null => {
+    return (
+      <span className="svg-link">
+        <Link to="edit">
+          <CogIcon />
+        </Link>
+      </span>
+    );
+  };
+
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
         <div className="profile-container">
           <div className="profile-heading">
@@ -78,13 +88,6 @@ const ProfileIndexPage = () => {
             <div className="profile-identity">
               <div className="fullname">{user.profile?.fullname || "-"}</div>
               <div className="username">{user.username}</div>
-            </div>
-            <div className="profile-action">
-              <span className="svg-link">
-                <Link to="edit">
-                  <CogIcon />
-                </Link>
-              </span>
             </div>
           </div>
           <div className="profile-info-section section-separator">
