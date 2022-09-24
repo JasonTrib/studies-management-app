@@ -2,7 +2,6 @@ import type { LinksFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import React from "react";
-import CogIcon from "~/components/icons/CogIcon";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import styles from "~/styles/courses.css";
 
@@ -26,14 +25,7 @@ const Course: FC<CourseT> = ({ data, canEdit }) => {
   return (
     <div className="course-container">
       <div className="heading">
-        <h3>{data.title}</h3>
-        {canEdit && (
-          <span className="svg-link">
-            <Link to="edit">
-              <CogIcon />
-            </Link>
-          </span>
-        )}
+        <h3>Description</h3>
       </div>
       <div className="content">
         <div className="body">

@@ -62,11 +62,31 @@
   margin-inline-start: 4px;
   margin-inline-end: 4px;
 }
-.app-container .container .page .page-heading .title {
+.app-container .container .page .page-heading .title-container {
+  height: 28px;
+  display: flex;
+  justify-content: space-between;
+}
+.app-container .container .page .page-heading .title-container .title {
+  line-height: 28px;
   font-size: 24px;
-  line-height: 24px;
   font-weight: 500;
   color: var(--color-text);
+}
+.app-container .container .page .page-heading .title-container .actions {
+  display: flex;
+  align-items: center;
+}
+.app-container .container .page .page-heading .title-container .actions .svg-link {
+  height: 24px;
+}
+.app-container .container .page .page-heading .title-container .actions .svg-danger {
+  height: 24px;
+  cursor: pointer;
+  fill: var(--color-button-red);
+}
+.app-container .container .page .page-heading .title-container .actions .svg-danger:hover {
+  fill: var(--color-button-red-hovered);
 }
 .app-container .container .page .page-content {
   background-color: var(--color-bg-lightest);

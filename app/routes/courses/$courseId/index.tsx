@@ -7,6 +7,7 @@ import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
+import CogIcon from "~/components/icons/CogIcon";
 import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsOnProfessorFollowedCourse,
@@ -149,16 +150,19 @@ const CourseDetailsPage = () => {
     useLoaderData() as LoaderDataT;
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
+  const headingActions = (): JSX.Element | null => {
+    return isPriviledged ? (
+      <span className="svg-link">
+        <Link to={`edit`}>
+          <CogIcon />
+        </Link>
+      </span>
+    ) : null;
+  };
+
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
-        <div className="content-heading link">
-          {isPriviledged ? (
-            <Link to={`/courses`}>Courses</Link>
-          ) : (
-            <Link to={`/my-courses`}>My courses</Link>
-          )}
-        </div>
         <Course data={course} canEdit={isPriviledged} />
       </>
       <>

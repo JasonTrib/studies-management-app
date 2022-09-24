@@ -75,14 +75,13 @@ const CourseAnnouncementsIndexPage = () => {
   const { courseId: courseIdRaw } = useParams();
   const courseId = parseInt(courseIdRaw || "");
 
+  const headingActions = (): JSX.Element | null => {
+    return canModAnns ? <NewAnnouncementButton courseId={courseId} /> : null;
+  };
+
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
-      <Container
-        title="Announcements"
-        data={announcements}
-        noResultsMsg="No announcements"
-        Button={canModAnns ? <NewAnnouncementButton courseId={courseId} /> : <></>}
-      >
+    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+      <Container data={announcements} noResultsMsg="No announcements">
         <AnnouncementsList
           untrimmed
           deletable={canModAnns}

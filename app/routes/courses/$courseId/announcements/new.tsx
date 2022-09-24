@@ -98,7 +98,6 @@ const AnnouncementsNewPage = () => {
   return (
     <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
-        <h2 className="heading">New announcement</h2>
         <div className="form-container">
           <Form
             method="post"

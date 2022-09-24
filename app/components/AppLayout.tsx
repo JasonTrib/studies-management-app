@@ -13,10 +13,11 @@ type AppLayoutT = {
     isLink: boolean;
   }[];
   title?: string;
+  Actions?: JSX.Element | null;
   children?: JSX.Element[] | JSX.Element;
 };
 
-const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, children }) => {
+const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, Actions, children }) => {
   const [offsprings, setOffspings] = useState<JSX.Element[]>([]);
   const lastCrumb = breadcrumbs?.[breadcrumbs.length - 1].text;
   const showBreadCrumbs = !!lastCrumb;
@@ -122,7 +123,10 @@ const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, children }) => {
                   ))}
                 </div>
               )}
-              <div className="title">{derivedTitle}</div>
+              <div className="title-container">
+                <div className="title">{derivedTitle}</div>
+                {Actions && <div className="actions">{Actions}</div>}
+              </div>
             </div>
           )}
           <div className="page-content">

@@ -77,7 +77,6 @@ const CoursesNewPage = () => {
   return (
     <AppLayout wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
-        <h2 className="heading">New course</h2>
         <div className="form-container">
           <CourseForm
             action={`/courses/new`}

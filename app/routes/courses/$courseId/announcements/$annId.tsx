@@ -1,8 +1,12 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useState } from "react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
 import AppLayout from "~/components/AppLayout";
+import ActionButton from "~/components/buttons/ActionButton";
+import DeleteIcon from "~/components/icons/DeleteIcon";
+import Modal from "~/components/Modal";
 import { getAnnouncement } from "~/DAO/announcementDAO.server";
 import {
   getIsProfessorFollowingCourse,
@@ -78,13 +82,49 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const AnnouncementDetailsPage = () => {
   const { announcement, canDeleteAnn, breadcrumbData } = useLoaderData() as LoaderDataT;
+  const transition = useTransition();
+  const isSubmitting = transition.state === "submitting";
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
+  const headingActions = (): JSX.Element | null => {
+    return canDeleteAnn ? (
+      <div className="svg-danger">
+        <DeleteIcon className="icon" width={24} height={24} onClick={openModal} />
+      </div>
+    ) : null;
+  };
+
   return (
-    <AppLayout breadcrumbs={breadcrumbData} wide>
+    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
-        <div className="content-heading link">
-          <Link to={`/courses/${announcement.course.id}`}>{announcement.course.title}</Link>
-        </div>
-        <Announcement data={announcement} showDelete={canDeleteAnn} />
+        <Announcement data={announcement} />
+        {canDeleteAnn && (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <div className="modal-heading">Are you sure you want to delete this announcement?</div>
+            <div className="modal-actions">
+              <Form
+                method="post"
+                action={`/announcements/${announcement.id}/delete`}
+                autoComplete="off"
+              >
+                <input
+                  type="hidden"
+                  id="redirectTo"
+                  name="redirectTo"
+                  value={`/courses/${announcement.course_id}/announcements`}
+                />
+                <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
+                  DELETE
+                </ActionButton>
+              </Form>
+              <ActionButton onClick={closeModal} variant="cancel" size="lg">
+                CANCEL
+              </ActionButton>
+            </div>
+          </Modal>
+        )}
       </>
     </AppLayout>
   );

@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
+import NewCourseButton from "~/components/buttons/NewCourseButton";
 import { links as ContainerLinks } from "~/components/Container";
 import CoursesTable from "~/components/courses/CoursesTable";
 import Table, { links as TableLinks } from "~/components/Table";
@@ -63,9 +64,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const CourseIndexPage = () => {
   const { breadcrumbData, courses, userRole } = useLoaderData() as LoaderDataT;
+  const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
+
+  const headingActions = (): JSX.Element | null => {
+    return isPriviledged ? <NewCourseButton /> : null;
+  };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <Table data={courses} noResultsMsg={"No courses found."} userRole={userRole}>
         <CoursesTable />
       </Table>

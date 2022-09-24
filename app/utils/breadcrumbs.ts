@@ -1,3 +1,4 @@
+import { getAnnouncement } from "~/DAO/announcementDAO.server";
 import { getCourse } from "~/DAO/courseDAO.server";
 import { getUser } from "~/DAO/userDAO.server";
 
@@ -78,7 +79,7 @@ export const bc_courses_id_anns_id = async (path: string) => {
     { text: "Courses", isLink: true },
     { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
     { text: "Announcements", isLink: true },
-    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+    { text: (await getAnnouncement(parseInt(pathSegs[3])))?.title || "", isLink: true },
   ];
 
   return crumbBuilder(pathSegs, textSegs);
