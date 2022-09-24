@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
-import NewCourseButton from "~/components/buttons/NewCourseButton";
+import NewButton from "~/components/buttons/NewButton";
 import { links as ContainerLinks } from "~/components/Container";
 import CoursesTable from "~/components/courses/CoursesTable";
 import Table, { links as TableLinks } from "~/components/Table";
@@ -67,7 +67,7 @@ const CourseIndexPage = () => {
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   const headingActions = (): JSX.Element | null => {
-    return isPriviledged ? <NewCourseButton /> : null;
+    return isPriviledged ? <NewButton directTo={"/courses/new"} /> : null;
   };
 
   return (
