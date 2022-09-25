@@ -7,6 +7,7 @@ import Box, { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
+import Page from "~/components/layout/Page";
 import { getAnnouncements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
@@ -15,7 +16,9 @@ import {
   getCoursesLecturing,
 } from "~/DAO/composites/composites.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
+import { getProfile } from "~/DAO/profileDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/index.css";
 import { logout, requireUser } from "~/utils/session.server";
@@ -30,6 +33,11 @@ export type LoaderDataT = {
   >;
   coursesRegistered: Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>;
   userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
+  userInfo: {
+    username: UserModelT["username"];
+    fullname: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["fullname"] | null;
+    gender: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["gender"] | null;
+  };
 };
 
 export const links: LinksFunction = () => {
@@ -64,48 +72,60 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const profile = await getProfile(user.id);
 
-  return json({ announcements, coursesRegistered, userRole: user.role });
+  return json({
+    announcements,
+    coursesRegistered,
+    userRole: user.role,
+    userInfo: {
+      username: user.username,
+      fullname: profile?.fullname,
+      gender: profile?.gender,
+    },
+  });
 };
 
 export default function Index() {
-  const { announcements, coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
+  const { announcements, coursesRegistered, userRole, userInfo } = useLoaderData() as LoaderDataT;
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
   const isStudent = userRole === USER_ROLE.STUDENT;
   const annTitle = isPriviledged ? "Announcements" : "My announcements";
 
   return (
-    <AppLayout title="Home">
-      <>
-        <Container
-          title={annTitle}
-          data={announcements}
-          noResultsMsg={"No announcements found"}
-          maxItems={8}
-          footerLink={{
-            directTo: "/announcements",
-          }}
-        >
-          <AnnouncementsList />
-        </Container>
-      </>
-      <>
-        <Box height={250} />
-        {!isPriviledged && (
+    <AppLayout userInfo={userInfo}>
+      <Page title="Home">
+        <>
           <Container
-            title="My courses"
-            data={coursesRegistered}
-            noResultsMsg={"No courses found"}
-            maxItems={6}
+            title={annTitle}
+            data={announcements}
+            noResultsMsg={"No announcements found"}
+            maxItems={8}
             footerLink={{
-              directTo: "/my-courses",
+              directTo: "/announcements",
             }}
-            Button={isStudent ? <RegisterToCourseButton /> : undefined}
           >
-            <CoursesList />
+            <AnnouncementsList />
           </Container>
-        )}
-      </>
+        </>
+        <>
+          <Box height={250} />
+          {!isPriviledged && (
+            <Container
+              title="My courses"
+              data={coursesRegistered}
+              noResultsMsg={"No courses found"}
+              maxItems={6}
+              footerLink={{
+                directTo: "/my-courses",
+              }}
+              Button={isStudent ? <RegisterToCourseButton /> : undefined}
+            >
+              <CoursesList />
+            </Container>
+          )}
+        </>
+      </Page>
     </AppLayout>
   );
 }

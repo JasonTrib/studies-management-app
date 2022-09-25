@@ -4,10 +4,10 @@ import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/re
 import bcrypt from "bcryptjs";
 import _ from "lodash";
 import type { z } from "zod";
-import AppLayout from "~/components/AppLayout";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import FormSelect from "~/components/form/FormSelect";
+import Page from "~/components/layout/Page";
 import type { studentUserDataT } from "~/DAO/userDAO.server";
 import { createStudent } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
@@ -76,7 +76,7 @@ const StudentNewPage = () => {
   const isSubmitting = transition.state === "submitting";
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <div className="form-container">
           <Form method="post" action="#" className="form" autoComplete="off">
@@ -133,7 +133,7 @@ const StudentNewPage = () => {
           </Form>
         </div>
       </div>
-    </AppLayout>
+    </Page>
   );
 };
 

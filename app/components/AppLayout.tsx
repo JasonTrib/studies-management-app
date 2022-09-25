@@ -1,39 +1,21 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
-import React, { useEffect, useState } from "react";
 import ActionButton from "./buttons/ActionButton";
 import AvatarIcon from "./icons/AvatarIcon";
-import ChevronRightIcon from "./icons/ChevronRightIcon";
-import HomeIcon from "./icons/HomeIcon";
 
 type AppLayoutT = {
-  wide?: boolean;
-  breadcrumbs?: {
-    seg: string;
-    text: string;
-    isLink: boolean;
-  }[];
-  title?: string;
-  Actions?: JSX.Element | null;
-  children?: JSX.Element[] | JSX.Element;
+  userInfo: {
+    username: string;
+    fullname?: string | null;
+    gender?: string | null;
+  };
 };
 
-const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, Actions, children }) => {
-  const [offsprings, setOffspings] = useState<JSX.Element[]>([]);
-  const lastCrumb = breadcrumbs?.[breadcrumbs.length - 1].text;
-  const showBreadCrumbs = !!lastCrumb;
-  const derivedTitle = title || lastCrumb;
-  const showPageHeading = !!derivedTitle;
-
-  useEffect(() => {
-    if (children) {
-      if (!Array.isArray(children)) {
-        setOffspings([children]);
-      } else {
-        setOffspings(children);
-      }
-    }
-  }, [children]);
+const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
+  const name = userInfo.fullname || userInfo.username;
+  let avatarColor = "";
+  if (userInfo.gender === "M") avatarColor = "gender-male";
+  if (userInfo.gender === "F") avatarColor = "gender-female";
 
   return (
     <div className="app-container">
@@ -43,9 +25,9 @@ const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, Actions, children
           <Link to="/my-profile">
             <div className="profile">
               <div className="avatar">
-                <AvatarIcon width={20} height={20} className={`icon`} />
+                <AvatarIcon width={20} height={20} className={`icon ${avatarColor}`} />
               </div>
-              <div className="name">{"My profile"}</div>
+              <div className="name">{name}</div>
             </div>
           </Link>
           <form action="/logout" method="post">
@@ -97,55 +79,7 @@ const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, Actions, children
             <Link to="/my-profile">My profile</Link>
           </div>
         </div>
-        <div className="page">
-          {showPageHeading && (
-            <div className="page-heading">
-              {showBreadCrumbs && (
-                <div className="breadcrumbs">
-                  <div className="svg-link link">
-                    <Link to="/">
-                      <HomeIcon className="home-icon" width={14} height={14} />
-                      <span>Home</span>
-                    </Link>
-                  </div>
-                  <ChevronRightIcon className="icon" />
-                  {breadcrumbs?.slice(0, -1).map((crumb) => (
-                    <React.Fragment key={crumb.seg}>
-                      {crumb.isLink ? (
-                        <span className="link">
-                          <Link to={`${crumb.seg}`}>{crumb.text}</Link>
-                        </span>
-                      ) : (
-                        crumb.text
-                      )}
-                      <ChevronRightIcon className="icon" />
-                    </React.Fragment>
-                  ))}
-                </div>
-              )}
-              <div className="title-container">
-                <div className="title">{derivedTitle}</div>
-                {Actions && <div className="actions">{Actions}</div>}
-              </div>
-            </div>
-          )}
-          <div className="page-content">
-            {wide ? (
-              <div className="wide-content-feed">
-                <div>{offsprings[0]}</div>
-                <div className="content-feed">
-                  <div className="main-feed">{offsprings[1]}</div>
-                  <div className="side-feed">{offsprings[2]}</div>
-                </div>
-              </div>
-            ) : (
-              <div className="content-feed">
-                <div className="main-feed">{offsprings[0]}</div>
-                <div className="side-feed">{offsprings[1]}</div>
-              </div>
-            )}
-          </div>
-        </div>
+        {children}
       </div>
     </div>
   );

@@ -2,8 +2,8 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import AppLayout from "~/components/AppLayout";
 import Container, { links as ContainerLinks } from "~/components/Container";
+import Page from "~/components/layout/Page";
 import { getAnnouncements } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsFollowedAsProfessor,
@@ -65,11 +65,11 @@ const AnnouncementsIndexPage = () => {
   const { breadcrumbData, announcements } = useLoaderData() as LoaderDataT;
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <Container data={announcements}>
         <AnnouncementsList untrimmed />
       </Container>
-    </AppLayout>
+    </Page>
   );
 };
 

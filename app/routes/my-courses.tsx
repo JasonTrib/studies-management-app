@@ -4,10 +4,13 @@ import { useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import { links as ContainerLinks } from "~/components/Container";
 import MyCoursesTable from "~/components/courses/MyCoursesTable";
+import Page from "~/components/layout/Page";
 import Table, { links as TableLinks } from "~/components/Table";
 import { getCoursesEnrolled, getCoursesLecturing } from "~/DAO/composites/composites.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
+import { getProfile } from "~/DAO/profileDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { bc_mycourses } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
@@ -19,6 +22,11 @@ type LoaderDataT = {
     null
   >;
   userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
+  userInfo: {
+    username: UserModelT["username"];
+    fullname: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["fullname"] | null;
+    gender: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["gender"] | null;
+  };
 };
 
 export const links: LinksFunction = () => {
@@ -47,14 +55,24 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     default:
       throw new Response("Unauthorized", { status: 401 });
   }
+  const profile = await getProfile(user.id);
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_mycourses(path);
 
-  return json({ breadcrumbData, coursesRegistered, userRole: user.role });
+  return json({
+    breadcrumbData,
+    coursesRegistered,
+    userRole: user.role,
+    userInfo: {
+      username: user.username,
+      fullname: profile?.fullname,
+      gender: profile?.gender,
+    },
+  });
 };
 
 const MyCoursesPage = () => {
-  const { breadcrumbData, coursesRegistered, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, coursesRegistered, userRole, userInfo } = useLoaderData() as LoaderDataT;
 
   let noResultsMsg;
   switch (userRole) {
@@ -71,10 +89,12 @@ const MyCoursesPage = () => {
   }
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
-      <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userRole}>
-        <MyCoursesTable />
-      </Table>
+    <AppLayout userInfo={userInfo}>
+      <Page wide breadcrumbs={breadcrumbData}>
+        <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userRole}>
+          <MyCoursesTable />
+        </Table>
+      </Page>
     </AppLayout>
   );
 };

@@ -1,10 +1,10 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
 import NewButton from "~/components/buttons/NewButton";
 import { links as ContainerLinks } from "~/components/Container";
 import CoursesTable from "~/components/courses/CoursesTable";
+import Page from "~/components/layout/Page";
 import Table, { links as TableLinks } from "~/components/Table";
 import {
   getCoursesAsProfessorExtended,
@@ -71,11 +71,11 @@ const CourseIndexPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <Table data={courses} noResultsMsg={"No courses found."} userRole={userRole}>
         <CoursesTable />
       </Table>
-    </AppLayout>
+    </Page>
   );
 };
 

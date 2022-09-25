@@ -1,11 +1,10 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
-import AppLayout from "~/components/AppLayout";
 import CourseForm from "~/components/form/CourseForm";
+import Page from "~/components/layout/Page";
 import type { courseDataT } from "~/DAO/courseDAO.server";
 import { createCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
@@ -75,7 +74,7 @@ const CoursesNewPage = () => {
   const isSubmitting = transition.state === "submitting";
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <div className="form-container">
           <CourseForm
@@ -86,7 +85,7 @@ const CoursesNewPage = () => {
           />
         </div>
       </div>
-    </AppLayout>
+    </Page>
   );
 };
 

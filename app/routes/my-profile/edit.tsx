@@ -5,13 +5,13 @@ import bcrypt from "bcryptjs";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import type { z } from "zod";
-import AppLayout from "~/components/AppLayout";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormCheckbox from "~/components/form/FormCheckbox";
 import FormInput from "~/components/form/FormInput";
 import FormRadioGroup from "~/components/form/FormRadioGroup";
 import FormTabs from "~/components/form/FormTabs";
 import FormTextarea from "~/components/form/FormTextarea";
+import Page from "~/components/layout/Page";
 import type { profileDataT } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import { updateUserPassword } from "~/DAO/userDAO.server";
@@ -113,7 +113,7 @@ const ProfileEditPage = () => {
   }, [selected]);
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <div className="form-container">
           <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
@@ -246,7 +246,7 @@ const ProfileEditPage = () => {
           )}
         </div>
       </div>
-    </AppLayout>
+    </Page>
   );
 };
 

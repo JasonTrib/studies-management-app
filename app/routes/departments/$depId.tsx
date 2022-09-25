@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
+import Page from "~/components/layout/Page";
 import { getDepartment } from "~/DAO/departmentDAO.server";
 
 type LoaderDataT = {
@@ -27,14 +27,14 @@ const DepartmentDetailsPage = () => {
   const { department } = useLoaderData() as LoaderDataT;
 
   return (
-    <AppLayout>
+    <Page>
       <div>DepartmentDetailsPage</div>
       <div>
         <h2>department</h2>
         <p>title: {department.full_title}</p>
         <p>description: {department.description}</p>
       </div>
-    </AppLayout>
+    </Page>
   );
 };
 

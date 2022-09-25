@@ -1,10 +1,10 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
 import CogIcon from "~/components/icons/CogIcon";
+import Page from "~/components/layout/Page";
 import {
   getProfessorUserExtended,
   getStudentUserExtended,
@@ -78,7 +78,7 @@ const ProfileIndexPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
         <div className="profile-container">
           <div className="profile-heading">
@@ -154,7 +154,7 @@ const ProfileIndexPage = () => {
           {user.profile?.info && <div className="content">{user.profile?.info}</div>}
         </div>
       </>
-    </AppLayout>
+    </Page>
   );
 };
 

@@ -1,8 +1,8 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
 import NewButton from "~/components/buttons/NewButton";
+import Page from "~/components/layout/Page";
 import Table, { links as TableLinks } from "~/components/Table";
 import ProfessorsTable from "~/components/users/ProfessorsTable";
 import { getProfessorUsersExtended } from "~/DAO/composites/composites.server";
@@ -41,11 +41,11 @@ const ProfessorsIndexPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <Table data={professorUsers} noResultsMsg={"No professors found."}>
         <ProfessorsTable />
       </Table>
-    </AppLayout>
+    </Page>
   );
 };
 

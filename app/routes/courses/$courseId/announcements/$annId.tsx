@@ -3,9 +3,9 @@ import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
-import AppLayout from "~/components/AppLayout";
 import ActionButton from "~/components/buttons/ActionButton";
 import DeleteIcon from "~/components/icons/DeleteIcon";
+import Page from "~/components/layout/Page";
 import Modal from "~/components/Modal";
 import { getAnnouncement } from "~/DAO/announcementDAO.server";
 import {
@@ -97,7 +97,7 @@ const AnnouncementDetailsPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
         <Announcement data={announcement} />
         {canDeleteAnn && (
@@ -126,7 +126,7 @@ const AnnouncementDetailsPage = () => {
           </Modal>
         )}
       </>
-    </AppLayout>
+    </Page>
   );
 };
 

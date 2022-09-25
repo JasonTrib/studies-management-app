@@ -1,13 +1,12 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
-import AppLayout from "~/components/AppLayout";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
+import Page from "~/components/layout/Page";
 import type { announcementDataT } from "~/DAO/announcementDAO.server";
 import { createAnnouncement } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
@@ -96,7 +95,7 @@ const AnnouncementsNewPage = () => {
   const isSubmitting = transition.state === "submitting";
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <div className="form-container">
           <Form
@@ -132,7 +131,7 @@ const AnnouncementsNewPage = () => {
           </Form>
         </div>
       </div>
-    </AppLayout>
+    </Page>
   );
 };
 

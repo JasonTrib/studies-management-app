@@ -2,12 +2,12 @@ import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/n
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import AppLayout from "~/components/AppLayout";
 import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
 import CogIcon from "~/components/icons/CogIcon";
+import Page from "~/components/layout/Page";
 import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import {
   getAnnouncementsOnProfessorFollowedCourse,
@@ -161,7 +161,7 @@ const CourseDetailsPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
         <Course data={course} canEdit={isPriviledged} />
       </>
@@ -191,7 +191,7 @@ const CourseDetailsPage = () => {
         )}
       </>
       <Box height={250} />
-    </AppLayout>
+    </Page>
   );
 };
 

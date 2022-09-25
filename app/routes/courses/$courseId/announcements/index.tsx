@@ -2,10 +2,10 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import AppLayout from "~/components/AppLayout";
 import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
 import Container from "~/components/Container";
 import { links as CourseLinks } from "~/components/courses/Course";
+import Page from "~/components/layout/Page";
 import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
 import { getProfessorCourseFollowing } from "~/DAO/professorCourseDAO.server";
@@ -80,14 +80,14 @@ const CourseAnnouncementsIndexPage = () => {
   };
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <Container data={announcements} noResultsMsg="No announcements">
         <AnnouncementsList
           deletable={canModAnns}
           landingRoute={`/courses/${courseId}/announcements`}
         />
       </Container>
-    </AppLayout>
+    </Page>
   );
 };
 

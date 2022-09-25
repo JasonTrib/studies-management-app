@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
+import Page from "~/components/layout/Page";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import { getProfessorsCount, getRegistrarsCount, getStudentsCount } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
@@ -45,7 +45,7 @@ const UsersIndexPage = () => {
   ];
 
   return (
-    <AppLayout breadcrumbs={breadcrumbData}>
+    <Page breadcrumbs={breadcrumbData}>
       <>
         {data.map((x) => (
           <div className="users-container" key={x.title}>
@@ -65,7 +65,7 @@ const UsersIndexPage = () => {
           </div>
         ))}
       </>
-    </AppLayout>
+    </Page>
   );
 };
 

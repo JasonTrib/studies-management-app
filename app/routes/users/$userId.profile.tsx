@@ -1,12 +1,12 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/AppLayout";
 import { links as ContainerLinks } from "~/components/Container";
 import MyCoursesTable from "~/components/courses/MyCoursesTable";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
+import Page from "~/components/layout/Page";
 import Table, { links as TableLinks } from "~/components/Table";
 import {
   getCoursesEnrolled,
@@ -116,7 +116,7 @@ const UserProfilePage = () => {
   const noResultsMsg = "User hasn't registered to any courses";
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <>
         <div className="profile-container">
           <div className="profile-heading">
@@ -209,7 +209,7 @@ const UserProfilePage = () => {
           <></>
         )}
       </>
-    </AppLayout>
+    </Page>
   );
 };
 

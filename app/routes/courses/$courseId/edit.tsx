@@ -4,7 +4,7 @@ import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/re
 import _ from "lodash";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import AppLayout from "~/components/AppLayout";
+import Page from "~/components/layout/Page";
 import ActionButton from "~/components/buttons/ActionButton";
 import CourseForm from "~/components/form/CourseForm";
 import FormInput from "~/components/form/FormInput";
@@ -169,7 +169,7 @@ const CourseEditPage = () => {
   const hasTooManyLecturers = professorsLecturing.length >= MAX_LECTURERS_PER_COURSE;
 
   return (
-    <AppLayout wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
         <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
         {selected === options[0] && (
@@ -283,7 +283,7 @@ const CourseEditPage = () => {
           </ActionButton>
         </div>
       </Modal>
-    </AppLayout>
+    </Page>
   );
 };
 
