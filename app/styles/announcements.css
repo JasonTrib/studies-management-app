@@ -51,6 +51,7 @@
 .announcement-container .content .body {
   color: var(--color-text-dark);
   font-size: 15px;
+  white-space: pre-line;
 }
 .announcement-container .content .meta-data {
   margin-top: 16px;

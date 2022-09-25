@@ -38,6 +38,7 @@
 .course-container .content .body {
   color: var(--color-text-dark);
   font-size: 15px;
+  white-space: pre-line;
 }
 .course-container .content .body .no-desc {
   color: var(--color-text-lighter);

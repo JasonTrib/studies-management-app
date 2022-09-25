@@ -83,7 +83,6 @@ const CourseAnnouncementsIndexPage = () => {
     <AppLayout wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <Container data={announcements} noResultsMsg="No announcements">
         <AnnouncementsList
-          untrimmed
           deletable={canModAnns}
           landingRoute={`/courses/${courseId}/announcements`}
         />

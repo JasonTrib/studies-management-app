@@ -56,6 +56,7 @@
   color: var(--color-text-dark);
   font-size: 13px;
   margin-bottom: 4px;
+  white-space: pre-line;
 }
 .container-blueprint .content.padding-top {
   padding-top: 8px;
