@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 import ActionButton from "./buttons/ActionButton";
+import AvatarIcon from "./icons/AvatarIcon";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
 import HomeIcon from "./icons/HomeIcon";
 
@@ -36,18 +37,17 @@ const AppLayout: FC<AppLayoutT> = ({ wide, breadcrumbs, title, Actions, children
 
   return (
     <div className="app-container">
-      <div className="appbar">
-        <h1>Studies Management App</h1>
-        <div>
-          <Link to="/">Home</Link>
-        </div>
-        <div>
-          <Link to="/login">Login</Link>
-        </div>
-        <div>
-          <Link to="/logout">Logout</Link>
-        </div>
-        <div style={{ position: "absolute", top: "8px", right: "8px" }}>
+      <div className="topbar">
+        <h1>Unilumnus</h1>
+        <div className="actions link">
+          <Link to="/my-profile">
+            <div className="profile">
+              <div className="avatar">
+                <AvatarIcon width={20} height={20} className={`icon`} />
+              </div>
+              <div className="name">{"My profile"}</div>
+            </div>
+          </Link>
           <form action="/logout" method="post">
             <ActionButton type="submit" variant="cancel" size="md">
               Logout

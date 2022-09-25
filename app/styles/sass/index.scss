@@ -6,11 +6,57 @@
   display: flex;
   flex-direction: column;
 
-  .appbar {
-    height: 100px;
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 12px;
+    min-height: 60px;
+    max-height: 60px;
     background-color: rgb(240, 255, 249);
     position: relative;
     z-index: 1;
+    box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
+    background-color: white;
+
+    .actions {
+      display: flex;
+      align-items: center;
+      column-gap: 32px;
+      height: 28px;
+
+      .profile {
+        display: flex;
+        align-items: center;
+
+        .avatar {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 28px;
+          height: 28px;
+          background-color: var(--color-bg-lightest);
+          box-shadow: 0px 0px 0px 1px var(--color-shadow);
+          border-radius: 1000px;
+
+          .icon {
+            fill: var(--color-text);
+
+            &.gender-male {
+              fill: hsl(220, 80%, 70%);
+            }
+
+            &.gender-female {
+              fill: hsl(300, 80%, 70%);
+            }
+          }
+        }
+
+        .name {
+          margin-inline-start: 8px;
+        }
+      }
+    }
   }
 
   .container {
@@ -21,6 +67,7 @@
     grid-auto-flow: row;
     grid-template-areas: "sidebar content";
     height: 100%;
+    z-index: 0;
 
     .sidebar {
       grid-area: sidebar;
