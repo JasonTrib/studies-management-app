@@ -1,12 +1,12 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { z } from "zod";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import styles from "~/styles/form.css";
-import { createUserSession, login } from "~/utils/session.server";
+import { createUserSession, getUserId, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
 import { loginSchema } from "~/validations/schemas/userSchema.server";
@@ -41,6 +41,9 @@ export type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const redirectTo = new URL(request.url).searchParams.toString();
+
+  const user = await getUserId(request);
+  if (user !== null) return redirect("/");
 
   return json({ redirectTo });
 };
