@@ -19,7 +19,14 @@
   box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
   background-color: white;
 }
-.app-container .topbar h1 {
+.app-container .topbar .link-title a {
+  text-decoration: none;
+  color: inherit;
+}
+.app-container .topbar .link-title a:hover {
+  color: var(--color-text-cyan-dark);
+}
+.app-container .topbar .link-title h1 {
   font-weight: 300;
 }
 .app-container .topbar .actions {

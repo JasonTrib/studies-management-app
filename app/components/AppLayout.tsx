@@ -21,7 +21,11 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
   return (
     <div className="app-container">
       <div className="topbar">
-        <h1>Unilumnus</h1>
+        <div className="link-title">
+          <Link to="/">
+            <h1>Unilumnus</h1>
+          </Link>
+        </div>
         <div className="actions link">
           <Link to="/my-profile">
             <div className="profile">

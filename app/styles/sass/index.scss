@@ -19,8 +19,19 @@
     box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
     background-color: white;
 
-    h1 {
-      font-weight: 300;
+    .link-title {
+      a {
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+          color: var(--color-text-cyan-dark);
+        }
+      }
+
+      h1 {
+        font-weight: 300;
+      }
     }
 
     .actions {
