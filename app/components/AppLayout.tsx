@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import ActionButton from "./buttons/ActionButton";
 import AvatarIcon from "./icons/AvatarIcon";
+import LogoutIcon from "./icons/LogoutIcon";
 
 type AppLayoutT = {
   userInfo: {
@@ -32,7 +33,10 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
           </Link>
           <form action="/logout" method="post">
             <ActionButton type="submit" variant="cancel" size="md">
-              Logout
+              <div className="logout-button">
+                Logout
+                <LogoutIcon />
+              </div>
             </ActionButton>
           </form>
         </div>

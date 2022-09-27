@@ -19,6 +19,10 @@
     box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
     background-color: white;
 
+    h1 {
+      font-weight: 300;
+    }
+
     .actions {
       display: flex;
       align-items: center;
@@ -55,6 +59,13 @@
         .name {
           margin-inline-start: 8px;
         }
+      }
+
+      .logout-button {
+        display: flex;
+        align-items: center;
+        column-gap: 6px;
+        fill: var(--color-text);
       }
     }
   }
