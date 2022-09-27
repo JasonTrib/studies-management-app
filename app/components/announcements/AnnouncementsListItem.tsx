@@ -50,8 +50,8 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
       </div>
       <div className={`body ${untrimmed ? "" : "ellipsis-3"}`}>{body}</div>
       <div className="metadata">
-        <span className="date mr-12">{date}</span>
-        <span className="course">{courseTitle}</span>
+        <span className="course mr-12">{courseTitle}</span>
+        <span className="date">{date}</span>
       </div>
       {deletable && (
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
