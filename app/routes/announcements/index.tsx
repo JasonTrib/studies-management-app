@@ -67,7 +67,7 @@ const AnnouncementsIndexPage = () => {
   return (
     <Page wide breadcrumbs={breadcrumbData}>
       <Container data={announcements}>
-        <AnnouncementsList untrimmed />
+        <AnnouncementsList />
       </Container>
     </Page>
   );
