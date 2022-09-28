@@ -244,42 +244,42 @@
             }
           }
         }
+      }
+    }
+  }
+}
 
-        .form-page {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+.form-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-          .heading {
-            margin-bottom: 8px;
-          }
+  .heading {
+    margin-bottom: 8px;
+  }
 
-          .form-container {
-            width: 420px;
+  .form-container {
+    width: 420px;
 
-            &.wide {
-              width: 640px;
-            }
-          }
+    &.wide {
+      width: 640px;
+    }
+  }
 
-          .form-tabs {
-            display: flex;
-            justify-content: center;
-            column-gap: 24px;
+  .form-tabs {
+    display: flex;
+    justify-content: center;
+    column-gap: 24px;
 
-            .tab-option {
-              cursor: pointer;
+    .tab-option {
+      cursor: pointer;
 
-              &.selected {
-                border-bottom: 2px solid var(--color-text-cyan-dark);
-              }
+      &.selected {
+        border-bottom: 2px solid var(--color-text-cyan-dark);
+      }
 
-              &:hover {
-                color: var(--color-text-cyan-dark);
-              }
-            }
-          }
-        }
+      &:hover {
+        color: var(--color-text-cyan-dark);
       }
     }
   }

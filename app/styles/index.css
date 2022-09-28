@@ -202,32 +202,33 @@
 .app-container .content-main .page .page-content .wide-content-feed .content-feed .side-feed {
   padding: 0;
 }
-.app-container .content-main .page .page-content .form-page {
+
+.form-page {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.app-container .content-main .page .page-content .form-page .heading {
+.form-page .heading {
   margin-bottom: 8px;
 }
-.app-container .content-main .page .page-content .form-page .form-container {
+.form-page .form-container {
   width: 420px;
 }
-.app-container .content-main .page .page-content .form-page .form-container.wide {
+.form-page .form-container.wide {
   width: 640px;
 }
-.app-container .content-main .page .page-content .form-page .form-tabs {
+.form-page .form-tabs {
   display: flex;
   justify-content: center;
   column-gap: 24px;
 }
-.app-container .content-main .page .page-content .form-page .form-tabs .tab-option {
+.form-page .form-tabs .tab-option {
   cursor: pointer;
 }
-.app-container .content-main .page .page-content .form-page .form-tabs .tab-option.selected {
+.form-page .form-tabs .tab-option.selected {
   border-bottom: 2px solid var(--color-text-cyan-dark);
 }
-.app-container .content-main .page .page-content .form-page .form-tabs .tab-option:hover {
+.form-page .form-tabs .tab-option:hover {
   color: var(--color-text-cyan-dark);
 }
 
