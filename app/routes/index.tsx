@@ -18,7 +18,6 @@ import {
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getProfile } from "~/DAO/profileDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/index.css";
 import { logout, requireUser } from "~/utils/session.server";
@@ -32,9 +31,9 @@ export type LoaderDataT = {
     >
   >;
   coursesRegistered: Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>;
-  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
   userInfo: {
-    username: UserModelT["username"];
+    username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
+    role: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
     fullname: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["fullname"] | null;
     gender: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["gender"] | null;
   };
@@ -77,9 +76,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json({
     announcements,
     coursesRegistered,
-    userRole: user.role,
     userInfo: {
       username: user.username,
+      role: user.role,
       fullname: profile?.fullname,
       gender: profile?.gender,
     },
@@ -87,9 +86,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Index() {
-  const { announcements, coursesRegistered, userRole, userInfo } = useLoaderData() as LoaderDataT;
-  const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
-  const isStudent = userRole === USER_ROLE.STUDENT;
+  const { announcements, coursesRegistered, userInfo } = useLoaderData() as LoaderDataT;
+  const isPriviledged =
+    userInfo.role === USER_ROLE.REGISTRAR || userInfo.role === USER_ROLE.SUPERADMIN;
+  const isStudent = userInfo.role === USER_ROLE.STUDENT;
   const annTitle = isPriviledged ? "Announcements" : "My announcements";
 
   return (

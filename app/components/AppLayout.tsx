@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { USER_ROLE } from "~/data/data";
 import ActionButton from "./buttons/ActionButton";
 import AnnouncementIcon from "./icons/AnnouncementIcon";
 import AvatarIcon from "./icons/AvatarIcon";
@@ -12,6 +14,7 @@ import UsersIcon from "./icons/UsersIcon";
 type AppLayoutT = {
   userInfo: {
     username: string;
+    role?: UserModelT["role"];
     fullname?: string | null;
     gender?: string | null;
   };
@@ -22,6 +25,8 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
   let avatarColor = "";
   if (userInfo.gender === "M") avatarColor = "gender-male";
   if (userInfo.gender === "F") avatarColor = "gender-female";
+  const showMyCourses =
+    userInfo.role === USER_ROLE.STUDENT || userInfo.role === USER_ROLE.PROFESSOR;
 
   return (
     <div className="app-container">
@@ -73,12 +78,14 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
             </div>
           </Link>
           <div className="separator" />
-          <Link to="/my-courses">
-            <div className="quicklink">
-              <MyCoursesIcon width={20} height={20} />
-              My courses
-            </div>
-          </Link>
+          {showMyCourses && (
+            <Link to="/my-courses">
+              <div className="quicklink">
+                <MyCoursesIcon width={20} height={20} />
+                My courses
+              </div>
+            </Link>
+          )}
           <Link to="/announcements">
             <div className="quicklink">
               <AnnouncementIcon width={20} height={20} />

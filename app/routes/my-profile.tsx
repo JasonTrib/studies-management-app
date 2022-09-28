@@ -2,12 +2,12 @@ import type { LoaderFunction } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import { getProfile } from "~/DAO/profileDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderDataT = {
   userInfo: {
-    username: UserModelT["username"];
+    username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
+    role: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
     fullname: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["fullname"] | null;
     gender: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["gender"] | null;
   };
@@ -22,6 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return {
     userInfo: {
       username: user.username,
+      role: user.role,
       fullname: profile?.fullname,
       gender: profile?.gender,
     },

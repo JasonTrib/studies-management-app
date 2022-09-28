@@ -10,7 +10,6 @@ import { getCoursesEnrolled, getCoursesLecturing } from "~/DAO/composites/compos
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getProfile } from "~/DAO/profileDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
-import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { bc_mycourses } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
@@ -21,9 +20,9 @@ type LoaderDataT = {
     Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>,
     null
   >;
-  userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
   userInfo: {
-    username: UserModelT["username"];
+    username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
+    role: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
     fullname: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["fullname"] | null;
     gender: Exclude<Awaited<ReturnType<typeof getProfile>>, null>["gender"] | null;
   };
@@ -62,9 +61,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json({
     breadcrumbData,
     coursesRegistered,
-    userRole: user.role,
     userInfo: {
       username: user.username,
+      role: user.role,
       fullname: profile?.fullname,
       gender: profile?.gender,
     },
@@ -72,13 +71,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const MyCoursesPage = () => {
-  const { breadcrumbData, coursesRegistered, userRole, userInfo } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, coursesRegistered, userInfo } = useLoaderData() as LoaderDataT;
 
   let noResultsMsg;
-  switch (userRole) {
+  switch (userInfo.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
-      noResultsMsg = `No courses can exist for "${userRole}" user.`;
+      noResultsMsg = `No courses can exist for "${userInfo.role}" user.`;
       break;
     case USER_ROLE.PROFESSOR:
       noResultsMsg = "No courses found that you are lecturing.";
@@ -91,7 +90,7 @@ const MyCoursesPage = () => {
   return (
     <AppLayout userInfo={userInfo}>
       <Page wide breadcrumbs={breadcrumbData}>
-        <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userRole}>
+        <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userInfo.role}>
           <MyCoursesTable />
         </Table>
       </Page>
