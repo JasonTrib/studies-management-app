@@ -16,7 +16,7 @@
   padding-inline-start: 12px;
   position: relative;
   z-index: 1;
-  box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
+  box-shadow: 0 0 12px var(--color-shadow-light), 4px -2px 4px 0px black;
   background-color: hsl(220deg, 50%, 25%);
   color: white;
 }
@@ -82,7 +82,7 @@
 }
 .app-container .sidebar {
   grid-area: sidebar;
-  box-shadow: 0 0 12px var(--color-shadow-light), 0px -2px 4px 0px black;
+  box-shadow: 0 0 12px var(--color-shadow-light), 4px -2px 4px 0px black;
   background-color: hsl(220deg, 50%, 25%);
   z-index: 0;
 }

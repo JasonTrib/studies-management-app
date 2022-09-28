@@ -42,7 +42,11 @@ export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]
     announcements.filter((ann) => ann.course_id === course.course_id),
   );
 
-  return announcementsFollowed;
+  const announcementsFollowedSorted = [...announcementsFollowed].sort((a, b) =>
+    a.created_at >= b.created_at ? -1 : 1,
+  );
+
+  return announcementsFollowedSorted;
 }
 
 export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"]) {
@@ -53,7 +57,11 @@ export async function getAnnouncementsFollowedAsProfessor(profId: Professor["id"
     announcements.filter((ann) => ann.course_id === course.course_id),
   );
 
-  return announcementsFollowed;
+  const announcementsFollowedSorted = [...announcementsFollowed].sort((a, b) =>
+    a.created_at >= b.created_at ? -1 : 1,
+  );
+
+  return announcementsFollowedSorted;
 }
 
 export async function getCoursesEnrolled(studentId: Student["id"]) {
