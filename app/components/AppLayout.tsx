@@ -20,12 +20,14 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
 
   return (
     <div className="app-container">
-      <div className="topbar">
+      <div className="topbar-logo">
         <div className="link-title">
           <Link to="/">
             <h1>Unilumnus</h1>
           </Link>
         </div>
+      </div>
+      <div className="topbar-main">
         <div className="actions link">
           <Link to="/my-profile">
             <div className="profile">
@@ -45,50 +47,27 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
           </form>
         </div>
       </div>
-      <div className="container">
-        <div className="sidebar">
-          <div>
-            <Link to="/departments">Departments</Link>
-          </div>
-          <div>
-            <Link to="/users">Users</Link>
-          </div>
-          <div>
-            <Link to="/users/registrars">Registrars</Link>
-          </div>
-          <div>
-            <Link to="/users/professors/new">New professor</Link>
-          </div>
-          <div>
-            <Link to="/users/professors">Professors</Link>
-          </div>
-          <div>
-            <Link to="/users/students/new">New student</Link>
-          </div>
-          <div>
-            <Link to="/users/students">Students</Link>
-          </div>
-          <div>
-            <Link to="/courses/new">New course</Link>
-          </div>
-          <div>
-            <Link to="/courses">Courses</Link>
-          </div>
-          <div>
-            <Link to="/my-courses">My courses</Link>
-          </div>
-          <div>
-            <Link to="/announcements">Announcements</Link>
-          </div>
-          <div>
-            <Link to="/my-profile/edit">Edit profile</Link>
-          </div>
-          <div>
-            <Link to="/my-profile">My profile</Link>
-          </div>
+      <div className="sidebar">
+        <div className="quicklinks-container link-simple">
+          <Link to="/departments">
+            <div className="quicklink">The department</div>
+          </Link>
+          <Link to="/users">
+            <div className="quicklink">Users</div>
+          </Link>
+          <Link to="/courses">
+            <div className="quicklink">Courses</div>
+          </Link>
+          <div className="separator" />
+          <Link to="/my-courses">
+            <div className="quicklink">My courses</div>
+          </Link>
+          <Link to="/announcements">
+            <div className="quicklink">Announcements</div>
+          </Link>
         </div>
-        {children}
       </div>
+      <div className="content-main">{children}</div>
     </div>
   );
 };

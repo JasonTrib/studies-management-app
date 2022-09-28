@@ -69,7 +69,7 @@ const Page: FC<PageT> = ({ wide, breadcrumbs, title, Actions, children }) => {
       <div className="page-content">
         {wide ? (
           <div className="wide-content-feed">
-            <div>{offsprings[0]}</div>
+            {offsprings[0]}
             <div className="content-feed">
               <div className="main-feed">{offsprings[1]}</div>
               <div className="side-feed">{offsprings[2]}</div>

@@ -205,7 +205,7 @@ export const bc_mycourses = async (path: string) => {
 export const bc_anns = async (path: string) => {
   const pathSegs = getPathSegs(path);
 
-  const textSegs = [{ text: "All announcements", isLink: true }];
+  const textSegs = [{ text: "Announcements", isLink: true }];
 
   return crumbBuilder(pathSegs, textSegs);
 };
