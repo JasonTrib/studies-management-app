@@ -45,8 +45,6 @@
 .app-container .topbar-main .actions {
   display: flex;
   align-items: center;
-  column-gap: 32px;
-  height: 28px;
   justify-content: space-between;
   width: 100%;
 }
@@ -94,11 +92,13 @@
 .app-container .sidebar .quicklinks-container .quicklink {
   display: flex;
   align-items: center;
+  column-gap: 8px;
   height: 36px;
-  margin-bottom: 1px;
-  color: white;
   padding-inline-start: 12px;
+  margin-bottom: 1px;
   background-color: hsla(0deg, 0%, 100%, 0.05);
+  color: white;
+  fill: white;
 }
 .app-container .sidebar .quicklinks-container .quicklink:hover {
   text-decoration: underline;

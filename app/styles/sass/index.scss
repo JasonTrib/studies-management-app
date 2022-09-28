@@ -109,11 +109,13 @@
       .quicklink {
         display: flex;
         align-items: center;
+        column-gap: 8px;
         height: 36px;
-        margin-bottom: 1px;
-        color: white;
         padding-inline-start: 12px;
+        margin-bottom: 1px;
         background-color: hsl(0, 0%, 100%, 5%);
+        color: white;
+        fill: white;
 
         &:hover {
           text-decoration: underline;

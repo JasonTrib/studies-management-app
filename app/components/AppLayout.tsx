@@ -1,8 +1,13 @@
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import ActionButton from "./buttons/ActionButton";
+import AnnouncementIcon from "./icons/AnnouncementIcon";
 import AvatarIcon from "./icons/AvatarIcon";
+import CoursesIcon from "./icons/CoursesIcon";
+import DepartmentIcon from "./icons/DepartmentIcon";
 import LogoutIcon from "./icons/LogoutIcon";
+import MyCoursesIcon from "./icons/MyCoursesIcon";
+import UsersIcon from "./icons/UsersIcon";
 
 type AppLayoutT = {
   userInfo: {
@@ -50,20 +55,35 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
       <div className="sidebar">
         <div className="quicklinks-container link-simple">
           <Link to="/departments">
-            <div className="quicklink">The department</div>
+            <div className="quicklink">
+              <DepartmentIcon width={20} height={20} />
+              The department
+            </div>
           </Link>
           <Link to="/users">
-            <div className="quicklink">Users</div>
+            <div className="quicklink">
+              <UsersIcon width={20} height={20} />
+              Users
+            </div>
           </Link>
           <Link to="/courses">
-            <div className="quicklink">Courses</div>
+            <div className="quicklink">
+              <CoursesIcon width={20} height={20} />
+              Courses
+            </div>
           </Link>
           <div className="separator" />
           <Link to="/my-courses">
-            <div className="quicklink">My courses</div>
+            <div className="quicklink">
+              <MyCoursesIcon width={20} height={20} />
+              My courses
+            </div>
           </Link>
           <Link to="/announcements">
-            <div className="quicklink">Announcements</div>
+            <div className="quicklink">
+              <AnnouncementIcon width={20} height={20} />
+              Announcements
+            </div>
           </Link>
         </div>
       </div>
