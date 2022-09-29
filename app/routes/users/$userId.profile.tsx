@@ -169,14 +169,18 @@ const UserProfilePage = () => {
           <div className="profile-info-section">
             <div className="info-list">
               <div className="field font-300">Email</div>
-              {user.profile?.is_public ? (
-                <div className="field">{user.profile?.email || "-"}</div>
+              {user.profile?.is_public && user.profile?.email ? (
+                <div className="field link">
+                  <a href={`mailto:${user.profile.email}`}>{user.profile.email}</a>
+                </div>
               ) : (
                 <div className="field">-</div>
               )}
               <div className="field font-300">Phone</div>
-              {user.profile?.is_public ? (
-                <div className="field">{user.profile?.phone || "-"}</div>
+              {user.profile?.is_public && user.profile?.phone ? (
+                <div className="field link">
+                  <a href={`tel:+30${user.profile.phone}`}>{user.profile.phone}</a>
+                </div>
               ) : (
                 <div className="field">-</div>
               )}

@@ -53,7 +53,14 @@ const UsersTableItem: FC<UsersTableItemT> = ({
       </td>
       {title && <td>{title}</td>}
       {show && fullname ? <td>{fullname}</td> : <td className="empty" />}
-      {email !== undefined && (show && email ? <td>{email}</td> : <td className="empty" />)}
+      {email !== undefined &&
+        (show && email ? (
+          <td className="link">
+            <a href={`mailto:${email}`}>{email}</a>
+          </td>
+        ) : (
+          <td className="empty" />
+        ))}
       {enrollmentYear && <td className="table-center">{enrollmentYear}</td>}
       {studiesStatus && <td className="table-center"> {studiesStatus}</td>}
       {typeof courseNumber === "number" && <td className="table-center">{courseNumber}</td>}
