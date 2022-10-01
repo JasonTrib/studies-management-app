@@ -104,12 +104,17 @@ async function upsertDepartments() {
   for (let i = 0; i < departments.length; i++) {
     await prisma.department.upsert({
       where: {
-        title_id: departments[i].titleId,
+        code_id: departments[i].codeId,
       },
       update: {},
       create: {
-        title_id: departments[i].titleId,
-        full_title: departments[i].fullTitle,
+        code_id: departments[i].codeId,
+        title: departments[i].title,
+        description: departments[i].description,
+        address: departments[i].address,
+        email: departments[i].email,
+        telephone: departments[i].telephone,
+        foundation_date: departments[i].foundationDate,
       },
     });
   }
@@ -296,8 +301,13 @@ async function createDepartments() {
   for (let i = 0; i < departments.length; i++) {
     await prisma.department.create({
       data: {
-        title_id: departments[i].titleId,
-        full_title: departments[i].fullTitle,
+        code_id: departments[i].codeId,
+        title: departments[i].title,
+        description: departments[i].description,
+        address: departments[i].address,
+        email: departments[i].email,
+        telephone: departments[i].telephone,
+        foundation_date: departments[i].foundationDate,
       },
     });
   }

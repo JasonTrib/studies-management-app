@@ -16,7 +16,7 @@ model User {
   updated_at DateTime @updatedAt
 
   dep_id     String     @db.VarChar(4)
-  department Department @relation(fields: [dep_id], references: [title_id], onDelete: Cascade, onUpdate: Cascade)
+  department Department @relation(fields: [dep_id], references: [code_id], onDelete: Cascade, onUpdate: Cascade)
 
   password          Password?
   profile           Profile?
@@ -51,9 +51,15 @@ model Profile {
 }
 
 model Department {
-  title_id    String  @id @db.VarChar(4)
-  full_title  String
-  description String?
+  code_id         String    @id @db.VarChar(4)
+  title           String    @unique
+  description     String?
+  address         String?
+  email           String?
+  telephone       String?
+  foundation_date DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
 
   Users   User[]
   Courses Course[]
@@ -125,7 +131,7 @@ model Course {
   updated_at      DateTime @updatedAt
 
   dep_id     String     @db.VarChar(4)
-  department Department @relation(fields: [dep_id], references: [title_id], onDelete: Cascade, onUpdate: Cascade)
+  department Department @relation(fields: [dep_id], references: [code_id], onDelete: Cascade, onUpdate: Cascade)
 
   professorCourses ProfessorCourse[]
   studentCourses   StudentCourse[]
@@ -137,7 +143,6 @@ model Announcement {
   title      String
   body       String   @db.VarChar(2000)
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
 
   course_id Int
   course    Course @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)

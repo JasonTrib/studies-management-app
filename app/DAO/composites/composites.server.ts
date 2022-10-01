@@ -156,7 +156,7 @@ export async function getCoursesLecturing(profId: Professor["id"]) {
   return coursesLecturing;
 }
 
-export async function getCoursesExtended(depId: Department["title_id"]) {
+export async function getCoursesExtended(depId: Department["code_id"]) {
   const courses = await getCourses(depId);
   const profCoursesRaw = await getAllProfessorCoursesLectured();
 
@@ -180,7 +180,7 @@ export async function getCoursesExtended(depId: Department["title_id"]) {
 }
 
 export async function getCoursesAsStudentExtended(
-  depId: Department["title_id"],
+  depId: Department["code_id"],
   studentId: Student["id"],
 ) {
   const courses = await getCourses(depId);
@@ -212,7 +212,7 @@ export async function getCoursesAsStudentExtended(
 }
 
 export async function getCoursesAsProfessorExtended(
-  depId: Department["title_id"],
+  depId: Department["code_id"],
   profId: Professor["id"],
 ) {
   const courses = await getCourses(depId);
@@ -318,10 +318,7 @@ export async function getIsProfessorLecturingCourse(
   return !!count;
 }
 
-export async function getRegistrarUsersExtended(
-  dep: Department["full_title"],
-  userId?: User["id"],
-) {
+export async function getRegistrarUsersExtended(dep: Department["title"], userId?: User["id"]) {
   const registrars = await getDepartmentRegistrars(dep);
 
   const registrarUsersExtended = registrars.map((registrar) => {
@@ -349,10 +346,7 @@ export async function getRegistrarUsersExtended(
   return registrarUsersExtended;
 }
 
-export async function getProfessorUsersExtended(
-  dep: Department["full_title"],
-  userId?: User["id"],
-) {
+export async function getProfessorUsersExtended(dep: Department["title"], userId?: User["id"]) {
   const professors = await getDepartmentProfessors(dep);
   const profCoursesEnrolled = await getAllProfessorCoursesLectured();
 
@@ -387,7 +381,7 @@ export async function getProfessorUsersExtended(
   return professorUsersExtended;
 }
 
-export async function getStudentUsersExtended(dep: Department["full_title"], userId?: User["id"]) {
+export async function getStudentUsersExtended(dep: Department["title"], userId?: User["id"]) {
   const students = await getDepartmentStudents(dep);
   const studentCoursesEnrolled = await getAllStudentCoursesEnrolled();
 

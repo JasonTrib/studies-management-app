@@ -29,7 +29,7 @@ export function getUser(id: User["id"]) {
   });
 }
 
-export function getDepartmentRegistrars(dep: Department["full_title"]) {
+export function getDepartmentRegistrars(dep: Department["title"]) {
   return prisma.user.findMany({
     where: {
       AND: [
@@ -62,7 +62,7 @@ export function getDepartmentRegistrars(dep: Department["full_title"]) {
   });
 }
 
-export function getDepartmentProfessors(dep: Department["full_title"]) {
+export function getDepartmentProfessors(dep: Department["title"]) {
   return prisma.user.findMany({
     where: {
       AND: [
@@ -95,7 +95,7 @@ export function getDepartmentProfessors(dep: Department["full_title"]) {
   });
 }
 
-export function getDepartmentStudents(dep: Department["full_title"]) {
+export function getDepartmentStudents(dep: Department["title"]) {
   return prisma.user.findMany({
     where: {
       AND: [
@@ -138,7 +138,7 @@ export function getRegistrarUserProfile(id: User["id"]) {
       role: true,
       department: {
         select: {
-          full_title: true,
+          title: true,
         },
       },
       profile: {
@@ -171,7 +171,7 @@ export function getProfessorUserProfile(id: User["id"]) {
       role: true,
       department: {
         select: {
-          full_title: true,
+          title: true,
         },
       },
       profile: {
@@ -204,7 +204,7 @@ export function getStudentUserProfile(id: User["id"]) {
       role: true,
       department: {
         select: {
-          full_title: true,
+          title: true,
         },
       },
       profile: {
@@ -242,7 +242,7 @@ export function getUserAnnouncements(id: User["id"]) {
   });
 }
 
-export function getProfessors(depId: Department["title_id"]) {
+export function getProfessors(depId: Department["code_id"]) {
   return prisma.user.findMany({
     where: {
       dep_id: depId,
@@ -253,7 +253,7 @@ export function getProfessors(depId: Department["title_id"]) {
   });
 }
 
-export function getRegistrarsCount(depId: Department["title_id"]) {
+export function getRegistrarsCount(depId: Department["code_id"]) {
   return prisma.registrar.count({
     where: {
       user: {
@@ -263,7 +263,7 @@ export function getRegistrarsCount(depId: Department["title_id"]) {
   });
 }
 
-export function getProfessorsCount(depId: Department["title_id"]) {
+export function getProfessorsCount(depId: Department["code_id"]) {
   return prisma.professor.count({
     where: {
       user: {
@@ -273,7 +273,7 @@ export function getProfessorsCount(depId: Department["title_id"]) {
   });
 }
 
-export function getStudentsCount(depId: Department["title_id"]) {
+export function getStudentsCount(depId: Department["code_id"]) {
   return prisma.student.count({
     where: {
       user: {

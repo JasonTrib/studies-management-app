@@ -6,7 +6,7 @@ export function getAllRegistrars() {
   return prisma.registrar.findMany({});
 }
 
-export function getRegistrars(depId: Department["title_id"]) {
+export function getRegistrars(depId: Department["code_id"]) {
   return prisma.registrar.findMany({
     where: {
       user: {
@@ -22,7 +22,7 @@ export function getRegistrar(id: Registrar["id"]) {
   });
 }
 
-export function getRegistrarsProfile(depId: Department["title_id"]) {
+export function getRegistrarsProfile(depId: Department["code_id"]) {
   return prisma.registrar.findMany({
     where: {
       user: {

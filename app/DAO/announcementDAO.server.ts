@@ -15,7 +15,7 @@ export function getAllAnnouncements() {
   });
 }
 
-export function getAnnouncements(depId: Department["title_id"]) {
+export function getAnnouncements(depId: Department["code_id"]) {
   return prisma.announcement.findMany({
     where: {
       course: {

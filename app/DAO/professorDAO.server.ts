@@ -12,7 +12,7 @@ export function getProfessor(id: Professor["id"]) {
   });
 }
 
-export function getProfessors(depId: Department["title_id"]) {
+export function getProfessors(depId: Department["code_id"]) {
   return prisma.professor.findMany({
     where: {
       user: {
@@ -29,7 +29,7 @@ export function getProfessors(depId: Department["title_id"]) {
   });
 }
 
-export function getProfessorsProfile(depId: Department["title_id"]) {
+export function getProfessorsProfile(depId: Department["code_id"]) {
   return prisma.professor.findMany({
     where: {
       user: {

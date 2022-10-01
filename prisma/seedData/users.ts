@@ -2,7 +2,7 @@ import type { Department, Password, Role, User } from "@prisma/client";
 
 export const users: {
   id: User["id"];
-  depId: Department["title_id"];
+  depId: Department["code_id"];
   username: User["username"];
   password: Password["hash"];
   role: Role;

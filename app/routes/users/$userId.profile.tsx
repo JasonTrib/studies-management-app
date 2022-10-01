@@ -135,7 +135,7 @@ const UserProfilePage = () => {
           <div className="profile-info-section section-separator">
             <div className="info-list">
               <div className="field font-300">Department</div>
-              <div className="field">{user.department?.full_title}</div>
+              <div className="field">{user.department?.title}</div>
               {isReg && (
                 <>
                   <div className="field font-300">Title</div>

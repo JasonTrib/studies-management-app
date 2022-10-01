@@ -6,7 +6,7 @@ export function getAllStudents() {
   return prisma.student.findMany({});
 }
 
-export function getStudents(depId: Department["title_id"]) {
+export function getStudents(depId: Department["code_id"]) {
   return prisma.student.findMany({
     where: {
       user: {
@@ -22,7 +22,7 @@ export function getStudent(id: Student["id"]) {
   });
 }
 
-export function getStudentsProfile(depId: Department["title_id"]) {
+export function getStudentsProfile(depId: Department["code_id"]) {
   return prisma.student.findMany({
     where: {
       user: {

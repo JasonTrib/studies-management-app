@@ -31,7 +31,7 @@ const DepartmentDetailsPage = () => {
       <div>DepartmentDetailsPage</div>
       <div>
         <h2>department</h2>
-        <p>title: {department.full_title}</p>
+        <p>title: {department.title}</p>
         <p>description: {department.description}</p>
       </div>
     </Page>

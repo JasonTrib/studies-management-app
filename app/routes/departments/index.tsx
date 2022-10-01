@@ -21,8 +21,8 @@ const DepartmentIndexPage = () => {
       <div>
         <h2>list of departments</h2>
         {departments.map((x) => (
-          <li key={x.title_id}>
-            <Link to={`/departments/${x.title_id}`}>{x.full_title}</Link>
+          <li key={x.code_id}>
+            <Link to={`/departments/${x.code_id}`}>{x.title}</Link>
           </li>
         ))}
       </div>
