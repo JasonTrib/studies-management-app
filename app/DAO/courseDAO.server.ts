@@ -6,8 +6,24 @@ export function getAllCourses() {
   return prisma.course.findMany({});
 }
 
+export function getAllCoursesShort() {
+  return prisma.course.findMany({
+    select: {
+      dep_id: true,
+    },
+  });
+}
+
 export function getCourses(depId: Course["dep_id"]) {
   return prisma.course.findMany({
+    where: {
+      dep_id: depId,
+    },
+  });
+}
+
+export function getCoursesCount(depId: Course["dep_id"]) {
+  return prisma.course.count({
     where: {
       dep_id: depId,
     },

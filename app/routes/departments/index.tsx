@@ -1,33 +1,10 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import Page from "~/components/layout/Page";
-import { getDepartments } from "~/DAO/departmentDAO.server";
-
-type LoaderDataT = {
-  departments: Awaited<ReturnType<typeof getDepartments>>;
-};
+import { redirect } from "@remix-run/node";
+import { logout, requireUser } from "~/utils/session.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const departments = await getDepartments();
-  return json({ departments });
-};
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
 
-const DepartmentIndexPage = () => {
-  const { departments } = useLoaderData() as LoaderDataT;
-  return (
-    <Page>
-      <div>DepartmentIndexPage</div>
-      <div>
-        <h2>list of departments</h2>
-        {departments.map((x) => (
-          <li key={x.code_id}>
-            <Link to={`/departments/${x.code_id}`}>{x.title}</Link>
-          </li>
-        ))}
-      </div>
-    </Page>
-  );
+  return redirect(`/departments/${user.dep_id}`);
 };
-
-export default DepartmentIndexPage;

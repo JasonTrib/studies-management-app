@@ -6,6 +6,34 @@ export function getAllUsers() {
   return prisma.user.findMany({});
 }
 
+export function getAllUsersExceptSuperadminsShort() {
+  return prisma.user.findMany({
+    where: {
+      role: {
+        not: "SUPERADMIN",
+      },
+    },
+    select: {
+      dep_id: true,
+    },
+  });
+}
+
+export function getUsersCount(depId: Department["code_id"]) {
+  return prisma.user.count({
+    where: {
+      AND: [
+        { dep_id: depId },
+        {
+          role: {
+            not: "SUPERADMIN",
+          },
+        },
+      ],
+    },
+  });
+}
+
 export function getUserByUsername(username: User["username"]) {
   return prisma.user.findUnique({
     where: {
@@ -29,7 +57,7 @@ export function getUser(id: User["id"]) {
   });
 }
 
-export function getDepartmentRegistrars(dep: Department["title"]) {
+export function getDepartmentRegistrars(dep: Department["code_id"]) {
   return prisma.user.findMany({
     where: {
       AND: [
@@ -62,7 +90,7 @@ export function getDepartmentRegistrars(dep: Department["title"]) {
   });
 }
 
-export function getDepartmentProfessors(dep: Department["title"]) {
+export function getDepartmentProfessors(dep: Department["code_id"]) {
   return prisma.user.findMany({
     where: {
       AND: [
@@ -95,7 +123,7 @@ export function getDepartmentProfessors(dep: Department["title"]) {
   });
 }
 
-export function getDepartmentStudents(dep: Department["title"]) {
+export function getDepartmentStudents(dep: Department["code_id"]) {
   return prisma.user.findMany({
     where: {
       AND: [

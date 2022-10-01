@@ -1,8 +1,13 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import AppLayout from "~/components/AppLayout";
 import { getProfile } from "~/DAO/profileDAO.server";
 import { logout, requireUser } from "~/utils/session.server";
+import departmentsStyles from "~/styles/departments.css";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: departmentsStyles }];
+};
 
 type LoaderDataT = {
   userInfo: {

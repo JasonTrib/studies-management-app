@@ -1,6 +1,7 @@
 import type { Course, Department, Gender, Professor, Student, User } from "@prisma/client";
 import { getAllAnnouncements } from "../announcementDAO.server";
-import { getCourse, getCourses } from "../courseDAO.server";
+import { getAllCoursesShort, getCourse, getCourses, getCoursesCount } from "../courseDAO.server";
+import { getDepartment, getDepartments } from "../departmentDAO.server";
 import {
   getAllProfessorCoursesLectured,
   getProfessorCourseAnnouncements,
@@ -27,11 +28,13 @@ import {
   getStudentCoursesRegisteredCountGivenCourse,
 } from "../studentCourseDAO.server";
 import {
+  getAllUsersExceptSuperadminsShort,
   getDepartmentProfessors,
   getDepartmentRegistrars,
   getDepartmentStudents,
   getProfessorUserProfile,
   getStudentUserProfile,
+  getUsersCount,
 } from "../userDAO.server";
 
 export async function getAnnouncementsFollowedAsStudent(studentId: Student["id"]) {
@@ -318,7 +321,7 @@ export async function getIsProfessorLecturingCourse(
   return !!count;
 }
 
-export async function getRegistrarUsersExtended(dep: Department["title"], userId?: User["id"]) {
+export async function getRegistrarUsersExtended(dep: Department["code_id"], userId?: User["id"]) {
   const registrars = await getDepartmentRegistrars(dep);
 
   const registrarUsersExtended = registrars.map((registrar) => {
@@ -346,7 +349,7 @@ export async function getRegistrarUsersExtended(dep: Department["title"], userId
   return registrarUsersExtended;
 }
 
-export async function getProfessorUsersExtended(dep: Department["title"], userId?: User["id"]) {
+export async function getProfessorUsersExtended(dep: Department["code_id"], userId?: User["id"]) {
   const professors = await getDepartmentProfessors(dep);
   const profCoursesEnrolled = await getAllProfessorCoursesLectured();
 
@@ -381,7 +384,7 @@ export async function getProfessorUsersExtended(dep: Department["title"], userId
   return professorUsersExtended;
 }
 
-export async function getStudentUsersExtended(dep: Department["title"], userId?: User["id"]) {
+export async function getStudentUsersExtended(dep: Department["code_id"], userId?: User["id"]) {
   const students = await getDepartmentStudents(dep);
   const studentCoursesEnrolled = await getAllStudentCoursesEnrolled();
 
@@ -468,4 +471,39 @@ export async function getProfessorUserShortExtended(courseId: Course["id"]) {
   });
 
   return profsShortExtended;
+}
+
+export async function getDepartmentExtended(depId: Department["code_id"]) {
+  const department = await getDepartment(depId);
+  if (!department) return null;
+  const coursesCount = await getCoursesCount(depId);
+  const usersCount = await getUsersCount(depId);
+
+  const departmentExtended = {
+    ...department,
+    users: usersCount,
+    courses: coursesCount,
+  };
+
+  return departmentExtended;
+}
+
+export async function getOtherDepartmentsExtended(depId: Department["code_id"]) {
+  const departments = await getDepartments();
+  const courses = await getAllCoursesShort();
+  const users = await getAllUsersExceptSuperadminsShort();
+
+  const otherDepartmentsExtended = departments
+    .map((dep) =>
+      dep.code_id === depId
+        ? null
+        : {
+            ...dep,
+            courses: courses.filter((course) => course.dep_id === dep.code_id).length,
+            users: users.filter((user) => user.dep_id === dep.code_id).length,
+          },
+    )
+    .filter((x) => x);
+
+  return otherDepartmentsExtended;
 }
