@@ -60,7 +60,21 @@ const DepartmentDetailsPage = () => {
             <div className="field font-300">Code</div>
             <div className="field">{department.code_id}</div>
             <div className="field font-300">Address</div>
-            <div className="field">{department.address || "-"}</div>
+            {department.address ? (
+              <div className="field link">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    department.address,
+                  )}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {`${department.address} ↗`}
+                </a>
+              </div>
+            ) : (
+              <div className="field">{"-"}</div>
+            )}
             <div className="field font-300">Email</div>
             {department.email ? (
               <div className="field link">
