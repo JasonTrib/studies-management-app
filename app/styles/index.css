@@ -175,6 +175,18 @@
 .app-container .content-main .page .page-heading .title-container .actions .svg-danger:hover {
   fill: var(--color-button-red-hovered);
 }
+.app-container .content-main .page .page-heading .title-container .actions .delete {
+  display: flex;
+  align-items: center;
+}
+.app-container .content-main .page .page-heading .title-container .actions .delete .icon {
+  cursor: pointer;
+  fill: var(--color-button-red);
+  place-self: baseline;
+}
+.app-container .content-main .page .page-heading .title-container .actions .delete .icon:hover {
+  fill: var(--color-button-red-hovered);
+}
 .app-container .content-main .page .page-content {
   background-color: var(--color-bg-lightest);
   padding: 12px;

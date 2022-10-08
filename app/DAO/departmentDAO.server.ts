@@ -41,3 +41,11 @@ export function editDepartment(data: departmentDataT) {
     },
   });
 }
+
+export function deleteDepartment(depId: Department["code_id"]) {
+  return prisma.department.delete({
+    where: {
+      code_id: depId,
+    },
+  });
+}

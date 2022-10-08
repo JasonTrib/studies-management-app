@@ -1,18 +1,27 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
+import { useState } from "react";
+import ActionButton from "~/components/buttons/ActionButton";
 import Container from "~/components/Container";
 import DepartmentsList from "~/components/departments/DepartmentsList";
 import CogIcon from "~/components/icons/CogIcon";
+import DeleteIcon from "~/components/icons/DeleteIcon";
 import Page from "~/components/layout/Page";
+import Modal from "~/components/Modal";
 import {
   getDepartmentExtended,
   getOtherDepartmentsExtended,
 } from "~/DAO/composites/composites.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
+import modalStyles from "~/styles/modal.css";
 import { bc_deps_id } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: modalStyles }];
+};
 
 type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_deps_id>>;
@@ -53,17 +62,31 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const DepartmentDetailsPage = () => {
   const { breadcrumbData, department, otherDepartments, userRole, isSameDepartment } =
     useLoaderData() as LoaderDataT;
-
+  const transition = useTransition();
+  const isSubmitting = transition.state === "submitting";
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
   const isPriviledged = userRole === USER_ROLE.SUPERADMIN || userRole === USER_ROLE.REGISTRAR;
+  const isSuperadmin = userRole === USER_ROLE.SUPERADMIN;
 
   const headingActions = (): JSX.Element | null => {
-    return isPriviledged && isSameDepartment ? (
-      <span className="svg-link">
-        <Link to="edit">
-          <CogIcon />
-        </Link>
-      </span>
-    ) : null;
+    if (isSameDepartment && isPriviledged) {
+      return (
+        <span className="svg-link">
+          <Link to="edit">
+            <CogIcon />
+          </Link>
+        </span>
+      );
+    } else if (!isSameDepartment && isSuperadmin) {
+      return (
+        <div className="delete">
+          <DeleteIcon className="icon" width={20} height={20} onClick={openModal} />
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -133,6 +156,33 @@ const DepartmentDetailsPage = () => {
             <div className="field">{department.courses}</div>
           </div>
         </div>
+        {isSuperadmin && !isSameDepartment && (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <div className="modal-heading">
+              Are you sure you want to <b>permanently</b> delete this departmemt?
+            </div>
+            <div className="modal-actions">
+              <Form
+                method="post"
+                action={`/departments/${department.code_id}/delete`}
+                autoComplete="off"
+              >
+                <ActionButton
+                  type="submit"
+                  disabled={isSubmitting}
+                  onClick={closeModal}
+                  variant="danger"
+                  fullwidth
+                >
+                  DELETE
+                </ActionButton>
+              </Form>
+              <ActionButton variant="cancel" size="lg" onClick={closeModal}>
+                CANCEL
+              </ActionButton>
+            </div>
+          </Modal>
+        )}
       </div>
       <></>
       <>

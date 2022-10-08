@@ -207,6 +207,21 @@ $sidebar-shadow: 0 0 12px var(--color-shadow-light), 4px -2px 4px 0px black;
                 fill: var(--color-button-red-hovered);
               }
             }
+
+            .delete {
+              display: flex;
+              align-items: center;
+
+              .icon {
+                cursor: pointer;
+                fill: var(--color-button-red);
+                place-self: baseline;
+
+                &:hover {
+                  fill: var(--color-button-red-hovered);
+                }
+              }
+            }
           }
         }
       }
