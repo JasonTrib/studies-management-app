@@ -5,6 +5,7 @@ import ActionButton from "./ActionButton";
 type NewButtonT = {
   directTo: string;
 };
+
 const NewButton: FC<NewButtonT> = ({ directTo }) => {
   return (
     <Link to={directTo}>

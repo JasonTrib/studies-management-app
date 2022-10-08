@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import ActionButton from "~/components/buttons/ActionButton";
+import NewButton from "~/components/buttons/NewButton";
 import Container from "~/components/Container";
 import DepartmentsList from "~/components/departments/DepartmentsList";
 import CogIcon from "~/components/icons/CogIcon";
@@ -186,8 +187,13 @@ const DepartmentDetailsPage = () => {
       </div>
       <></>
       <>
-        {otherDepartments.length > 0 && (
-          <Container data={otherDepartments} title="Other Departments">
+        {(isSuperadmin || otherDepartments.length > 0) && (
+          <Container
+            data={otherDepartments}
+            title="Other Departments"
+            noResultsMsg="No other departments exist"
+            Button={<NewButton directTo={"/departments/new"} />}
+          >
             <DepartmentsList />
           </Container>
         )}

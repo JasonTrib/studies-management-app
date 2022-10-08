@@ -233,3 +233,14 @@ export const bc_deps_id_edit = async (path: string) => {
 
   return crumbBuilder(pathSegs, textSegs);
 };
+
+export const bc_deps_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Departments", isLink: false },
+    { text: "New", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
