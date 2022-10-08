@@ -24,11 +24,11 @@ const FormSelect: FC<FormSelectT> = ({
       <label className="label" htmlFor={label}>
         <span className="field-text">{text}</span>
         <select
+          className={`field-input select ${error ? "invalid-input" : ""}`}
           id={label}
           name={label}
           disabled={disabled}
           defaultValue={defaultValue}
-          className={`field-input select ${error ? "invalid-input" : ""}`}
         >
           {values.map((value, idx) => (
             <option key={value} value={value}>

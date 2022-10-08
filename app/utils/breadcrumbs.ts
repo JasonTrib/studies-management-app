@@ -221,3 +221,15 @@ export const bc_deps_id = async (path: string) => {
 
   return crumbBuilder(pathSegs, textSegs);
 };
+
+export const bc_deps_id_edit = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Departments", isLink: false },
+    { text: (await getDepartment(pathSegs[1]))?.title || "", isLink: true },
+    { text: "Edit", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};

@@ -3,11 +3,14 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import Container from "~/components/Container";
 import DepartmentsList from "~/components/departments/DepartmentsList";
+import CogIcon from "~/components/icons/CogIcon";
 import Page from "~/components/layout/Page";
 import {
   getDepartmentExtended,
   getOtherDepartmentsExtended,
 } from "~/DAO/composites/composites.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
+import { USER_ROLE } from "~/data/data";
 import { bc_deps_id } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
 
@@ -15,6 +18,7 @@ type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_deps_id>>;
   department: Exclude<Awaited<ReturnType<typeof getDepartmentExtended>>, null>;
   otherDepartments: Awaited<ReturnType<typeof getOtherDepartmentsExtended>>;
+  userRole: UserModelT["role"];
   isSameDepartment: boolean;
 };
 
@@ -37,15 +41,33 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_deps_id(path);
 
-  return json({ breadcrumbData, department, otherDepartments, isSameDepartment });
+  return json({
+    breadcrumbData,
+    department,
+    otherDepartments,
+    userRole: user.role,
+    isSameDepartment,
+  });
 };
 
 const DepartmentDetailsPage = () => {
-  const { breadcrumbData, department, otherDepartments, isSameDepartment } =
+  const { breadcrumbData, department, otherDepartments, userRole, isSameDepartment } =
     useLoaderData() as LoaderDataT;
 
+  const isPriviledged = userRole === USER_ROLE.SUPERADMIN || userRole === USER_ROLE.REGISTRAR;
+
+  const headingActions = (): JSX.Element | null => {
+    return isPriviledged && isSameDepartment ? (
+      <span className="svg-link">
+        <Link to="edit">
+          <CogIcon />
+        </Link>
+      </span>
+    ) : null;
+  };
+
   return (
-    <Page wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <div className="department-container">
         {department.description && (
           <>
