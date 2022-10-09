@@ -34,10 +34,8 @@ export const links: LinksFunction = () => {
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
   const action = formData.get("_action");
-  const courseIdRaw = formData.get("courseId");
-
-  const courseId = paramToInt(`${courseIdRaw}`);
-  if (!courseId) throw new Error();
+  const courseId = paramToInt(params.courseId);
+  if (courseId === null) throw new Response("Not Found", { status: 404 });
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
