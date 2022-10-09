@@ -33,17 +33,15 @@ export const links: LinksFunction = () => {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const annId = paramToInt(params.annId);
   const courseId = paramToInt(params.courseId);
-  if (annId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (annId === null || courseId === null) throw new Response("Not Found", { status: 404 });
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
 
   const announcement = await getAnnouncement(annId);
   if (!announcement || announcement.course_id !== courseId) {
     throw new Response("Not Found", { status: 404 });
   }
-
-  const user = await requireUser(request);
-  if (user === null) return logout(request);
 
   let isFollowing: boolean;
   let canDeleteAnn = false;
@@ -57,9 +55,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!prof) throw new Error();
 
       isFollowing = await getIsProfessorFollowingCourse(prof.id, announcement.course_id);
-      if (!isFollowing) {
-        throw new Response("Unauthorized", { status: 401 });
-      }
+      if (!isFollowing) throw new Response("Forbidden", { status: 403 });
+
       canDeleteAnn = await getIsProfessorLecturingCourse(prof.id, announcement.course_id);
       break;
     case USER_ROLE.STUDENT:
@@ -67,9 +64,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!student) throw new Error();
 
       isFollowing = await getIsStudentFollowingCourse(student.id, announcement.course_id);
-      if (!isFollowing) {
-        throw new Response("Unauthorized", { status: 401 });
-      }
+      if (!isFollowing) throw new Response("Forbidden", { status: 403 });
       break;
     default:
       throw new Response("Unauthorized", { status: 401 });

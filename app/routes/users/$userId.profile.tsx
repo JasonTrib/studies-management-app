@@ -43,18 +43,14 @@ type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const id = paramToInt(params.userId);
-  if (id == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (id == null) throw new Response("Not Found", { status: 404 });
 
   const activeUser = await requireUser(request);
   if (activeUser === null) return logout(request);
   if (activeUser.id === id) return redirect("/my-profile");
 
   const user = await getUser(id);
-  if (!user) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (!user) throw new Response("Not Found", { status: 404 });
 
   let userExtended;
   let coursesRegistered;

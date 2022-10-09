@@ -31,6 +31,9 @@ type Schema1T = z.infer<typeof profileSchema>;
 type Schema2T = z.infer<typeof editPasswordSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
 
@@ -79,9 +82,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (user === null) return logout(request);
 
   const profile = await getProfile(user.id);
-  if (!profile) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (!profile) throw new Response("Not Found", { status: 404 });
+
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_myprofile_edit(path);
 

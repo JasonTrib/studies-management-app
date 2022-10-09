@@ -16,6 +16,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import type { bc_courses_id_edit } from "~/utils/breadcrumbs";
 import { bc_deps_id_edit } from "~/utils/breadcrumbs";
+import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -29,9 +30,11 @@ type SchemaT = z.infer<typeof editDepartmentSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const depId = params.depId;
-  if (depId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (depId == null) throw new Response("Not Found", { status: 404 });
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const form = await extractAndValidateFormData<SchemaT>(request, editDepartmentSchema);
   if (!_.isEmpty(form.errors) || form.data === null) {
@@ -69,24 +72,14 @@ type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const depId = params.depId;
-  if (!depId) {
-    throw new Response("Bad request", { status: 400 });
-  }
-  const department = await getDepartment(depId);
-  if (department == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (!depId) throw new Response("Not Found", { status: 404 });
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
-  switch (user.role) {
-    case USER_ROLE.SUPERADMIN:
-    case USER_ROLE.REGISTRAR:
-      break;
-    default:
-      throw new Response("Unauthorized", { status: 401 });
-  }
+  const department = await getDepartment(depId);
+  if (department == null) throw new Response("Not Found", { status: 404 });
 
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_deps_id_edit(path);

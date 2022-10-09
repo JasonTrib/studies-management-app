@@ -15,9 +15,7 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const annId = paramToInt(params.annId);
-  if (annId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (annId == null) throw new Response("Not Found", { status: 404 });
 
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
@@ -34,11 +32,13 @@ export const action: ActionFunction = async ({ request, params }) => {
       if (!prof) throw new Error();
 
       const course = await getCourseIdFromAnnouncement(annId);
-      if (!course) throw new Error();
+      if (!course) throw new Response("Not Found", { status: 404 });
 
       const isLecturing = await getIsProfessorLecturingCourse(prof.id, course.id);
-      if (!isLecturing) throw new Response("Unauthorized", { status: 401 });
+      if (!isLecturing) throw new Response("Forbidden", { status: 403 });
       break;
+    case USER_ROLE.STUDENT:
+      throw new Response("Forbidden", { status: 403 });
     default:
       throw new Response("Unauthorized", { status: 401 });
   }

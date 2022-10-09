@@ -15,6 +15,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_courses_id_anns_new } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
+import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -28,9 +29,11 @@ type SchemaT = z.infer<typeof newAnnouncementSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const courseId = paramToInt(params.courseId);
-  if (courseId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (courseId == null) throw new Response("Not Found", { status: 404 });
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.PROFESSOR);
 
   const form = await extractAndValidateFormData<SchemaT>(request, newAnnouncementSchema);
 
@@ -56,9 +59,7 @@ type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const courseId = paramToInt(params.courseId);
-  if (courseId == null) {
-    return redirect("/announcements");
-  }
+  if (courseId == null) throw new Response("Not Found", { status: 404 });
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
@@ -72,11 +73,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!prof) throw new Error();
 
       const isAuthorized = await getIsProfessorLecturingCourse(prof.id, courseId);
-      if (!isAuthorized) {
-        throw new Response("Unauthorized", { status: 401 });
-      }
+      if (!isAuthorized) throw new Response("Forbidden", { status: 403 });
       break;
     case USER_ROLE.STUDENT:
+      throw new Response("Forbidden", { status: 403 });
     default:
       throw new Response("Unauthorized", { status: 401 });
   }

@@ -34,17 +34,14 @@ type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const depId = params.depId;
-  if (!depId) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (!depId) throw new Response("Not Found", { status: 404 });
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
 
   const department = await getDepartmentExtended(depId);
-  if (!department) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (!department) throw new Response("Not Found", { status: 404 });
+
   const otherDepartments = await getOtherDepartmentsExtended(depId);
   const isSameDepartment = depId === user.dep_id;
 

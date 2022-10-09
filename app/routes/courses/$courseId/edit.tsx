@@ -30,6 +30,7 @@ import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import { courseSchema } from "~/validations/schemas/courseSchema.server";
+import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
 
 export const links: LinksFunction = () => {
   return [
@@ -43,9 +44,11 @@ type SchemaT = z.infer<typeof courseSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const courseId = paramToInt(params.courseId);
-  if (courseId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (courseId == null) throw new Response("Not Found", { status: 404 });
+
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
@@ -110,25 +113,14 @@ type LoaderDataT = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const courseId = paramToInt(params.courseId);
-  if (courseId == null) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  const course = await getCourse(courseId);
-  if (!course) {
-    throw new Response("Not Found", { status: 404 });
-  }
+  if (courseId == null) throw new Response("Not Found", { status: 404 });
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
-  switch (user.role) {
-    case USER_ROLE.SUPERADMIN:
-    case USER_ROLE.REGISTRAR:
-      break;
-    default:
-      throw new Response("Unauthorized", { status: 401 });
-  }
+  const course = await getCourse(courseId);
+  if (!course) throw new Response("Not Found", { status: 404 });
 
   const professorsLecturing = await getProfessorUserShortExtended(courseId);
   const professors = await getProfessors(user.dep_id);
