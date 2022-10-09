@@ -72,7 +72,7 @@ const ProfessorsNewPage = () => {
   const { breadcrumbData, dep } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
@@ -84,21 +84,21 @@ const ProfessorsNewPage = () => {
                 text="Username"
                 label="username"
                 type="text"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.username}
               />
               <FormInput
                 text="Password"
                 label="password"
                 type="password"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.password}
               />
               <FormInput
                 text="Confirm password"
                 label="confirmPassword"
                 type="password"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.confirmPassword}
               />
             </div>
@@ -114,16 +114,16 @@ const ProfessorsNewPage = () => {
                   "Emeritus Professor",
                 ]}
                 defaultValue={"Professor"}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.title}
               />
             </div>
             <div className="form-submit">
               <input type="hidden" id="dep" name="dep" value={dep} />
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
+              <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isSubmitting}>
+              <ActionButton type="submit" disabled={isBusy}>
                 SUBMIT
               </ActionButton>
             </div>

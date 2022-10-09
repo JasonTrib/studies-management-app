@@ -73,7 +73,7 @@ const StudentNewPage = () => {
   const { breadcrumbData, dep } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
@@ -85,21 +85,21 @@ const StudentNewPage = () => {
                 text="Username"
                 label="username"
                 type="text"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.username}
               />
               <FormInput
                 text="Password"
                 label="password"
                 type="password"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.password}
               />
               <FormInput
                 text="Confirm password"
                 label="confirmPassword"
                 type="password"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.confirmPassword}
               />
             </div>
@@ -109,7 +109,7 @@ const StudentNewPage = () => {
                 label="enrollmentYear"
                 type="number"
                 defaultValue={new Date().getFullYear()}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.enrollmentYear}
               />
               <FormSelect
@@ -117,16 +117,16 @@ const StudentNewPage = () => {
                 label="studiesStatus"
                 values={["UNDERGRADUATE", "POSTGRADUATE", "ALUM"]}
                 defaultValue={"UNDERGRADUATE"}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.studiesStatus}
               />
             </div>
             <div className="form-submit">
               <input type="hidden" id="dep" name="dep" value={dep} />
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
+              <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isSubmitting}>
+              <ActionButton type="submit" disabled={isBusy}>
                 SUBMIT
               </ActionButton>
             </div>

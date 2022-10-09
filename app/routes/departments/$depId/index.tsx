@@ -64,7 +64,7 @@ const DepartmentDetailsPage = () => {
   const { breadcrumbData, department, otherDepartments, userRole, isSameDepartment } =
     useLoaderData() as LoaderDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -170,7 +170,7 @@ const DepartmentDetailsPage = () => {
               >
                 <ActionButton
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   onClick={closeModal}
                   variant="danger"
                   fullwidth

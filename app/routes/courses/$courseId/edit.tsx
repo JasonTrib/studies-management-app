@@ -152,7 +152,7 @@ const CourseEditPage = () => {
     useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const options = ["Edit", "Assign", "Delete"];
   const [selected, setSelected] = useState(options[0]);
   const [isOpen, setIsOpen] = useState(false);
@@ -179,7 +179,7 @@ const CourseEditPage = () => {
               _action="editCourse"
               dep={dep}
               defaultData={course}
-              disabled={isSubmitting}
+              disabled={isBusy}
               errors={actionData?.errors}
             />
           </div>
@@ -200,13 +200,13 @@ const CourseEditPage = () => {
                       optionsText={profsNotLecturing.map(
                         (prof) => `${prof.user.username} - ${prof.title}`,
                       )}
-                      disabled={hasTooManyLecturers || hasAvailableProfs || isSubmitting}
+                      disabled={hasTooManyLecturers || hasAvailableProfs || isBusy}
                       error={actionData?.errors?.title}
                     />
                   </div>
                   <ActionButton
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isBusy}
                     name="_action"
                     value={"assignProf"}
                     variant={hasTooManyLecturers || hasAvailableProfs ? "cancel" : "primary"}
@@ -244,13 +244,7 @@ const CourseEditPage = () => {
         </div>
         <div className="modal-actions">
           <Form method="post" action={`/courses/${course.id}/delete`} autoComplete="off">
-            <ActionButton
-              type="submit"
-              disabled={isSubmitting}
-              variant="danger"
-              size="lg"
-              fullwidth
-            >
+            <ActionButton type="submit" disabled={isBusy} variant="danger" size="lg" fullwidth>
               DELETE
             </ActionButton>
           </Form>
@@ -268,7 +262,7 @@ const CourseEditPage = () => {
             <input type="hidden" id="profId" name="profId" value={profIdRef.current || ""} />
             <ActionButton
               type="submit"
-              disabled={isSubmitting}
+              disabled={isBusy}
               name="_action"
               value={"unregisterProf"}
               onClick={closeModal2}

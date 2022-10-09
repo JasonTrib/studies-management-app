@@ -100,7 +100,7 @@ const DepartmentsEditPage = () => {
   const { breadcrumbData, department } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const formattedFoundationDate = department.foundation_date
     ? format(new Date(department.foundation_date), "yyyy-MM-dd")
     : undefined;
@@ -116,14 +116,14 @@ const DepartmentsEditPage = () => {
                 label="title"
                 type="text"
                 defaultValue={department.title}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.title}
               />
               <FormTextarea
                 text="Description"
                 label="description"
                 defaultValue={department.description || undefined}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.description}
               />
               <FormInput
@@ -131,7 +131,7 @@ const DepartmentsEditPage = () => {
                 label="address"
                 type="text"
                 defaultValue={department.address || undefined}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.address}
               />
               <FormInput
@@ -139,7 +139,7 @@ const DepartmentsEditPage = () => {
                 label="email"
                 type="email"
                 defaultValue={department.email || undefined}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.email}
               />
               <FormInput
@@ -147,23 +147,23 @@ const DepartmentsEditPage = () => {
                 label="telephone"
                 type="tel"
                 defaultValue={department.telephone || undefined}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.telephone}
               />
               <FormDatePicker
                 text="Foundation date"
                 label="foundationDate"
                 defaultValue={formattedFoundationDate}
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.foundationDate}
               />
             </div>
             <div className="form-submit">
               <input type="hidden" id="dep" name="dep" value={department.code_id} />
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
+              <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isSubmitting}>
+              <ActionButton type="submit" disabled={isBusy}>
                 SUBMIT
               </ActionButton>
             </div>

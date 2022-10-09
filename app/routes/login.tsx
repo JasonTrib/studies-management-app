@@ -58,7 +58,7 @@ const LoginPage = () => {
   const actionData = useActionData() as ActionDataT;
   const { redirectTo } = useLoaderData() as LoaderDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
 
   return (
     <div className="login-page">
@@ -71,22 +71,22 @@ const LoginPage = () => {
                 text="Username"
                 label="username"
                 type="text"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.username}
               />
               <FormInput
                 text="Password"
                 label="password"
                 type="password"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.password}
               />
             </div>
             <div className="form-submit">
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
+              <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isSubmitting}>
+              <ActionButton type="submit" disabled={isBusy}>
                 SUBMIT
               </ActionButton>
               <div className="invalid">{actionData?.authError}</div>

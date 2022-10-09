@@ -92,7 +92,7 @@ const AnnouncementsNewPage = () => {
   const { breadcrumbData, courseId } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
@@ -109,22 +109,22 @@ const AnnouncementsNewPage = () => {
                 text="Title"
                 label="title"
                 type="text"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.title}
               />
               <FormTextarea
                 text="Body"
                 label="body"
-                disabled={isSubmitting}
+                disabled={isBusy}
                 error={actionData?.errors?.body}
               />
             </div>
             <div className="form-submit">
               <input type="hidden" id="courseId" name="courseId" value={courseId} />
-              <button className="form-reset" type="reset" disabled={isSubmitting}>
+              <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isSubmitting}>
+              <ActionButton type="submit" disabled={isBusy}>
                 SUBMIT
               </ActionButton>
             </div>

@@ -71,8 +71,7 @@ const CoursesNewPage = () => {
   const { breadcrumbData, dep } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
-
+  const isBusy = transition.state !== "idle";
   return (
     <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-page">
@@ -80,7 +79,7 @@ const CoursesNewPage = () => {
           <CourseForm
             action={`/courses/new`}
             dep={dep}
-            disabled={isSubmitting}
+            disabled={isBusy}
             errors={actionData?.errors}
           />
         </div>

@@ -31,7 +31,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
   untrimmed,
 }) => {
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -59,7 +59,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
           <div className="modal-actions">
             <Form method="post" action={`/announcements/${annId}/delete`} autoComplete="off">
               <input type="hidden" id="redirectTo" name="redirectTo" value={landingRoute} />
-              <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
+              <ActionButton type="submit" disabled={isBusy} variant="danger" fullwidth>
                 DELETE
               </ActionButton>
             </Form>

@@ -99,7 +99,7 @@ const ProfileEditPage = () => {
   const { breadcrumbData, profile, username } = useLoaderData() as LoaderDataT;
   const actionData = useActionData() as ActionDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const options = ["Profile", "Account"];
   const [selected, setSelected] = useState(options[0]);
   const [revealChangePassword, setRevealChangePassword] = useState(false);
@@ -125,7 +125,7 @@ const ProfileEditPage = () => {
                   label="fullname"
                   type="text"
                   defaultValue={profile.fullname || undefined}
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.fullname}
                 />
                 <FormInput
@@ -133,7 +133,7 @@ const ProfileEditPage = () => {
                   label="email"
                   type="email"
                   defaultValue={profile.email || undefined}
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.email}
                 />
                 <FormRadioGroup
@@ -143,7 +143,7 @@ const ProfileEditPage = () => {
                   defaultChecked={
                     profile.gender === "M" ? "MALE" : profile.gender === "F" ? "FEMALE" : undefined
                   }
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.gender}
                 />
                 <FormInput
@@ -151,35 +151,30 @@ const ProfileEditPage = () => {
                   label="phone"
                   type="tel"
                   defaultValue={profile.phone || undefined}
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.phone}
                 />
                 <FormTextarea
                   text="Info"
                   label="info"
                   defaultValue={profile.info || undefined}
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.info}
                 />
                 <FormCheckbox
                   text="Public"
                   label="isPublic"
                   defaultChecked={profile.is_public}
-                  disabled={isSubmitting}
+                  disabled={isBusy}
                   error={actionData?.errors?.isPublic}
                 />
               </div>
               <div className="form-submit">
                 <input type="hidden" id="userId" name="userId" value={profile.user_id} />
-                <button className="form-reset" type="reset" disabled={isSubmitting}>
+                <button className="form-reset" type="reset" disabled={isBusy}>
                   ✖
                 </button>
-                <ActionButton
-                  type="submit"
-                  name="_action"
-                  value="updateProfile"
-                  disabled={isSubmitting}
-                >
+                <ActionButton type="submit" name="_action" value="updateProfile" disabled={isBusy}>
                   SUBMIT
                 </ActionButton>
               </div>
@@ -203,7 +198,7 @@ const ProfileEditPage = () => {
                       text="Old password"
                       label="oldPassword"
                       type="password"
-                      disabled={isSubmitting}
+                      disabled={isBusy}
                       error={actionData?.errors?.oldPassword}
                     />
                   </div>
@@ -212,27 +207,27 @@ const ProfileEditPage = () => {
                       text="New password"
                       label="newPassword"
                       type="password"
-                      disabled={isSubmitting}
+                      disabled={isBusy}
                       error={actionData?.errors?.newPassword}
                     />
                     <FormInput
                       text="Confirm new password"
                       label="confirmNewPassword"
                       type="password"
-                      disabled={isSubmitting}
+                      disabled={isBusy}
                       error={actionData?.errors?.confirmNewPassword}
                     />
                   </div>
                   <div className="form-submit">
                     <input type="hidden" id="username" name="username" value={username} />
-                    <button className="form-reset" type="reset" disabled={isSubmitting}>
+                    <button className="form-reset" type="reset" disabled={isBusy}>
                       ✖
                     </button>
                     <ActionButton
                       type="submit"
                       name="_action"
                       value="updatePassword"
-                      disabled={isSubmitting}
+                      disabled={isBusy}
                     >
                       SUBMIT
                     </ActionButton>

@@ -83,7 +83,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const AnnouncementDetailsPage = () => {
   const { announcement, canDeleteAnn, breadcrumbData } = useLoaderData() as LoaderDataT;
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isBusy = transition.state !== "idle";
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -115,7 +115,7 @@ const AnnouncementDetailsPage = () => {
                   name="redirectTo"
                   value={`/courses/${announcement.course_id}/announcements`}
                 />
-                <ActionButton type="submit" disabled={isSubmitting} variant="danger" fullwidth>
+                <ActionButton type="submit" disabled={isBusy} variant="danger" fullwidth>
                   DELETE
                 </ActionButton>
               </Form>
