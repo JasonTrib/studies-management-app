@@ -17,7 +17,7 @@ const FormInput: FC<FormInputT> = ({ text, label, defaultValue, disabled, error 
       <label className="label" htmlFor={label}>
         <span className="field-text">{text}</span>
         <input
-          className={`field-input ${error ? "invalid-input" : ""}`}
+          className={`field-input date ${error ? "invalid-input" : ""}`}
           id={label}
           ref={ref}
           name={label}

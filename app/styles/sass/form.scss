@@ -58,8 +58,15 @@
         }
 
         .textarea {
-          resize: none;
-          height: 100px;
+          resize: vertical;
+          line-height: 17px;
+          min-height: 34px;
+          max-height: 300px;
+          height: 85px;
+        }
+
+        .date {
+          height: 26px;
         }
       }
 
