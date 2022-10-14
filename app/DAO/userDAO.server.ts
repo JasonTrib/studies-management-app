@@ -394,3 +394,9 @@ export function updateUserPassword(username: User["username"], password: Passwor
     },
   });
 }
+
+export function deleteUser(id: User["id"]) {
+  return prisma.user.delete({
+    where: { id },
+  });
+}

@@ -1,12 +1,16 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useState } from "react";
+import ActionButton from "~/components/buttons/ActionButton";
 import { links as ContainerLinks } from "~/components/Container";
 import MyCoursesTable from "~/components/courses/MyCoursesTable";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
+import DeleteIcon from "~/components/icons/DeleteIcon";
 import Page from "~/components/layout/Page";
+import Modal from "~/components/Modal";
 import Table, { links as TableLinks } from "~/components/Table";
 import {
   getCoursesEnrolled,
@@ -20,6 +24,7 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import { getRegistrarUserProfile, getUser } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
+import modalStyles from "~/styles/modal.css";
 import profileStyles from "~/styles/profile.css";
 import { bc_users_id_profile } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
@@ -27,7 +32,12 @@ import { paramToInt } from "~/utils/paramToInt";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: profileStyles }, ...ContainerLinks(), ...TableLinks()];
+  return [
+    { rel: "stylesheet", href: profileStyles },
+    { rel: "stylesheet", href: modalStyles },
+    ...ContainerLinks(),
+    ...TableLinks(),
+  ];
 };
 
 type LoaderDataT = {
@@ -97,11 +107,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const UserProfilePage = () => {
   const { breadcrumbData, user, userRole, courses } = useLoaderData() as LoaderDataT;
+  const transition = useTransition();
+  const isBusy = transition.state !== "idle";
   const activeUserHasPriviledge =
     userRole === "PROFESSOR" || userRole === "REGISTRAR" || userRole === "SUPERADMIN";
   const isReg = user.role === "REGISTRAR";
   const isProf = user.role === "PROFESSOR";
   const isStud = user.role === "STUDENT";
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+  const canDeleteUser =
+    userRole === "SUPERADMIN" ||
+    (userRole === "REGISTRAR" && user.role !== "SUPERADMIN" && user.role !== "REGISTRAR");
 
   let avatarColor = "";
   if (user.profile?.is_public) {
@@ -111,8 +129,16 @@ const UserProfilePage = () => {
   }
   const noResultsMsg = "User hasn't registered to any courses";
 
+  const headingActions = (): JSX.Element | null => {
+    return canDeleteUser ? (
+      <div className="svg-danger">
+        <DeleteIcon className="icon" width={24} height={24} onClick={openModal} />
+      </div>
+    ) : null;
+  };
+
   return (
-    <Page wide breadcrumbs={breadcrumbData}>
+    <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
       <>
         <div className="profile-container">
           <div className="profile-heading">
@@ -207,6 +233,24 @@ const UserProfilePage = () => {
           </Table>
         ) : (
           <></>
+        )}
+        {canDeleteUser && (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+            <div className="modal-heading">
+              Are you sure you want to <b>permanently</b> delete this user?
+            </div>
+            <div className="modal-actions">
+              <Form method="post" action={`/users/${user.id}/delete`} autoComplete="off">
+                <input type="hidden" id="redirectTo" name="redirectTo" value={`/users`} />
+                <ActionButton type="submit" disabled={isBusy} variant="danger" fullwidth>
+                  DELETE
+                </ActionButton>
+              </Form>
+              <ActionButton onClick={closeModal} variant="cancel" size="lg">
+                CANCEL
+              </ActionButton>
+            </div>
+          </Modal>
         )}
       </>
     </Page>
