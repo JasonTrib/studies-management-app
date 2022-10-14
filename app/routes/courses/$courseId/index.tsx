@@ -172,7 +172,9 @@ const CourseDetailsPage = () => {
               fixed: true,
             }}
             Button={
-              canModAnns ? <></> : <FollowCourseButton variant="unfollow" courseId={course.id} />
+              canModAnns ? undefined : (
+                <FollowCourseButton variant="unfollow" courseId={course.id} />
+              )
             }
           >
             <AnnouncementsList />

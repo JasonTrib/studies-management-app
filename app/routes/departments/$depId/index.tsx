@@ -189,7 +189,7 @@ const DepartmentDetailsPage = () => {
             data={otherDepartments}
             title="Other Departments"
             noResultsMsg="No other departments exist"
-            Button={<NewButton directTo={"/departments/new"} />}
+            Button={isPriviledged ? <NewButton directTo={"/departments/new"} /> : undefined}
           >
             <DepartmentsList />
           </Container>
