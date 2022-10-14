@@ -45,7 +45,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await deleteAnnouncement(annId);
 
-  const redirectTo = body.redirectTo ?? "/";
+  const redirectTo = body.redirectTo ?? "/announcements";
 
   return redirect(`${redirectTo}`);
 };

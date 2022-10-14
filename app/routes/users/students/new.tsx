@@ -47,7 +47,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await createStudent(data);
 
-  return redirect("/students");
+  return redirect("users/students");
 };
 
 type LoaderDataT = {
