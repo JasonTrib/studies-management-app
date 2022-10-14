@@ -36,6 +36,12 @@ export function getCourse(id: Course["id"]) {
   });
 }
 
+export function getCourseOnTitle(title: string) {
+  return prisma.course.findUnique({
+    where: { title },
+  });
+}
+
 export function getCoursesAnnouncements(depId: Course["dep_id"]) {
   return prisma.course.findMany({
     where: {

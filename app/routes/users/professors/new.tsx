@@ -9,6 +9,7 @@ import FormInput from "~/components/form/FormInput";
 import FormSelect from "~/components/form/FormSelect";
 import Page from "~/components/layout/Page";
 import type { professorUserDataT } from "~/DAO/userDAO.server";
+import { getUserOnUsername } from "~/DAO/userDAO.server";
 import { createProfessor } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -34,6 +35,17 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });
+  }
+
+  const conflictingUser = await getUserOnUsername(form.data.username);
+  if (conflictingUser !== null) {
+    return json(
+      {
+        data: null,
+        errors: { username: "This username already exists" },
+      },
+      { status: 400 },
+    );
   }
 
   const data: professorUserDataT = {

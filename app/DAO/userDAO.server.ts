@@ -57,6 +57,12 @@ export function getUser(id: User["id"]) {
   });
 }
 
+export function getUserOnUsername(username: string) {
+  return prisma.user.findUnique({
+    where: { username },
+  });
+}
+
 export function getDepartmentRegistrars(dep: Department["code_id"]) {
   return prisma.user.findMany({
     where: {

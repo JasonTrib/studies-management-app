@@ -14,6 +14,22 @@ export function getDepartment(depId: Department["code_id"]) {
   });
 }
 
+export function getDepartmentOnCode(code: string) {
+  return prisma.department.findUnique({
+    where: {
+      code_id: code,
+    },
+  });
+}
+
+export function getDepartmentOnTitle(title: string) {
+  return prisma.department.findUnique({
+    where: {
+      title: title,
+    },
+  });
+}
+
 export type departmentDataT = {
   code_id: string;
   title: string;

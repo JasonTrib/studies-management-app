@@ -8,6 +8,12 @@ export function getProfile(userId: Profile["user_id"]) {
   });
 }
 
+export function getProfileOnEmail(email: string) {
+  return prisma.profile.findUnique({
+    where: { email },
+  });
+}
+
 export type profileDataT = {
   user_id: number;
   fullname?: string;

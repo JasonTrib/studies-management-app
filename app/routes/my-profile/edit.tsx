@@ -13,6 +13,7 @@ import FormTabs from "~/components/form/FormTabs";
 import FormTextarea from "~/components/form/FormTextarea";
 import Page from "~/components/layout/Page";
 import type { profileDataT } from "~/DAO/profileDAO.server";
+import { getProfileOnEmail } from "~/DAO/profileDAO.server";
 import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
 import { updateUserPassword } from "~/DAO/userDAO.server";
 import styles from "~/styles/form.css";
@@ -43,6 +44,19 @@ export const action: ActionFunction = async ({ request, params }) => {
       return json(form, { status: 400 });
     }
 
+    if (form.data.email) {
+      const profile = await getProfileOnEmail(form.data.email);
+      if (profile !== null && profile.user_id !== parseInt(form.data.userId)) {
+        return json(
+          {
+            data: null,
+            errors: { email: "This email already exists" },
+          },
+          { status: 400 },
+        );
+      }
+    }
+
     const data: profileDataT = {
       user_id: parseInt(form.data.userId),
       fullname: form.data.fullname,
@@ -68,7 +82,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     await updateUserPassword(form.data.username, await bcrypt.hash(form.data.newPassword, 10));
   }
 
-  return redirect("/profile");
+  return redirect("/my-profile");
 };
 
 type LoaderDataT = {

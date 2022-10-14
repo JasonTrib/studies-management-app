@@ -10,6 +10,8 @@ import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
 import Page from "~/components/layout/Page";
 import type { departmentDataT } from "~/DAO/departmentDAO.server";
+import { getDepartmentOnCode } from "~/DAO/departmentDAO.server";
+import { getDepartmentOnTitle } from "~/DAO/departmentDAO.server";
 import { createDepartment } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -36,6 +38,25 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   const codeId = form.data.code.toUpperCase();
+  let errorValidations;
+  const departmentOnCodeId = await getDepartmentOnCode(codeId);
+  const departmentOnTitle = await getDepartmentOnTitle(form.data.title);
+  if (departmentOnCodeId !== null) {
+    errorValidations = { code: "This code already exists" };
+  }
+  if (departmentOnTitle !== null) {
+    errorValidations = { ...errorValidations, title: "This title already exists" };
+  }
+  if (errorValidations) {
+    return json(
+      {
+        data: null,
+        errors: { ...errorValidations },
+      },
+      { status: 400 },
+    );
+  }
+
   let foundationDate;
   const parsedDate = Date.parse(form.data.foundationDate);
   if (!isNaN(parsedDate)) {

@@ -6,6 +6,7 @@ import type { z } from "zod";
 import CourseForm from "~/components/form/CourseForm";
 import Page from "~/components/layout/Page";
 import type { courseDataT } from "~/DAO/courseDAO.server";
+import { getCourseOnTitle } from "~/DAO/courseDAO.server";
 import { createCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -31,6 +32,17 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });
+  }
+
+  const course = await getCourseOnTitle(form.data.title);
+  if (course !== null) {
+    return json(
+      {
+        data: null,
+        errors: { title: "This title already exists" },
+      },
+      { status: 400 },
+    );
   }
 
   const data: courseDataT = {

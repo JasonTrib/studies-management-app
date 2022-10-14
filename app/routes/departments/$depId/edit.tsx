@@ -11,6 +11,7 @@ import FormTextarea from "~/components/form/FormTextarea";
 import Page from "~/components/layout/Page";
 import { links as TableLinks } from "~/components/Table";
 import type { departmentDataT } from "~/DAO/departmentDAO.server";
+import { getDepartmentOnTitle } from "~/DAO/departmentDAO.server";
 import { editDepartment, getDepartment } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
@@ -39,6 +40,17 @@ export const action: ActionFunction = async ({ request, params }) => {
   const form = await extractAndValidateFormData<SchemaT>(request, editDepartmentSchema);
   if (!_.isEmpty(form.errors) || form.data === null) {
     return json(form, { status: 400 });
+  }
+
+  const department = await getDepartmentOnTitle(form.data.title);
+  if (department !== null && department.code_id !== form.data.dep) {
+    return json(
+      {
+        data: null,
+        errors: { title: "This title already exists" },
+      },
+      { status: 400 },
+    );
   }
 
   let foundationDate;
