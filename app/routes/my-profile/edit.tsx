@@ -130,7 +130,7 @@ const ProfileEditPage = () => {
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
-      <div className="form-page">
+      <div className="form-layout">
         <div className="form-container">
           <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
           {selected === options[0] && (
@@ -251,7 +251,11 @@ const ProfileEditPage = () => {
                   </div>
                 </>
               ) : (
-                <ActionButton onClick={handleClick}>Change password</ActionButton>
+                <div className="mb-28">
+                  <ActionButton onClick={handleClick} fullwidth>
+                    Change password
+                  </ActionButton>
+                </div>
               )}
             </Form>
           )}

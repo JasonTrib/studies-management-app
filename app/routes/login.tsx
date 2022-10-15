@@ -5,6 +5,7 @@ import _ from "lodash";
 import type { z } from "zod";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
+import BarePage from "~/components/layout/BarePage";
 import styles from "~/styles/form.css";
 import { createUserSession, getUserId, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
@@ -25,7 +26,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   const user = await login(form.data);
-
   if (!user) {
     return json({ ...form, authError: "Invalid credentials" }, { status: 400 });
   }
@@ -61,11 +61,11 @@ const LoginPage = () => {
   const isBusy = transition.state !== "idle";
 
   return (
-    <div className="login-page">
-      <div className="form-page pt-100">
-        <h2 className="heading">Login</h2>
+    <BarePage>
+      <div className="form-layout">
         <div className="form-container">
           <Form method="post" action={`/login?${redirectTo}`} className="form" autoComplete="off">
+            <div className="form-heading">Login</div>
             <div className="form-fields">
               <FormInput
                 text="Username"
@@ -94,7 +94,7 @@ const LoginPage = () => {
           </Form>
         </div>
       </div>
-    </div>
+    </BarePage>
   );
 };
 

@@ -85,7 +85,7 @@ const CoursesNewPage = () => {
   const isBusy = transition.state !== "idle";
   return (
     <Page wide breadcrumbs={breadcrumbData}>
-      <div className="form-page">
+      <div className="form-layout">
         <div className="form-container">
           <CourseForm
             action={`/courses/new`}

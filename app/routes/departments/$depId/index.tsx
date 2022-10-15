@@ -157,7 +157,8 @@ const DepartmentDetailsPage = () => {
         {isSuperadmin && !isSameDepartment && (
           <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
             <div className="modal-heading">
-              Are you sure you want to <b>permanently</b> delete this departmemt?
+              Are you sure you want to <b>permanently</b> delete this department, along with all of
+              its users and courses?
             </div>
             <div className="modal-actions">
               <Form

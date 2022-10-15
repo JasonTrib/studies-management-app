@@ -1,7 +1,7 @@
 body {
   font-family: "Roboto", sans-serif;
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   background-color: rgb(36, 39, 46);
   color: var(--color-text-dark);
 }
@@ -29,10 +29,23 @@ h3 {
   --color-button-red: hsl(350, 90%, 60%);
   --color-button-red-disabled: hsla(350, 90%, 50%, 0.5);
   --color-button-red-hovered: hsl(350, 90%, 70%);
+  --color-deep-blue: hsl(220, 50%, 25%);
 }
 
 .mr-12 {
   margin-right: 12px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.mb-28 {
+  margin-bottom: 28px;
+}
+
+.my-32 {
+  margin-block: 32px;
 }
 
 .pt-100 {

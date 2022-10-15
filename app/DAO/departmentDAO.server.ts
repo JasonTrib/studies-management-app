@@ -6,6 +6,10 @@ export function getDepartments() {
   return prisma.department.findMany({});
 }
 
+export function getDepartmentsCount() {
+  return prisma.department.count();
+}
+
 export function getDepartment(depId: Department["code_id"]) {
   return prisma.department.findUnique({
     where: {
@@ -68,6 +72,48 @@ export function createDepartment(data: departmentDataT) {
       email: data.email,
       telephone: data.telephone,
       foundation_date: data.foundation_date,
+    },
+  });
+}
+
+export type departmentWithUserDataT = {
+  code_id: string;
+  title: string;
+  description?: string;
+  address?: string;
+  email?: string;
+  telephone?: string;
+  foundation_date?: string;
+  updated_at?: string;
+  username: string;
+  password: string;
+  role: "SUPERADMIN";
+};
+
+export function createDepartmentWithSuperadmin(data: departmentWithUserDataT) {
+  return prisma.department.create({
+    data: {
+      code_id: data.code_id,
+      title: data.title,
+      description: data.description,
+      address: data.address,
+      email: data.email,
+      telephone: data.telephone,
+      foundation_date: data.foundation_date,
+      Users: {
+        create: {
+          username: data.username,
+          role: data.role,
+          password: {
+            create: {
+              hash: data.password,
+            },
+          },
+          profile: {
+            create: {},
+          },
+        },
+      },
     },
   });
 }

@@ -107,7 +107,7 @@ const DepartmentNewPage = () => {
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
-      <div className="form-page">
+      <div className="form-layout">
         <div className="form-container">
           <Form method="post" action="#" className="form" autoComplete="off">
             <div className="form-fields fields-separator">

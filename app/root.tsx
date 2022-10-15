@@ -1,8 +1,10 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { getDepartmentsCount } from "~/DAO/departmentDAO.server";
 import { links as IndexLinks } from "~/routes/index";
-import styles from "~/styles/global.css";
 import errorStyles from "~/styles/error.css";
+import styles from "~/styles/global.css";
 // import {
 //   logUserDAO,
 //   logCourseDAO,
@@ -42,6 +44,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // logProfessorDAO();
   // logURegistrarDAO();
 
+  const departments = await getDepartmentsCount();
+  const path = new URL(request.url).pathname;
+  const onInitPage = path.match(/^\/initialization/);
+  if (!departments) {
+    if (!onInitPage) return redirect("/initialization");
+  } else {
+    if (onInitPage) return redirect("/");
+  }
   return null;
 };
 

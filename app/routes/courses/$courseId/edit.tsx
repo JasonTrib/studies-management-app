@@ -162,7 +162,7 @@ const CourseEditPage = () => {
 
   return (
     <Page wide breadcrumbs={breadcrumbData}>
-      <div className="form-page">
+      <div className="form-layout">
         <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
         {selected === options[0] && (
           <div className="form-container">
@@ -196,16 +196,18 @@ const CourseEditPage = () => {
                       error={actionData?.errors?.title}
                     />
                   </div>
-                  <ActionButton
-                    type="submit"
-                    disabled={isBusy}
-                    name="_action"
-                    value={"assignProf"}
-                    variant={hasTooManyLecturers || hasAvailableProfs ? "cancel" : "primary"}
-                    fullwidth
-                  >
-                    ASSIGN
-                  </ActionButton>
+                  <div className="mb-16">
+                    <ActionButton
+                      type="submit"
+                      disabled={isBusy}
+                      name="_action"
+                      value={"assignProf"}
+                      variant={hasTooManyLecturers || hasAvailableProfs ? "cancel" : "primary"}
+                      fullwidth
+                    >
+                      ASSIGN
+                    </ActionButton>
+                  </div>
                 </Form>
               </div>
             </div>
@@ -223,9 +225,11 @@ const CourseEditPage = () => {
                   disabled
                 />
               </div>
-              <ActionButton onClick={openModal} variant="danger">
-                DELETE
-              </ActionButton>
+              <div className="mb-28">
+                <ActionButton onClick={openModal} variant="danger" fullwidth>
+                  DELETE
+                </ActionButton>
+              </div>
             </div>
           </div>
         )}
