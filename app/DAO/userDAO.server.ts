@@ -386,6 +386,37 @@ export function createProfessor(data: professorUserDataT) {
   });
 }
 
+export type registrarUserDataT = {
+  dep_id: string;
+  username: string;
+  password: string;
+  role: "REGISTRAR";
+  title: string;
+};
+
+export function createRegistrar(data: registrarUserDataT) {
+  return prisma.user.create({
+    data: {
+      dep_id: data.dep_id,
+      username: data.username,
+      role: data.role,
+      password: {
+        create: {
+          hash: data.password,
+        },
+      },
+      profile: {
+        create: {},
+      },
+      registrar: {
+        create: {
+          title: data.title,
+        },
+      },
+    },
+  });
+}
+
 export function updateUserPassword(username: User["username"], password: Password["hash"]) {
   return prisma.user.update({
     where: {

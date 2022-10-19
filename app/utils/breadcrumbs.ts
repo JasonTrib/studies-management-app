@@ -130,6 +130,18 @@ export const bc_users_regs = async (path: string) => {
   return crumbBuilder(pathSegs, textSegs);
 };
 
+export const bc_users_regs_new = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: "Registrars", isLink: true },
+    { text: "New registrar", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
 export const bc_users_profs = async (path: string) => {
   const pathSegs = getPathSegs(path);
 
