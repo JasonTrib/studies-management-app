@@ -2,14 +2,14 @@ import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import type { UserModelT } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
-import ActionButton from "./buttons/ActionButton";
-import AnnouncementIcon from "./icons/AnnouncementIcon";
-import AvatarIcon from "./icons/AvatarIcon";
-import CoursesIcon from "./icons/CoursesIcon";
-import DepartmentIcon from "./icons/DepartmentIcon";
-import LogoutIcon from "./icons/LogoutIcon";
-import MyCoursesIcon from "./icons/MyCoursesIcon";
-import UsersIcon from "./icons/UsersIcon";
+import ActionButton from "../buttons/ActionButton";
+import AnnouncementIcon from "../icons/AnnouncementIcon";
+import AvatarIcon from "../icons/AvatarIcon";
+import CoursesIcon from "../icons/CoursesIcon";
+import DepartmentIcon from "../icons/DepartmentIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+import MyCoursesIcon from "../icons/MyCoursesIcon";
+import UsersIcon from "../icons/UsersIcon";
 
 type AppLayoutT = {
   userInfo: {
