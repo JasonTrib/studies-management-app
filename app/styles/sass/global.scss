@@ -94,6 +94,19 @@ h3 {
   }
 }
 
+.svg-btn {
+  fill: var(--color-text-cyan);
+  cursor: pointer;
+
+  &:hover {
+    fill: var(--color-text-cyan-dark);
+  }
+
+  svg {
+    display: flex;
+  }
+}
+
 .ellipsis-3 {
   $lines: 3;
 

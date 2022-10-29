@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { departments } from "./seedData/departments";
 import { users } from "./seedData/users";
@@ -11,6 +12,7 @@ import { professorCourses } from "./seedData/professorCourses";
 import { studentCourses } from "./seedData/studentCourses";
 import { userAnnouncements } from "./seedData/userAnnnouncements";
 import bcrypt from "bcryptjs";
+import { studiesCurriculums } from "./seedData/studiesCurriculums";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +24,7 @@ async function main() {
 
   if (UPSERT) {
     await upsertDepartments();
+    await upsertStudiesCurriculum();
     await upsertUsers();
     await upsertProfiles();
     await upsertRegistrars();
@@ -36,6 +39,7 @@ async function main() {
     await prisma.department.deleteMany({});
 
     await createDepartments();
+    await createStudiesCurriculum();
     await createUsers();
     await createProfiles();
     await createRegistrars();
@@ -263,6 +267,20 @@ async function upsertUserAnnouncements() {
   }
 }
 
+async function upsertStudiesCurriculum() {
+  for (let i = 0; i < studiesCurriculums.length; i++) {
+    await prisma.studiesCurriculum.upsert({
+      where: { dep_id: studiesCurriculums[i].depId },
+      update: {},
+      create: {
+        dep_id: studiesCurriculums[i].depId,
+        undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
+        postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
+      },
+    });
+  }
+}
+
 async function createUsers() {
   for (let i = 0; i < users.length; i++) {
     await prisma.user.create({
@@ -415,6 +433,18 @@ async function createUserAnnouncements() {
         announcement_id: userAnnouncements[i].annId,
         has_posted: userAnnouncements[i].hasPosted,
         has_seen: userAnnouncements[i].hasSeen,
+      },
+    });
+  }
+}
+
+async function createStudiesCurriculum() {
+  for (let i = 0; i < studiesCurriculums.length; i++) {
+    await prisma.studiesCurriculum.create({
+      data: {
+        dep_id: studiesCurriculums[i].depId,
+        undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
+        postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
       },
     });
   }

@@ -1,6 +1,13 @@
 import type { Course, Department, Gender, Professor, Student, User } from "@prisma/client";
 import { getAllAnnouncements } from "../announcementDAO.server";
-import { getAllCoursesShort, getCourse, getCourses, getCoursesCount } from "../courseDAO.server";
+import {
+  getAllCoursesShort,
+  getCourse,
+  getCourses,
+  getCoursesCount,
+  getPostgradCourses,
+  getUndergradCourses,
+} from "../courseDAO.server";
 import { getDepartment, getDepartments } from "../departmentDAO.server";
 import {
   getAllProfessorCoursesLectured,
@@ -506,4 +513,34 @@ export async function getOtherDepartmentsExtended(depId: Department["code_id"]) 
     .filter((x) => x);
 
   return otherDepartmentsExtended;
+}
+
+export async function getUndergradCurriculumCourses(depId: Department["code_id"]) {
+  const courses = await getUndergradCourses(depId);
+
+  const scaffold = [...Array(8)].map(() => ({ semester: { compulsories: 0, electives: 0 } }));
+
+  courses.forEach((course) =>
+    course.is_elective
+      ? (scaffold[course.semester - 1].semester.electives += 1)
+      : (scaffold[course.semester - 1].semester.compulsories += 1),
+  );
+  const undergradCurriculumData = [...scaffold];
+
+  return undergradCurriculumData;
+}
+
+export async function getPostgradCurriculumCourses(depId: Department["code_id"]) {
+  const courses = await getPostgradCourses(depId);
+
+  const scaffold = [...Array(4)].map(() => ({ semester: { compulsories: 0, electives: 0 } }));
+
+  courses.forEach((course) =>
+    course.is_elective
+      ? (scaffold[course.semester - 1].semester.electives += 1)
+      : (scaffold[course.semester - 1].semester.compulsories += 1),
+  );
+  const postgradCurriculumData = [...scaffold];
+
+  return postgradCurriculumData;
 }

@@ -22,6 +22,24 @@ export function getCourses(depId: Course["dep_id"]) {
   });
 }
 
+export function getUndergradCourses(depId: Course["dep_id"]) {
+  return prisma.course.findMany({
+    where: {
+      dep_id: depId,
+      is_postgraduate: false,
+    },
+  });
+}
+
+export function getPostgradCourses(depId: Course["dep_id"]) {
+  return prisma.course.findMany({
+    where: {
+      dep_id: depId,
+      is_postgraduate: true,
+    },
+  });
+}
+
 export function getCoursesCount(depId: Course["dep_id"]) {
   return prisma.course.count({
     where: {
