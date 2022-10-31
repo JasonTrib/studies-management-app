@@ -14,10 +14,13 @@ import {
   updatePostgradStudiesCurriculum,
   updateUndergradStudiesCurriculum,
 } from "~/DAO/studiesCurriculumDAO.server";
+import type { UserModelT } from "~/DAO/userDAO.server";
 import type { curriculumDataT } from "~/data/data";
+import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/curriculum.css";
 import tableStyles from "~/styles/table.css";
 import { bc_studies_curriculum } from "~/utils/breadcrumbs";
+import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import {
@@ -37,6 +40,7 @@ type SchemaT = z.infer<typeof undergradCurriculumSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
+  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
@@ -47,16 +51,26 @@ export const action: ActionFunction = async ({ request, params }) => {
       return json(form, { status: 400 });
     }
 
-    const curriculumData: curriculumDataT = [
-      { semester: { electives: parseInt(form.data.sem1) } },
-      { semester: { electives: parseInt(form.data.sem2) } },
-      { semester: { electives: parseInt(form.data.sem3) } },
-      { semester: { electives: parseInt(form.data.sem4) } },
-      { semester: { electives: parseInt(form.data.sem5) } },
-      { semester: { electives: parseInt(form.data.sem6) } },
-      { semester: { electives: parseInt(form.data.sem7) } },
-      { semester: { electives: parseInt(form.data.sem8) } },
-    ];
+    const undergradCourses = await getUndergradCurriculumCourses(user.dep_id);
+    const electivesAvailable = undergradCourses.map((x) => x.semester.electives);
+
+    const formDataArray = [
+      form.data.sem1,
+      form.data.sem2,
+      form.data.sem3,
+      form.data.sem4,
+      form.data.sem5,
+      form.data.sem6,
+      form.data.sem7,
+      form.data.sem8,
+    ].map((x) => parseInt(x));
+
+    if (electivesAvailable.some((electives, i) => formDataArray[i] > electives))
+      throw new Response("Bad Request", { status: 400 });
+
+    const curriculumData: curriculumDataT = formDataArray.map((x) => ({
+      semester: { electives: x },
+    }));
 
     await updateUndergradStudiesCurriculum(user.dep_id, curriculumData);
   }
@@ -66,12 +80,19 @@ export const action: ActionFunction = async ({ request, params }) => {
       return json(form, { status: 400 });
     }
 
-    const curriculumData: curriculumDataT = [
-      { semester: { electives: parseInt(form.data.sem1) } },
-      { semester: { electives: parseInt(form.data.sem2) } },
-      { semester: { electives: parseInt(form.data.sem3) } },
-      { semester: { electives: parseInt(form.data.sem4) } },
-    ];
+    const postgradCourses = await getPostgradCurriculumCourses(user.dep_id);
+    const electivesAvailable = postgradCourses.map((x) => x.semester.electives);
+
+    const formDataArray = [form.data.sem1, form.data.sem2, form.data.sem3, form.data.sem4].map(
+      (x) => parseInt(x),
+    );
+
+    if (electivesAvailable.some((electives, i) => formDataArray[i] > electives))
+      throw new Response("Bad Request", { status: 400 });
+
+    const curriculumData: curriculumDataT = formDataArray.map((x) => ({
+      semester: { electives: x },
+    }));
 
     await updatePostgradStudiesCurriculum(user.dep_id, curriculumData);
   }
@@ -85,6 +106,7 @@ type LoaderDataT = {
   postgradCourses: Awaited<ReturnType<typeof getPostgradCurriculumCourses>>;
   undergradCurriculum: curriculumDataT | [];
   postgradCurriculum: curriculumDataT | [];
+  userRole: UserModelT["role"];
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -120,6 +142,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     postgradCourses,
     undergradCurriculum,
     postgradCurriculum,
+    userRole: user.role,
   };
 };
 
@@ -130,7 +153,9 @@ const StudiesCurriculumPage = () => {
     postgradCourses,
     undergradCurriculum,
     postgradCurriculum,
+    userRole,
   } = useLoaderData() as LoaderDataT;
+  const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   return (
     <Page breadcrumbs={breadcrumbData} wide>
@@ -140,12 +165,14 @@ const StudiesCurriculumPage = () => {
           coursesData={undergradCourses}
           curriculumData={undergradCurriculum}
           variant={"undergradCurriculum"}
+          showAction={isPriviledged}
         />
         <Curriculum
           title="Postgraduate curriculum"
           coursesData={postgradCourses}
           curriculumData={postgradCurriculum}
           variant={"postgradCurriculum"}
+          showAction={isPriviledged}
         />
       </>
     </Page>

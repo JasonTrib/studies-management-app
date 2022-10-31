@@ -12,9 +12,16 @@ type CurriculumT = {
   coursesData: studiesCoursesDataT;
   curriculumData: curriculumDataT;
   variant: string;
+  showAction: boolean;
 };
 
-const Curriculum: FC<CurriculumT> = ({ title, coursesData, curriculumData, variant }) => {
+const Curriculum: FC<CurriculumT> = ({
+  title,
+  coursesData,
+  curriculumData,
+  variant,
+  showAction,
+}) => {
   const transition = useTransition();
   const isBusy = transition.state !== "idle";
   const [isEditing, setIsEditing] = useState(false);
@@ -36,29 +43,30 @@ const Curriculum: FC<CurriculumT> = ({ title, coursesData, curriculumData, varia
         <div className="heading">
           <h3>{title}</h3>
           <div className="actions">
-            {isEditing ? (
-              <>
-                <ActionButton
-                  className="action-btn"
-                  disabled={isBusy}
-                  variant="primary"
-                  type="submit"
-                >
-                  SUBMIT
-                </ActionButton>
-                <ActionButton
-                  className="action-btn"
-                  onClick={() => setIsEditing(false)}
-                  variant="cancel"
-                >
-                  CANCEL
-                </ActionButton>
-              </>
-            ) : (
-              <div className="svg-btn" onClick={() => setIsEditing(true)}>
-                <CogIcon />
-              </div>
-            )}
+            {showAction &&
+              (isEditing ? (
+                <>
+                  <ActionButton
+                    className="action-btn"
+                    disabled={isBusy}
+                    variant="primary"
+                    type="submit"
+                  >
+                    SUBMIT
+                  </ActionButton>
+                  <ActionButton
+                    className="action-btn"
+                    onClick={() => setIsEditing(false)}
+                    variant="cancel"
+                  >
+                    CANCEL
+                  </ActionButton>
+                </>
+              ) : (
+                <div className="svg-btn" onClick={() => setIsEditing(true)}>
+                  <CogIcon />
+                </div>
+              ))}
           </div>
         </div>
         <div className="content">
