@@ -65,7 +65,6 @@ export const action: ActionFunction = async ({ request, params }) => {
       phone: form.data.phone,
       info: form.data.info,
       is_public: form.data.isPublic === "on" ? true : false,
-      updated_at: new Date().toISOString(),
     };
     await updateProfile(data);
   }

@@ -22,7 +22,6 @@ export type profileDataT = {
   phone?: string;
   info?: string;
   is_public: boolean;
-  updated_at: string;
 };
 
 export function updateProfile(data: profileDataT) {
@@ -35,7 +34,7 @@ export function updateProfile(data: profileDataT) {
       phone: data.phone,
       info: data.info,
       is_public: data.is_public,
-      updated_at: data.updated_at,
+      updated_at: new Date().toISOString(),
     },
   });
 }

@@ -62,12 +62,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     );
   }
 
-  let foundationDate;
-  const parsedDate = Date.parse(form.data.foundationDate);
-  if (!isNaN(parsedDate)) {
-    foundationDate = new Date(parsedDate).toISOString();
-  } else {
-    foundationDate = "";
+  const foundationDate = new Date(form.data.foundationDate);
+  let foundationIsoDate;
+  if (foundationDate.toString() !== "Invalid Date") {
+    foundationIsoDate = foundationDate.toISOString();
   }
 
   const data: departmentDataT & studiesCurriculumDataT = {
@@ -77,7 +75,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     address: form.data.address,
     email: form.data.email,
     telephone: form.data.telephone,
-    foundation_date: foundationDate,
+    foundation_date: foundationIsoDate ?? null,
     undergrad: INIT_UNDERGRAD_CURRICULUM,
     postgrad: INIT_POSTGRAD_CURRICULUM,
     registration_periods: INIT_REGISTRATION_PERIODS,

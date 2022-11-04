@@ -91,7 +91,6 @@ export type courseDataT = {
   is_elective: boolean;
   is_postgraduate: boolean;
   is_public: boolean;
-  updated_at?: string;
 };
 
 export function createCourse(data: courseDataT) {
@@ -135,7 +134,7 @@ export function editCourse(data: Omit<courseDataT, "dep_id">) {
       is_elective: data.is_elective,
       is_postgraduate: data.is_postgraduate,
       is_public: data.is_public,
-      updated_at: data.updated_at,
+      updated_at: new Date().toISOString(),
     },
   });
 }

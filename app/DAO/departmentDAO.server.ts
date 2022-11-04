@@ -37,12 +37,11 @@ export function getDepartmentOnTitle(title: string) {
 export type departmentDataT = {
   code_id: string;
   title: string;
-  description?: string;
-  address?: string;
-  email?: string;
-  telephone?: string;
-  foundation_date?: string;
-  updated_at?: string;
+  description: string | null;
+  address: string | null;
+  email: string | null;
+  telephone: string | null;
+  foundation_date: string | null;
 };
 
 export function editDepartment(data: departmentDataT) {
@@ -57,7 +56,7 @@ export function editDepartment(data: departmentDataT) {
       email: data.email,
       telephone: data.telephone,
       foundation_date: data.foundation_date,
-      updated_at: data.updated_at,
+      updated_at: new Date().toISOString(),
     },
   });
 }
@@ -97,7 +96,6 @@ export type departmentWithUserDataT = {
   email?: string;
   telephone?: string;
   foundation_date?: string;
-  updated_at?: string;
   username: string;
   password: string;
   role: "SUPERADMIN";

@@ -68,7 +68,6 @@ export const action: ActionFunction = async ({ request, params }) => {
       is_elective: form.data.isElective === "on" ? true : false,
       is_postgraduate: form.data.isPostgraduate === "on" ? true : false,
       is_public: form.data.isPublic === "on" ? true : false,
-      updated_at: new Date().toISOString(),
     };
 
     await editCourse(data);
