@@ -37,3 +37,14 @@ export function updatePostgradStudiesCurriculum(
     },
   });
 }
+
+export function updateRegistrationPeriod(depId: Department["code_id"], data: Prisma.JsonObject) {
+  return prisma.studiesCurriculum.update({
+    where: {
+      dep_id: depId,
+    },
+    data: {
+      registration_periods: data,
+    },
+  });
+}

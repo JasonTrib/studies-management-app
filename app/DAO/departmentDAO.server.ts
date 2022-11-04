@@ -1,5 +1,5 @@
 import { prisma } from "~/db.server";
-import type { Department } from "@prisma/client";
+import type { Department, Prisma } from "@prisma/client";
 export type { Department as DepartmentModelT } from "@prisma/client";
 
 export function getDepartments() {
@@ -62,7 +62,13 @@ export function editDepartment(data: departmentDataT) {
   });
 }
 
-export function createDepartment(data: departmentDataT) {
+export type studiesCurriculumDataT = {
+  undergrad: Prisma.JsonArray;
+  postgrad: Prisma.JsonArray;
+  registration_periods: Prisma.JsonObject;
+};
+
+export function createDepartment(data: departmentDataT & studiesCurriculumDataT) {
   return prisma.department.create({
     data: {
       code_id: data.code_id,
@@ -72,6 +78,13 @@ export function createDepartment(data: departmentDataT) {
       email: data.email,
       telephone: data.telephone,
       foundation_date: data.foundation_date,
+      StudiesCurriculum: {
+        create: {
+          undergrad: data.undergrad,
+          postgrad: data.postgrad,
+          registration_periods: data.registration_periods,
+        },
+      },
     },
   });
 }
@@ -88,7 +101,7 @@ export type departmentWithUserDataT = {
   username: string;
   password: string;
   role: "SUPERADMIN";
-};
+} & studiesCurriculumDataT;
 
 export function createDepartmentWithSuperadmin(data: departmentWithUserDataT) {
   return prisma.department.create({
@@ -112,6 +125,13 @@ export function createDepartmentWithSuperadmin(data: departmentWithUserDataT) {
           profile: {
             create: {},
           },
+        },
+      },
+      StudiesCurriculum: {
+        create: {
+          undergrad: data.undergrad,
+          postgrad: data.postgrad,
+          registration_periods: data.registration_periods,
         },
       },
     },

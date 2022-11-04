@@ -16,7 +16,7 @@ export async function extractAndValidateFormData<SchemaT>(request: Request, sche
 }
 
 export function validateFormData<SchemaT>(
-  body: { [k: string]: FormDataEntryValue },
+  body: { [k: string]: FormDataEntryValue | Date },
   schema: ZodSchema,
 ) {
   try {

@@ -91,4 +91,97 @@
   background-color: hsla(0deg, 100%, 50%, 0.14);
 }
 
+.registration-periods-container {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  margin-bottom: 16px;
+}
+.registration-periods-container .heading {
+  box-shadow: 0px 1px 0px var(--color-shadow);
+  margin-bottom: 1px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.registration-periods-container .heading h3 {
+  font-size: 21px;
+  color: var(--color-text-light);
+}
+.registration-periods-container .heading .actions {
+  display: flex;
+  column-gap: 8px;
+  user-select: none;
+}
+.registration-periods-container .heading .actions .action-btn {
+  height: 26px;
+}
+.registration-periods-container .content {
+  padding: 12px;
+}
+.registration-periods-container .content .body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+}
+.registration-periods-container .content .body .label {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.registration-periods-container .content .body .registration-period {
+  display: flex;
+}
+.registration-periods-container .content .body .registration-period .registration-date {
+  line-height: 30px;
+  margin-bottom: 22px;
+}
+.registration-periods-container .content .body .registration-period .registration-date-edit {
+  width: 200px;
+}
+.registration-periods-container .content .body .registration-period .date-separator {
+  margin-inline: 16px;
+  line-height: 28px;
+}
+.registration-periods-container .content .body .registration-period .field {
+  margin-bottom: 4px;
+}
+.registration-periods-container .content .body .registration-period .field .label {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+.registration-periods-container .content .body .registration-period .field .label .field-input {
+  height: 24px;
+  font-size: 14px;
+  color: var(--color-text-light);
+  outline: none;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-text-lighter);
+}
+.registration-periods-container .content .body .registration-period .field .label .field-input.invalid-input {
+  border-color: red;
+}
+.registration-periods-container .content .body .registration-period .field .label .field-input:focus {
+  border-color: var(--color-text-cyan);
+}
+.registration-periods-container .content .body .registration-period .field .label .field-input:disabled {
+  border-color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.registration-periods-container .content .body .registration-period .field .label .date {
+  height: 26px;
+}
+.registration-periods-container .content .body .registration-period .field .error {
+  display: block;
+  color: red;
+  font-size: 12px;
+  min-height: 18px;
+  margin-top: 2px;
+}
+
 /*# sourceMappingURL=curriculum.css.map */

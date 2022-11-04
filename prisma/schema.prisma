@@ -61,9 +61,9 @@ model Department {
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
 
-  Users              User[]
-  Courses            Course[]
-  CourseRegistration StudiesCurriculum?
+  Users             User[]
+  Courses           Course[]
+  StudiesCurriculum StudiesCurriculum?
 }
 
 model Registrar {
@@ -163,8 +163,9 @@ model UserAnnouncement {
 }
 
 model StudiesCurriculum {
-  undergrad Json
-  postgrad  Json
+  undergrad            Json
+  postgrad             Json
+  registration_periods Json
 
   dep_id     String     @unique
   department Department @relation(fields: [dep_id], references: [code_id], onDelete: Cascade, onUpdate: Cascade)

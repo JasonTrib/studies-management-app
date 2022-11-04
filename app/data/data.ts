@@ -11,3 +11,15 @@ export const USER_ROLE: {
 
 export type studiesCoursesDataT = { semester: { compulsories: number; electives: number } }[];
 export type curriculumDataT = { semester: { electives: number } }[];
+
+export const registrationPeriodScaffold = {
+  fallSemester: {
+    startDate: "",
+    endDate: "",
+  },
+  springSemester: {
+    startDate: "",
+    endDate: "",
+  },
+};
+export type registrationPeriodT = typeof registrationPeriodScaffold;

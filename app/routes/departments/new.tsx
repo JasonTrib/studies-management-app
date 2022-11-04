@@ -9,11 +9,16 @@ import FormDatePicker from "~/components/form/FormDatePicker";
 import FormInput from "~/components/form/FormInput";
 import FormTextarea from "~/components/form/FormTextarea";
 import Page from "~/components/layout/Page";
-import type { departmentDataT } from "~/DAO/departmentDAO.server";
+import type { departmentDataT, studiesCurriculumDataT } from "~/DAO/departmentDAO.server";
 import { getDepartmentOnCode } from "~/DAO/departmentDAO.server";
 import { getDepartmentOnTitle } from "~/DAO/departmentDAO.server";
 import { createDepartment } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
+import {
+  INIT_POSTGRAD_CURRICULUM,
+  INIT_REGISTRATION_PERIODS,
+  INIT_UNDERGRAD_CURRICULUM,
+} from "~/data/initializationData";
 import styles from "~/styles/form.css";
 import { bc_deps_new } from "~/utils/breadcrumbs";
 import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
@@ -65,7 +70,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     foundationDate = "";
   }
 
-  const data: departmentDataT = {
+  const data: departmentDataT & studiesCurriculumDataT = {
     code_id: codeId,
     title: form.data.title,
     description: form.data.description,
@@ -73,6 +78,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     email: form.data.email,
     telephone: form.data.telephone,
     foundation_date: foundationDate,
+    undergrad: INIT_UNDERGRAD_CURRICULUM,
+    postgrad: INIT_POSTGRAD_CURRICULUM,
+    registration_periods: INIT_REGISTRATION_PERIODS,
   };
 
   await createDepartment(data);

@@ -1,7 +1,7 @@
 import { Form, useTransition } from "@remix-run/react";
 import _ from "lodash";
 import type { FC } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import CogIcon from "~/components/icons/CogIcon";
 import type { curriculumDataT, studiesCoursesDataT } from "~/data/data";
@@ -25,6 +25,7 @@ const Curriculum: FC<CurriculumT> = ({
   const transition = useTransition();
   const isBusy = transition.state !== "idle";
   const [isEditing, setIsEditing] = useState(false);
+  const hasLoaded = useRef(false);
   const classPale = isEditing ? "pale" : "";
   const compulsories = coursesData.map((x) => x.semester.compulsories);
   const electivesAvailable = coursesData.map((x) => x.semester.electives);
@@ -36,6 +37,16 @@ const Curriculum: FC<CurriculumT> = ({
   const sumArray = (arr: Array<number>) => arr.reduce((prev, curr) => prev + curr, 0);
 
   const renderData = (arr: Array<number>) => arr.map((x, i) => <td key={`${i}:${x}`}>{x}</td>);
+
+  useEffect(() => {
+    if (transition.state === "loading") {
+      hasLoaded.current = true;
+    }
+    if (hasLoaded && transition.state === "idle") {
+      hasLoaded.current = false;
+      setIsEditing(false);
+    }
+  }, [transition.state]);
 
   return (
     <div className="curriculum-container">

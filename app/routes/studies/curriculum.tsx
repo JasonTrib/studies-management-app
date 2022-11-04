@@ -1,9 +1,14 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { format, getMonth, getYear } from "date-fns";
 import _ from "lodash";
+import { useEffect, useRef, useState } from "react";
 import type { z } from "zod";
+import ActionButton from "~/components/buttons/ActionButton";
 import Curriculum from "~/components/Curriculum";
+import FormDatePicker from "~/components/form/FormDatePicker";
+import CogIcon from "~/components/icons/CogIcon";
 import Page from "~/components/layout/Page";
 import {
   getPostgradCurriculumCourses,
@@ -12,30 +17,36 @@ import {
 import {
   getStudiesCurriculum,
   updatePostgradStudiesCurriculum,
+  updateRegistrationPeriod,
   updateUndergradStudiesCurriculum,
 } from "~/DAO/studiesCurriculumDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
-import type { curriculumDataT } from "~/data/data";
-import { USER_ROLE } from "~/data/data";
-import styles from "~/styles/curriculum.css";
+import type { curriculumDataT, registrationPeriodT } from "~/data/data";
+import { registrationPeriodScaffold, USER_ROLE } from "~/data/data";
+import curriculumStyles from "~/styles/curriculum.css";
 import tableStyles from "~/styles/table.css";
 import { bc_studies_curriculum } from "~/utils/breadcrumbs";
+import { formatDate } from "~/utils/dateUtils";
 import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
+import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import {
   postgradCurriculumSchema,
+  registrationPeriodsSchema,
   undergradCurriculumSchema,
 } from "~/validations/schemas/studiesCurriculumSchemas.server";
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: curriculumStyles },
     { rel: "stylesheet", href: tableStyles },
   ];
 };
 
-type SchemaT = z.infer<typeof undergradCurriculumSchema>;
+type Schema1T = z.infer<typeof undergradCurriculumSchema>;
+type Schema2T = z.infer<typeof postgradCurriculumSchema>;
+type Schema3T = z.infer<typeof registrationPeriodsSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
   const user = await requireUser(request);
@@ -46,7 +57,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const body = Object.fromEntries(formData);
 
   if (body["_action"] === "undergradCurriculum") {
-    const form = validateFormData<SchemaT>(body, undergradCurriculumSchema);
+    const form = validateFormData<Schema1T>(body, undergradCurriculumSchema);
     if (!_.isEmpty(form.errors) || form.data === null) {
       return json(form, { status: 400 });
     }
@@ -75,7 +86,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     await updateUndergradStudiesCurriculum(user.dep_id, curriculumData);
   }
   if (body["_action"] === "postgradCurriculum") {
-    const form = validateFormData<SchemaT>(body, postgradCurriculumSchema);
+    const form = validateFormData<Schema2T>(body, postgradCurriculumSchema);
     if (!_.isEmpty(form.errors) || form.data === null) {
       return json(form, { status: 400 });
     }
@@ -96,6 +107,57 @@ export const action: ActionFunction = async ({ request, params }) => {
 
     await updatePostgradStudiesCurriculum(user.dep_id, curriculumData);
   }
+  if (body["_action"] === "registrationPeriod") {
+    const bodyData = {
+      fallSemesterStart: new Date(`${body.fallSemesterStart}`),
+      fallSemesterEnd: new Date(`${body.fallSemesterEnd}`),
+      springSemesterStart: new Date(`${body.springSemesterStart}`),
+      springSemesterEnd: new Date(`${body.springSemesterEnd}`),
+    };
+
+    const form = validateFormData<Schema3T>(bodyData, registrationPeriodsSchema);
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
+
+    const studiesCurriculum = await getStudiesCurriculum(user.dep_id);
+    if (!studiesCurriculum) throw new Error();
+
+    let registrationPeriods = registrationPeriodScaffold;
+    if (
+      studiesCurriculum.registration_periods &&
+      typeof studiesCurriculum.registration_periods === "object" &&
+      !Array.isArray(studiesCurriculum.registration_periods) &&
+      studiesCurriculum.registration_periods !== null
+    ) {
+      registrationPeriods = studiesCurriculum.registration_periods as registrationPeriodT;
+    }
+
+    const filterPastDate = (date: Date) =>
+      date.getTime() >= Date.now() ? date.toISOString() : undefined;
+
+    const fallSemesterStart =
+      filterPastDate(form.data.fallSemesterStart) || registrationPeriods.fallSemester.startDate;
+    const fallSemesterEnd =
+      filterPastDate(form.data.fallSemesterEnd) || registrationPeriods.fallSemester.endDate;
+    const springSemesterStart =
+      filterPastDate(form.data.springSemesterStart) || registrationPeriods.springSemester.startDate;
+    const springSemesterEnd =
+      filterPastDate(form.data.springSemesterEnd) || registrationPeriods.springSemester.startDate;
+
+    const registrationData: registrationPeriodT = {
+      fallSemester: {
+        startDate: fallSemesterStart,
+        endDate: fallSemesterEnd,
+      },
+      springSemester: {
+        startDate: springSemesterStart,
+        endDate: springSemesterEnd,
+      },
+    };
+
+    await updateRegistrationPeriod(user.dep_id, registrationData);
+  }
 
   return null;
 };
@@ -106,6 +168,7 @@ type LoaderDataT = {
   postgradCourses: Awaited<ReturnType<typeof getPostgradCurriculumCourses>>;
   undergradCurriculum: curriculumDataT | [];
   postgradCurriculum: curriculumDataT | [];
+  registrationPeriods: registrationPeriodT;
   userRole: UserModelT["role"];
 };
 
@@ -117,6 +180,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const postgradCourses = await getPostgradCurriculumCourses(user.dep_id);
   const studiesCurriculum = await getStudiesCurriculum(user.dep_id);
 
+  let registrationPeriods = registrationPeriodScaffold;
   let undergradCurriculum: curriculumDataT = [];
   let postgradCurriculum: curriculumDataT = [];
   if (
@@ -133,6 +197,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   ) {
     postgradCurriculum = studiesCurriculum.postgrad as curriculumDataT;
   }
+  if (
+    studiesCurriculum?.registration_periods &&
+    typeof studiesCurriculum?.registration_periods === "object" &&
+    !Array.isArray(studiesCurriculum?.registration_periods) &&
+    studiesCurriculum?.registration_periods !== null
+  ) {
+    registrationPeriods = studiesCurriculum?.registration_periods as registrationPeriodT;
+  }
 
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_studies_curriculum(path);
@@ -142,9 +214,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     postgradCourses,
     undergradCurriculum,
     postgradCurriculum,
+    registrationPeriods,
     userRole: user.role,
   };
 };
+
+type ActionDataT = FormValidationT<Schema3T> | undefined;
 
 const StudiesCurriculumPage = () => {
   const {
@@ -153,9 +228,52 @@ const StudiesCurriculumPage = () => {
     postgradCourses,
     undergradCurriculum,
     postgradCurriculum,
+    registrationPeriods,
     userRole,
   } = useLoaderData() as LoaderDataT;
+  const transition = useTransition();
+  const isBusy = transition.state !== "idle";
+  const actionData = useActionData() as ActionDataT;
+  const [isEditing, setIsEditing] = useState(false);
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
+  const hasLoaded = useRef(false);
+
+  useEffect(() => {
+    if (transition.state === "loading") {
+      hasLoaded.current = true;
+    }
+    if (hasLoaded && transition.state === "idle") {
+      hasLoaded.current = false;
+      if (!actionData?.errors) {
+        setIsEditing(false);
+      }
+    }
+  }, [transition.state, actionData?.errors]);
+
+  const evaluateDate = (dateIso?: string) => {
+    return dateIso ? formatDate(new Date(dateIso)) : "(Date not set)";
+  };
+  const dateToDateInputValid = (dateIso?: string) => {
+    return dateIso ? format(new Date(dateIso), "yyyy-MM-dd") : undefined;
+  };
+
+  const formattedDates = {
+    fallStart: dateToDateInputValid(registrationPeriods.fallSemester.startDate),
+    fallEnd: dateToDateInputValid(registrationPeriods.fallSemester.endDate),
+    springStart: dateToDateInputValid(registrationPeriods.springSemester.startDate),
+    springEnd: dateToDateInputValid(registrationPeriods.springSemester.endDate),
+    now: dateToDateInputValid(new Date().toISOString()),
+  };
+
+  let earliestValidDate;
+  let latestValidDate;
+  if (getMonth(new Date()) < 5) {
+    earliestValidDate = _.max([`${getYear(new Date())}-02-01`, formattedDates.now]);
+    latestValidDate = `${getYear(new Date())}-05-31`;
+  } else {
+    earliestValidDate = _.max([`${getYear(new Date()) + 1}-02-01`, formattedDates.now]);
+    latestValidDate = `${getYear(new Date()) + 1}-05-31`;
+  }
 
   return (
     <Page breadcrumbs={breadcrumbData} wide>
@@ -174,6 +292,119 @@ const StudiesCurriculumPage = () => {
           variant={"postgradCurriculum"}
           showAction={isPriviledged}
         />
+        <div className="registration-periods-container">
+          <Form method="post" action={`/studies/curriculum`}>
+            <div className="heading">
+              <h3>Registration periods</h3>
+              <div className="actions">
+                {isEditing ? (
+                  <>
+                    <ActionButton
+                      className="action-btn"
+                      disabled={isBusy}
+                      variant="primary"
+                      type="submit"
+                    >
+                      SUBMIT
+                    </ActionButton>
+                    <ActionButton
+                      className="action-btn"
+                      onClick={() => setIsEditing(false)}
+                      variant="cancel"
+                    >
+                      CANCEL
+                    </ActionButton>
+                    <input type="hidden" id="_action" name="_action" value={"registrationPeriod"} />
+                  </>
+                ) : (
+                  <div className="svg-btn" onClick={() => setIsEditing(true)}>
+                    <CogIcon />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="content">
+              <div className="body">
+                <div className="label">Fall semester</div>
+                <div className="registration-period">
+                  {isEditing ? (
+                    <>
+                      <div className="registration-date-edit">
+                        <FormDatePicker
+                          label="fallSemesterStart"
+                          min={_.max([`${getYear(new Date())}-09-01`, formattedDates.now])}
+                          max={`${getYear(new Date())}-12-31`}
+                          defaultValue={formattedDates.fallStart}
+                          disabled={isBusy}
+                          error={actionData?.errors?.fallSemesterStart}
+                        />
+                      </div>
+                      <div className="date-separator">-</div>
+                      <div className="registration-date-edit">
+                        <FormDatePicker
+                          label="fallSemesterEnd"
+                          min={_.max([`${getYear(new Date())}-09-01`, formattedDates.now])}
+                          max={`${getYear(new Date())}-12-31`}
+                          defaultValue={formattedDates.fallEnd}
+                          disabled={isBusy}
+                          error={actionData?.errors?.fallSemesterEnd}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="registration-date">
+                        {evaluateDate(registrationPeriods.fallSemester.startDate)}
+                      </div>
+                      <div className="date-separator">-</div>
+                      <div className="registration-date end-date">
+                        {evaluateDate(registrationPeriods.fallSemester.endDate)}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="label">Spring semester</div>
+                <div className="registration-period">
+                  {isEditing ? (
+                    <>
+                      <div className="registration-date-edit">
+                        <FormDatePicker
+                          label="springSemesterStart"
+                          min={earliestValidDate}
+                          max={latestValidDate}
+                          defaultValue={formattedDates.springStart}
+                          disabled={isBusy}
+                          error={actionData?.errors?.springSemesterStart}
+                        />
+                      </div>
+                      <div className="date-separator">-</div>
+                      <div className="registration-date-edit">
+                        <FormDatePicker
+                          label="springSemesterEnd"
+                          min={earliestValidDate}
+                          max={latestValidDate}
+                          defaultValue={formattedDates.springEnd}
+                          disabled={isBusy}
+                          error={actionData?.errors?.springSemesterEnd}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="registration-date">
+                        {evaluateDate(registrationPeriods.springSemester.startDate)}
+                      </div>
+                      <div className="date-separator">-</div>
+                      <div className="registration-date end-date">
+                        {evaluateDate(registrationPeriods.springSemester.endDate)}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Form>
+        </div>
       </>
     </Page>
   );

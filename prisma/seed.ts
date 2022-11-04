@@ -276,6 +276,7 @@ async function upsertStudiesCurriculum() {
         dep_id: studiesCurriculums[i].depId,
         undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
         postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
+        registration_periods: studiesCurriculums[i].registrationPeriods as Prisma.JsonObject,
       },
     });
   }
@@ -445,6 +446,7 @@ async function createStudiesCurriculum() {
         dep_id: studiesCurriculums[i].depId,
         undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
         postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
+        registration_periods: studiesCurriculums[i].registrationPeriods as Prisma.JsonObject,
       },
     });
   }

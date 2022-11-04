@@ -12,6 +12,11 @@ import FormTextarea from "~/components/form/FormTextarea";
 import BarePage from "~/components/layout/BarePage";
 import type { departmentWithUserDataT } from "~/DAO/departmentDAO.server";
 import { createDepartmentWithSuperadmin } from "~/DAO/departmentDAO.server";
+import {
+  INIT_POSTGRAD_CURRICULUM,
+  INIT_REGISTRATION_PERIODS,
+  INIT_UNDERGRAD_CURRICULUM,
+} from "~/data/initializationData";
 import formStyles from "~/styles/form.css";
 import { createUserSession, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
@@ -51,6 +56,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     username: form.data.username,
     password: await bcrypt.hash(form.data.password, 10),
     role: "SUPERADMIN",
+    undergrad: INIT_UNDERGRAD_CURRICULUM,
+    postgrad: INIT_POSTGRAD_CURRICULUM,
+    registration_periods: INIT_REGISTRATION_PERIODS,
   };
 
   await createDepartmentWithSuperadmin(data);
