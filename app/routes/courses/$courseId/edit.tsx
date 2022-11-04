@@ -25,7 +25,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import modalStyles from "~/styles/modal.css";
 import { bc_courses_id_edit } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";

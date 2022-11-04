@@ -2,7 +2,7 @@ import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { deleteUser, getUser } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request, params }) => {

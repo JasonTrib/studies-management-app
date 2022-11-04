@@ -6,7 +6,7 @@ import { getCourseIdFromAnnouncement } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {

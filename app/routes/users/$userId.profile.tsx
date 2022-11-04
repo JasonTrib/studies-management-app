@@ -28,7 +28,7 @@ import modalStyles from "~/styles/modal.css";
 import profileStyles from "~/styles/profile.css";
 import { bc_users_id_profile } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {

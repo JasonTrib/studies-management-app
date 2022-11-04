@@ -14,7 +14,7 @@ import { getProfessorId } from "~/DAO/professorDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_courses_id_anns_new } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";

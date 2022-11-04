@@ -17,7 +17,7 @@ import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { bc_courses_id_anns_id } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 type LoaderDataT = {

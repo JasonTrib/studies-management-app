@@ -15,7 +15,7 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
 import { bc_courses_id_anns } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {

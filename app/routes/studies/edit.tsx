@@ -15,6 +15,7 @@ import {
 } from "~/DAO/studiesCurriculumDAO.server";
 import type { curriculumDataT, registrationPeriodT } from "~/data/data";
 import { registrationPeriodScaffold, USER_ROLE } from "~/data/data";
+import { isObject } from "~/utils/utils";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import { validateFormData } from "~/validations/formValidation.server";
@@ -104,12 +105,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     if (!studiesCurriculum) throw new Error();
 
     let registrationPeriods = registrationPeriodScaffold;
-    if (
-      studiesCurriculum.registration_periods &&
-      typeof studiesCurriculum.registration_periods === "object" &&
-      !Array.isArray(studiesCurriculum.registration_periods) &&
-      studiesCurriculum.registration_periods !== null
-    ) {
+    if (isObject(studiesCurriculum.registration_periods)) {
       registrationPeriods = studiesCurriculum.registration_periods as registrationPeriodT;
     }
 

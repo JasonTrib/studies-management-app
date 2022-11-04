@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { getProfessor } from "~/DAO/professorDAO.server";
-import { paramToInt } from "~/utils/paramToInt";
+import { paramToInt } from "~/utils/utils";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const id = paramToInt(params.profId);

@@ -21,6 +21,7 @@ import curriculumStyles from "~/styles/curriculum.css";
 import tableStyles from "~/styles/table.css";
 import { bc_studies } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
+import { isObject } from "~/utils/utils";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
@@ -57,26 +58,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let registrationPeriods = registrationPeriodScaffold;
   let undergradCurriculum: curriculumDataT = [];
   let postgradCurriculum: curriculumDataT = [];
-  if (
-    studiesCurriculum?.undergrad &&
-    typeof studiesCurriculum?.undergrad === "object" &&
-    Array.isArray(studiesCurriculum?.undergrad)
-  ) {
+  if (studiesCurriculum && Array.isArray(studiesCurriculum.undergrad)) {
     undergradCurriculum = studiesCurriculum.undergrad as curriculumDataT;
   }
-  if (
-    studiesCurriculum?.postgrad &&
-    typeof studiesCurriculum?.postgrad === "object" &&
-    Array.isArray(studiesCurriculum?.postgrad)
-  ) {
+  if (studiesCurriculum && Array.isArray(studiesCurriculum.postgrad)) {
     postgradCurriculum = studiesCurriculum.postgrad as curriculumDataT;
   }
-  if (
-    studiesCurriculum?.registration_periods &&
-    typeof studiesCurriculum?.registration_periods === "object" &&
-    !Array.isArray(studiesCurriculum?.registration_periods) &&
-    studiesCurriculum?.registration_periods !== null
-  ) {
+  if (isObject(studiesCurriculum?.registration_periods)) {
     registrationPeriods = studiesCurriculum?.registration_periods as registrationPeriodT;
   }
 
