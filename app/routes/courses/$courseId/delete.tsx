@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { deleteCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { paramToInt } from "~/utils/paramToInt";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   await deleteCourse(courseId);
 

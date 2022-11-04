@@ -2,7 +2,7 @@ import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { deleteDepartment } from "~/DAO/departmentDAO.server";
 import { USER_ROLE } from "~/data/data";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.SUPERADMIN);
+  preventUnlessHasAccess(user.role, USER_ROLE.SUPERADMIN);
 
   if (user.dep_id === depId) throw new Response("Method Not Allowed", { status: 405 });
 

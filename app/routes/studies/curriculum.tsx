@@ -21,7 +21,7 @@ import curriculumStyles from "~/styles/curriculum.css";
 import tableStyles from "~/styles/table.css";
 import { bc_studies_curriculum } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import type { registrationPeriodsSchema } from "~/validations/schemas/studiesCurriculumSchemas.server";
@@ -48,7 +48,7 @@ type LoaderDataT = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR, "/studies");
 
   const undergradCourses = await getUndergradCurriculumCourses(user.dep_id);
   const postgradCourses = await getPostgradCurriculumCourses(user.dep_id);

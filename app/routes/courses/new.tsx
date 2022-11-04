@@ -11,7 +11,7 @@ import { createCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_courses_new } from "~/utils/breadcrumbs";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -26,7 +26,7 @@ type SchemaT = z.infer<typeof courseSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const form = await extractAndValidateFormData<SchemaT>(request, courseSchema);
 
@@ -68,7 +68,7 @@ type LoaderDataT = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_courses_new(path);

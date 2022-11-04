@@ -17,7 +17,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import type { bc_courses_id_edit } from "~/utils/breadcrumbs";
 import { bc_deps_id_edit } from "~/utils/breadcrumbs";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const form = await extractAndValidateFormData<SchemaT>(request, editDepartmentSchema);
   if (!_.isEmpty(form.errors) || form.data === null) {
@@ -88,7 +88,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const department = await getDepartment(depId);
   if (department == null) throw new Response("Not Found", { status: 404 });

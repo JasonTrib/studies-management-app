@@ -15,7 +15,7 @@ import {
 } from "~/DAO/studiesCurriculumDAO.server";
 import type { curriculumDataT, registrationPeriodT } from "~/data/data";
 import { registrationPeriodScaffold, USER_ROLE } from "~/data/data";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import {
@@ -31,7 +31,7 @@ type Schema3T = z.infer<typeof registrationPeriodsSchema>;
 export const action: ActionFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const formData = await request.formData();
   const body = Object.fromEntries(formData);

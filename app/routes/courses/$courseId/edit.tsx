@@ -30,7 +30,7 @@ import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
 import { courseSchema } from "~/validations/schemas/courseSchema.server";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 
 export const links: LinksFunction = () => {
   return [
@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
@@ -117,7 +117,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+  preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
   const course = await getCourse(courseId);
   if (!course) throw new Response("Not Found", { status: 404 });

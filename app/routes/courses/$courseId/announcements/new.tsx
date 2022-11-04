@@ -15,7 +15,7 @@ import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_courses_id_anns_new } from "~/utils/breadcrumbs";
 import { paramToInt } from "~/utils/paramToInt";
-import { throwUnlessHasAccess } from "~/utils/permissionUtils.server";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
-  throwUnlessHasAccess(user.role, USER_ROLE.PROFESSOR);
+  preventUnlessHasAccess(user.role, USER_ROLE.PROFESSOR);
 
   const form = await extractAndValidateFormData<SchemaT>(request, newAnnouncementSchema);
 
