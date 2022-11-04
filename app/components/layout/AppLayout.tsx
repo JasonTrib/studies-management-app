@@ -7,6 +7,7 @@ import AnnouncementIcon from "../icons/AnnouncementIcon";
 import AvatarIcon from "../icons/AvatarIcon";
 import CoursesIcon from "../icons/CoursesIcon";
 import DepartmentIcon from "../icons/DepartmentIcon";
+import GradIcon from "../icons/GradIcon";
 import LogoutIcon from "../icons/LogoutIcon";
 import MyCoursesIcon from "../icons/MyCoursesIcon";
 import UsersIcon from "../icons/UsersIcon";
@@ -27,6 +28,8 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
   if (userInfo.gender === "F") avatarColor = "gender-female";
   const showMyCourses =
     userInfo.role === USER_ROLE.STUDENT || userInfo.role === USER_ROLE.PROFESSOR;
+  const showStudies =
+    userInfo.role === USER_ROLE.REGISTRAR || userInfo.role === USER_ROLE.SUPERADMIN;
 
   return (
     <div className="app-container">
@@ -65,6 +68,14 @@ const AppLayout: FC<AppLayoutT> = ({ userInfo, children }) => {
               The department
             </div>
           </Link>
+          {showStudies && (
+            <Link to="/studies">
+              <div className="quicklink">
+                <GradIcon width={20} height={20} />
+                Studies
+              </div>
+            </Link>
+          )}
           <Link to="/users">
             <div className="quicklink">
               <UsersIcon width={20} height={20} />

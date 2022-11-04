@@ -142,5 +142,5 @@ export const action: ActionFunction = async ({ request, params }) => {
     await updateRegistrationPeriod(user.dep_id, registrationData);
   }
 
-  return redirect("studies/curriculum");
+  return redirect("/studies");
 };
