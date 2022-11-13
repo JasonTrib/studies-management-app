@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getMonth, getYear } from "date-fns";
+import Container from "~/components/Container";
 import CourseRegistration from "~/components/CourseRegistration";
 import Page from "~/components/layout/Page";
 import {
@@ -92,15 +93,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const isRegistrationPeriod = isFallRegistration || isSpringRegistration;
 
   if (!isRegistrationPeriod) {
-    return json({ ...returnScaffold, diagnostic: "Course registration is closed" });
+    return json({ ...returnScaffold, diagnostic: "⚠ Course registration is closed" });
   } else if (user.role !== USER_ROLE.STUDENT) {
-    return json({ ...returnScaffold, diagnostic: "Course registration is open for students" });
+    return json({ ...returnScaffold, diagnostic: "⚠ Course registration is open for students" });
   }
 
   const student = await getStudentFromUserId(user.id);
   if (!student) throw new Error();
   if (student.studies_status === "ALUM") {
-    return json({ ...returnScaffold, diagnostic: "Cannot register to courses" });
+    return json({ ...returnScaffold, diagnostic: "⚠ Cannot register to courses" });
   }
   const isUndergrad = student.studies_status === "UNDERGRADUATE";
   const isPostgrad = student.studies_status === "POSTGRADUATE";
@@ -167,8 +168,14 @@ const CourseRegistrationIndexPage = () => {
   return (
     <Page breadcrumbs={breadcrumbData} wide>
       <>
-        <CourseRegistration title="Available courses" courses={coursesAvailable} />
-        <CourseRegistration title="Drafted courses" courses={coursesDrafted} />
+        {diagnostic ? (
+          <Container title={diagnostic} />
+        ) : (
+          <>
+            <CourseRegistration title="Available courses" courses={coursesAvailable} />
+            <CourseRegistration title="Drafted courses" courses={coursesDrafted} />
+          </>
+        )}
       </>
     </Page>
   );
