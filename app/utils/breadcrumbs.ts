@@ -264,3 +264,14 @@ export const bc_studies = async (path: string) => {
 
   return crumbBuilder(pathSegs, textSegs);
 };
+
+export const bc_studies_registration = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Studies", isLink: false },
+    { text: "Course registration", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};

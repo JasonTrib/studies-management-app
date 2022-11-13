@@ -101,6 +101,7 @@ model StudentCourse {
   grade        Float?
   is_enrolled  Boolean
   is_following Boolean
+  is_drafted   Boolean
 
   student Student @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)

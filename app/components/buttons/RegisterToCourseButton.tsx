@@ -4,7 +4,7 @@ import ActionButton from "./ActionButton";
 
 const RegisterToCourseButton: FC = () => {
   return (
-    <Link to="/courses">
+    <Link to="/studies/course-registration">
       <ActionButton>Register to a course ↗</ActionButton>
     </Link>
   );

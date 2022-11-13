@@ -189,6 +189,7 @@ async function upsertStudentCourses() {
         grade: studentCourses[i].grade,
         is_enrolled: studentCourses[i].isEnrolled,
         is_following: studentCourses[i].isFollowing,
+        is_drafted: studentCourses[i].isDrafted,
       },
     });
   }
@@ -378,6 +379,7 @@ async function createStudentCourses() {
         grade: studentCourses[i].grade,
         is_enrolled: studentCourses[i].isEnrolled,
         is_following: studentCourses[i].isFollowing,
+        is_drafted: studentCourses[i].isDrafted,
       },
     });
   }

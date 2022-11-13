@@ -6,6 +6,7 @@ export const studentCourses: {
   grade: StudentCourse["grade"];
   isEnrolled: StudentCourse["is_enrolled"];
   isFollowing: StudentCourse["is_following"];
+  isDrafted: StudentCourse["is_drafted"];
 }[] = [
   {
     studentId: 1,
@@ -13,6 +14,7 @@ export const studentCourses: {
     grade: 4,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 1,
@@ -20,6 +22,7 @@ export const studentCourses: {
     grade: 6,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 1,
@@ -27,6 +30,7 @@ export const studentCourses: {
     grade: 3,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 1,
@@ -34,6 +38,7 @@ export const studentCourses: {
     grade: 9,
     isEnrolled: true,
     isFollowing: false,
+    isDrafted: false,
   },
   {
     studentId: 1,
@@ -41,6 +46,7 @@ export const studentCourses: {
     grade: 6,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -48,6 +54,7 @@ export const studentCourses: {
     grade: 7,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -55,6 +62,7 @@ export const studentCourses: {
     grade: 8,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -62,6 +70,7 @@ export const studentCourses: {
     grade: null,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -69,6 +78,7 @@ export const studentCourses: {
     grade: 10,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -76,6 +86,7 @@ export const studentCourses: {
     grade: 9,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -83,6 +94,7 @@ export const studentCourses: {
     grade: 5,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 2,
@@ -90,6 +102,7 @@ export const studentCourses: {
     grade: 6,
     isEnrolled: true,
     isFollowing: false,
+    isDrafted: false,
   },
   {
     studentId: 3,
@@ -97,6 +110,7 @@ export const studentCourses: {
     grade: null,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 5,
@@ -104,6 +118,7 @@ export const studentCourses: {
     grade: 2,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 5,
@@ -111,6 +126,7 @@ export const studentCourses: {
     grade: 6,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 5,
@@ -118,6 +134,7 @@ export const studentCourses: {
     grade: 7,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 5,
@@ -125,6 +142,7 @@ export const studentCourses: {
     grade: null,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 5,
@@ -132,6 +150,7 @@ export const studentCourses: {
     grade: 8,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 6,
@@ -139,6 +158,7 @@ export const studentCourses: {
     grade: null,
     isEnrolled: false,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 6,
@@ -146,6 +166,7 @@ export const studentCourses: {
     grade: null,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
   {
     studentId: 6,
@@ -153,5 +174,6 @@ export const studentCourses: {
     grade: null,
     isEnrolled: true,
     isFollowing: true,
+    isDrafted: false,
   },
 ];

@@ -1,0 +1,45 @@
+.course-registration-container {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  margin-bottom: 16px;
+}
+.course-registration-container table {
+  margin-bottom: 0;
+}
+.course-registration-container table td {
+  text-align: center;
+}
+.course-registration-container .text-start {
+  text-align: start;
+}
+.course-registration-container .heading {
+  box-shadow: 0px 1px 0px var(--color-shadow);
+  margin-bottom: 1px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.course-registration-container .heading h3 {
+  font-size: 21px;
+  color: var(--color-text-light);
+}
+.course-registration-container .heading .actions {
+  display: flex;
+  column-gap: 8px;
+  user-select: none;
+}
+.course-registration-container .heading .actions .action-btn {
+  height: 26px;
+}
+.course-registration-container .content {
+  padding: 12px;
+}
+.course-registration-container .content .body {
+  display: flex;
+  position: relative;
+}
+
+/*# sourceMappingURL=course-registration.css.map */

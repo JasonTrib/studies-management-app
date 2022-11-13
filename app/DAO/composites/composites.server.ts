@@ -5,6 +5,8 @@ import {
   getCourse,
   getCourses,
   getCoursesCount,
+  getCoursesForPostgradRegistration,
+  getCoursesForUndergradRegistration,
   getPostgradCourses,
   getUndergradCourses,
 } from "../courseDAO.server";
@@ -543,4 +545,66 @@ export async function getPostgradCurriculumCourses(depId: Department["code_id"])
   const postgradCurriculumData = [...scaffold];
 
   return postgradCurriculumData;
+}
+
+export async function getStudentCoursesForUndergradRegistration(
+  depId: Department["code_id"],
+  studentId: Student["id"],
+  semester: number,
+) {
+  const courses = await getCoursesForUndergradRegistration(depId, semester);
+  const studentCourses = await getStudentCourses(studentId);
+  const profCourses = await getAllProfessorCoursesLectured();
+
+  const coursesExtended = courses
+    .map((course) => {
+      const matchingCourse = studentCourses.find(
+        (studCourse) => course.id === studCourse.course_id,
+      );
+      const professors = profCourses.filter((profCourse) => course.id === profCourse.course_id);
+
+      return {
+        ...course,
+        professors: professors.map((prof) => ({
+          id: prof.professor.id,
+          fullname: prof.professor.user.profile?.fullname,
+        })),
+        grade: matchingCourse?.grade || null,
+        isDrafted: matchingCourse?.is_drafted || false,
+      };
+    })
+    .filter((x) => x);
+
+  return coursesExtended;
+}
+
+export async function getStudentCoursesForPostgradRegistration(
+  depId: Department["code_id"],
+  studentId: Student["id"],
+  semester: number,
+) {
+  const courses = await getCoursesForPostgradRegistration(depId, semester);
+  const studentCourses = await getStudentCourses(studentId);
+  const profCourses = await getAllProfessorCoursesLectured();
+
+  const coursesExtended = courses
+    .map((course) => {
+      const matchingCourse = studentCourses.find(
+        (studCourse) => course.id === studCourse.course_id,
+      );
+      const professors = profCourses.filter((profCourse) => course.id === profCourse.course_id);
+
+      return {
+        ...course,
+        professors: professors.map((prof) => ({
+          id: prof.professor.id,
+          fullname: prof.professor.user.profile?.fullname,
+        })),
+        grade: matchingCourse?.grade || null,
+        isDrafted: matchingCourse?.is_drafted || false,
+      };
+    })
+    .filter((x) => x);
+
+  return coursesExtended;
 }
