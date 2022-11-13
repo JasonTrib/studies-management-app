@@ -2,11 +2,11 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import AppLayout from "~/components/layout/AppLayout";
 import Box, { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
+import AppLayout from "~/components/layout/AppLayout";
 import Page from "~/components/layout/Page";
 import { getAnnouncements } from "~/DAO/announcementDAO.server";
 import {
@@ -17,10 +17,16 @@ import {
 } from "~/DAO/composites/composites.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getProfile } from "~/DAO/profileDAO.server";
-import { getStudentId } from "~/DAO/studentDAO.server";
+import { getStudentFromUserId } from "~/DAO/studentDAO.server";
+import { getStudiesCurriculum } from "~/DAO/studiesCurriculumDAO.server";
 import { USER_ROLE } from "~/data/data";
 import styles from "~/styles/index.css";
 import { logout, requireUser } from "~/utils/session.server";
+import { getCurrentRegistration } from "~/utils/utils";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }, ...ContainerLinks(), ...BoxLinks()];
+};
 
 export type LoaderDataT = {
   announcements: Awaited<
@@ -31,6 +37,7 @@ export type LoaderDataT = {
     >
   >;
   coursesRegistered: Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>;
+  canStudentRegister: boolean;
   userInfo: {
     username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
     role: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
@@ -39,16 +46,13 @@ export type LoaderDataT = {
   };
 };
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }, ...ContainerLinks(), ...BoxLinks()];
-};
-
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
 
   let coursesRegistered;
   let announcements;
+  let canStudentRegister = false;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
@@ -62,11 +66,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       coursesRegistered = await getCoursesLecturing(prof.id);
       break;
     case USER_ROLE.STUDENT:
-      const student = await getStudentId(user.id);
+      const student = await getStudentFromUserId(user.id);
       if (!student) throw new Error();
 
       announcements = await getAnnouncementsFollowedAsStudent(student.id);
       coursesRegistered = await getCoursesEnrolled(student.id);
+
+      if (student.studies_status !== "ALUM") {
+        const dateNow = new Date();
+        const studiesCurriculum = await getStudiesCurriculum(user.dep_id);
+        const { isFallRegistration, isSpringRegistration } = getCurrentRegistration(
+          studiesCurriculum,
+          dateNow,
+        );
+        canStudentRegister = isFallRegistration || isSpringRegistration;
+      }
+
       break;
     default:
       throw new Response("Unauthorized", { status: 401 });
@@ -76,6 +91,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json({
     announcements,
     coursesRegistered,
+    canStudentRegister,
     userInfo: {
       username: user.username,
       role: user.role,
@@ -86,7 +102,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Index() {
-  const { announcements, coursesRegistered, userInfo } = useLoaderData() as LoaderDataT;
+  const { announcements, coursesRegistered, canStudentRegister, userInfo } =
+    useLoaderData() as LoaderDataT;
   const isPriviledged =
     userInfo.role === USER_ROLE.REGISTRAR || userInfo.role === USER_ROLE.SUPERADMIN;
   const isStudent = userInfo.role === USER_ROLE.STUDENT;
@@ -119,7 +136,7 @@ export default function Index() {
               footerLink={{
                 directTo: "/my-courses",
               }}
-              Button={isStudent ? <RegisterToCourseButton /> : undefined}
+              Button={isStudent && canStudentRegister ? <RegisterToCourseButton /> : undefined}
             >
               <CoursesList />
             </Container>

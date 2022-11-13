@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { addDays, format, getMonth, getYear } from "date-fns";
+import { getMonth, getYear } from "date-fns";
 import CourseRegistration from "~/components/CourseRegistration";
 import Page from "~/components/layout/Page";
 import {
@@ -11,16 +11,15 @@ import {
 import { getProfile } from "~/DAO/profileDAO.server";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { getStudentFromUserId } from "~/DAO/studentDAO.server";
-import type { StudiesCurriculumModelT } from "~/DAO/studiesCurriculumDAO.server";
 import { getStudiesCurriculum } from "~/DAO/studiesCurriculumDAO.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
-import type { curriculumDataT, registrationPeriodT } from "~/data/data";
-import { registrationPeriodScaffold, USER_ROLE } from "~/data/data";
+import type { curriculumDataT } from "~/data/data";
+import { USER_ROLE } from "~/data/data";
 import courseRegistrationStyles from "~/styles/course-registration.css";
 import tableStyles from "~/styles/table.css";
 import { bc_studies_registration } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
-import { isObject } from "~/utils/utils";
+import { getCurrentRegistration } from "~/utils/utils";
 
 export const links: LinksFunction = () => {
   return [
@@ -39,28 +38,6 @@ const coursesPerSemester = [
   { electives: 0, passed: 0, drafted: 0 },
   { electives: 0, passed: 0, drafted: 0 },
 ];
-
-const getCurrentRegistration = (
-  studiesCurriculum: StudiesCurriculumModelT | null,
-  dateNow: Date,
-) => {
-  let registrationPeriods = registrationPeriodScaffold;
-  if (isObject(studiesCurriculum?.registration_periods)) {
-    registrationPeriods = studiesCurriculum?.registration_periods as registrationPeriodT;
-  }
-  const dateStringNow = dateNow.toISOString();
-
-  const isFallRegistration =
-    format(new Date(registrationPeriods.fallSemester.startDate), "yyyy-MM-dd") < dateStringNow &&
-    dateStringNow <
-      format(addDays(new Date(registrationPeriods.fallSemester.endDate), 1), "yyyy-MM-dd");
-  const isSpringRegistration =
-    format(new Date(registrationPeriods.springSemester.startDate), "yyyy-MM-dd") < dateStringNow &&
-    dateStringNow <
-      format(addDays(new Date(registrationPeriods.springSemester.endDate), 1), "yyyy-MM-dd");
-
-  return { isFallRegistration, isSpringRegistration };
-};
 
 const calcStudentSemester = (enrollmentYear: StudentModelT["enrollment_year"], dateNow: Date) => {
   if (
