@@ -7,6 +7,10 @@
   table {
     td {
       text-align: center;
+
+      &.action-cell {
+        padding: 0;
+      }
     }
     margin-bottom: 0;
   }
@@ -28,16 +32,6 @@
       font-size: 21px;
       color: var(--color-text-light);
     }
-
-    .actions {
-      display: flex;
-      column-gap: 8px;
-      user-select: none;
-
-      .action-btn {
-        height: 26px;
-      }
-    }
   }
 
   .content {
@@ -46,6 +40,23 @@
     .body {
       display: flex;
       position: relative;
+    }
+
+    .action-box {
+      height: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .action-button {
+        height: 24px;
+        width: 24px;
+      }
+    }
+
+    .draft-submit {
+      width: 240px;
+      margin: 36px auto 12px;
     }
   }
 }

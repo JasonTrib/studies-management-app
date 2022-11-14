@@ -10,6 +10,9 @@
 .course-registration-container table td {
   text-align: center;
 }
+.course-registration-container table td.action-cell {
+  padding: 0;
+}
 .course-registration-container .text-start {
   text-align: start;
 }
@@ -26,20 +29,26 @@
   font-size: 21px;
   color: var(--color-text-light);
 }
-.course-registration-container .heading .actions {
-  display: flex;
-  column-gap: 8px;
-  user-select: none;
-}
-.course-registration-container .heading .actions .action-btn {
-  height: 26px;
-}
 .course-registration-container .content {
   padding: 12px;
 }
 .course-registration-container .content .body {
   display: flex;
   position: relative;
+}
+.course-registration-container .content .action-box {
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.course-registration-container .content .action-box .action-button {
+  height: 24px;
+  width: 24px;
+}
+.course-registration-container .content .draft-submit {
+  width: 240px;
+  margin: 36px auto 12px;
 }
 
 /*# sourceMappingURL=course-registration.css.map */
