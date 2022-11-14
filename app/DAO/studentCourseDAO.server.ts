@@ -157,6 +157,7 @@ export function assignStudentCourse(studentId: Student["id"], courseId: Course["
       course_id: courseId,
       is_following: true,
       is_enrolled: true,
+      is_drafted: false,
     },
   });
 }
@@ -177,6 +178,7 @@ export function followStudentCourse(studentId: Student["id"], courseId: Course["
       course_id: courseId,
       is_following: true,
       is_enrolled: false,
+      is_drafted: false,
     },
   });
 }
@@ -191,6 +193,41 @@ export function unfollowStudentCourse(studentId: Student["id"], courseId: Course
     },
     data: {
       is_following: false,
+    },
+  });
+}
+
+export function draftStudentCourse(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.upsert({
+    where: {
+      student_id_course_id: {
+        student_id: studentId,
+        course_id: courseId,
+      },
+    },
+    update: {
+      is_drafted: true,
+    },
+    create: {
+      student_id: studentId,
+      course_id: courseId,
+      is_following: false,
+      is_enrolled: false,
+      is_drafted: true,
+    },
+  });
+}
+
+export function undraftStudentCourse(studentId: Student["id"], courseId: Course["id"]) {
+  return prisma.studentCourse.update({
+    where: {
+      student_id_course_id: {
+        student_id: studentId,
+        course_id: courseId,
+      },
+    },
+    data: {
+      is_drafted: false,
     },
   });
 }

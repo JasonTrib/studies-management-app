@@ -1,8 +1,10 @@
+import { useTransition } from "@remix-run/react";
 import type { FC } from "react";
 import type {
-  getStudentCoursesForUndergradRegistration,
   getStudentCoursesForPostgradRegistration,
+  getStudentCoursesForUndergradRegistration,
 } from "~/DAO/composites/composites.server";
+import RegistrationAction from "./RegistrationAction";
 
 type CourseRegistrationT = {
   title?: string;
@@ -12,9 +14,14 @@ type CourseRegistrationT = {
       | typeof getStudentCoursesForPostgradRegistration
     >
   >;
+  available: number[];
+  variant: "pool" | "drafted";
 };
 
-const CourseRegistration: FC<CourseRegistrationT> = ({ title, courses }) => {
+const CourseRegistration: FC<CourseRegistrationT> = ({ title, courses, available, variant }) => {
+  const transition = useTransition();
+  const isBusy = transition.state !== "idle";
+
   return (
     <div className="course-registration-container">
       {title && (
@@ -24,36 +31,44 @@ const CourseRegistration: FC<CourseRegistrationT> = ({ title, courses }) => {
         </div>
       )}
       <div className="content">
-        <div className="body">
-          <table>
-            <colgroup>
-              <col />
-              <col />
-              <col className="col-small" />
-              <col className="col-small" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th className="text-start">Title</th>
-                <th className="text-start">Instructors</th>
-                <th className="text-start">Semester</th>
-                <th className="text-start"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course) => (
-                <tr key={course.id}>
-                  <td className="text-start">{course.title}</td>
-                  <td className="text-start">{course.professors.map((prof) => prof.fullname)}</td>
-                  <td>{course.semester}</td>
-                  <td>
-                    <button>X</button>
-                  </td>
+        {courses.length > 0 && (
+          <div className="body">
+            <table>
+              <colgroup>
+                <col />
+                <col />
+                <col className="col-small" />
+                <col className="col-small" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th className="text-start">Title</th>
+                  <th className="text-start">Instructors</th>
+                  <th className="text-start">Semester</th>
+                  <th className="text-start"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {courses.map((course) => (
+                  <tr key={course.id}>
+                    <td className="text-start">{course.title}</td>
+                    <td className="text-start">{course.professors.map((prof) => prof.fullname)}</td>
+                    <td>{course.semester}</td>
+                    <td>
+                      {(variant === "drafted" || available.find((x) => x === course.id)) && (
+                        <RegistrationAction
+                          courseId={course.id}
+                          isDisabled={isBusy}
+                          variant={variant === "pool" ? "draft" : "undraft"}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

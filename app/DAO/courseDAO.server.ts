@@ -135,6 +135,9 @@ export function getCoursesForUndergradRegistration(
         lte: semester,
       },
     },
+    orderBy: {
+      semester: "asc",
+    },
   });
 }
 
@@ -150,6 +153,9 @@ export function getCoursesForPostgradRegistration(
       semester: {
         lte: semester,
       },
+    },
+    orderBy: {
+      semester: "asc",
     },
   });
 }

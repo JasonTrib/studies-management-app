@@ -59,8 +59,9 @@ const calcStudentSemester = (enrollmentYear: StudentModelT["enrollment_year"], d
 type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_studies_registration>>;
   userRole: UserModelT["role"];
-  coursesAvailable: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>>;
+  coursesPool: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>>;
   coursesDrafted: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>>;
+  courseIdsAvailable: number[];
   diagnostic?: string;
 };
 
@@ -148,21 +149,28 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     }
   });
 
+  const coursesPool = studentCourses.filter((x) => !x.isDrafted && (!x.grade || x.grade < 5));
   const coursesDrafted = studentCourses.filter((x) => x.isDrafted);
-  let coursesAvailable: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>> = [];
 
-  const coursesAvailableCandidates = studentCourses.filter((x) => !x.isDrafted);
-  coursesAvailable = coursesAvailableCandidates.filter((course) =>
-    curriculum[course.semester - 1].semester.electives >
-    coursesPerSemester[course.semester - 1].passed + coursesPerSemester[course.semester - 1].drafted
-      ? true
-      : false,
-  );
+  const courseIdsAvailable = coursesPool
+    .map((course) =>
+      curriculum[course.semester - 1].semester.electives >
+      coursesPerSemester[course.semester - 1].passed +
+        coursesPerSemester[course.semester - 1].drafted
+        ? course.id
+        : null,
+    )
+    .filter((x) => x) as number[];
 
-  return json({ ...returnScaffold, coursesAvailable, coursesDrafted });
+  return json({
+    ...returnScaffold,
+    coursesPool,
+    coursesDrafted,
+    courseIdsAvailable,
+  });
 };
 const CourseRegistrationIndexPage = () => {
-  const { breadcrumbData, coursesAvailable, coursesDrafted, diagnostic } =
+  const { breadcrumbData, coursesPool, coursesDrafted, courseIdsAvailable, diagnostic } =
     useLoaderData() as LoaderDataT;
 
   return (
@@ -172,8 +180,18 @@ const CourseRegistrationIndexPage = () => {
           <Container title={diagnostic} />
         ) : (
           <>
-            <CourseRegistration title="Available courses" courses={coursesAvailable} />
-            <CourseRegistration title="Drafted courses" courses={coursesDrafted} />
+            <CourseRegistration
+              title="Courses pool"
+              courses={coursesPool}
+              available={courseIdsAvailable}
+              variant="pool"
+            />
+            <CourseRegistration
+              title="Drafted courses"
+              courses={coursesDrafted}
+              available={courseIdsAvailable}
+              variant="drafted"
+            />
           </>
         )}
       </>
