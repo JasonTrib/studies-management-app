@@ -1,18 +1,21 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import AppLayout from "~/components/layout/AppLayout";
+import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import { links as ContainerLinks } from "~/components/Container";
 import MyCoursesTable from "~/components/courses/MyCoursesTable";
+import AppLayout from "~/components/layout/AppLayout";
 import Page from "~/components/layout/Page";
 import Table, { links as TableLinks } from "~/components/Table";
 import { getCoursesEnrolled, getCoursesLecturing } from "~/DAO/composites/composites.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getProfile } from "~/DAO/profileDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
+import { getStudiesCurriculum } from "~/DAO/studiesCurriculumDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { bc_mycourses } from "~/utils/breadcrumbs";
 import { logout, requireUser } from "~/utils/session.server";
+import { getCurrentRegistration } from "~/utils/utils";
 
 type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_mycourses>>;
@@ -20,6 +23,7 @@ type LoaderDataT = {
     Awaited<ReturnType<typeof getCoursesLecturing | typeof getCoursesEnrolled>>,
     null
   >;
+  canRegisterToCourse: boolean;
   userInfo: {
     username: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["username"];
     role: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
@@ -37,6 +41,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (user === null) return logout(request);
 
   let coursesRegistered;
+  let canRegisterToCourse;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
@@ -50,6 +55,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       const student = await getStudentId(user.id);
       if (!student) throw new Error();
       coursesRegistered = await getCoursesEnrolled(student.id);
+
+      const dateNow = new Date();
+      const studiesCurriculum = await getStudiesCurriculum(user.dep_id);
+      const { isFallRegistration, isSpringRegistration } = getCurrentRegistration(
+        studiesCurriculum,
+        dateNow,
+      );
+      canRegisterToCourse = isFallRegistration || isSpringRegistration;
       break;
     default:
       throw new Response("Unauthorized", { status: 401 });
@@ -61,6 +74,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json({
     breadcrumbData,
     coursesRegistered,
+    canRegisterToCourse,
     userInfo: {
       username: user.username,
       role: user.role,
@@ -71,7 +85,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const MyCoursesPage = () => {
-  const { breadcrumbData, coursesRegistered, userInfo } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, coursesRegistered, canRegisterToCourse, userInfo } =
+    useLoaderData() as LoaderDataT;
 
   let noResultsMsg;
   switch (userInfo.role) {
@@ -87,9 +102,13 @@ const MyCoursesPage = () => {
       break;
   }
 
+  const headingActions = (): JSX.Element | null => {
+    return canRegisterToCourse ? <RegisterToCourseButton /> : null;
+  };
+
   return (
     <AppLayout userInfo={userInfo}>
-      <Page wide breadcrumbs={breadcrumbData}>
+      <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
         <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userInfo.role}>
           <MyCoursesTable />
         </Table>
