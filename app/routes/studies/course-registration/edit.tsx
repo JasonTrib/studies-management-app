@@ -7,7 +7,7 @@ import {
   undraftStudentCourse,
   unregisterStudentCourses,
 } from "~/DAO/studentCourseDAO.server";
-import { getStudentId } from "~/DAO/studentDAO.server";
+import { getStudentId, updateStudentRegistration } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { logout, requireUser } from "~/utils/session.server";
 import { paramToInt } from "~/utils/utils";
@@ -51,9 +51,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     // unregister non-drafted courses
     // register AND undraft drafted courses
     // register to semester's compulsory courses
+    // persist student's registration
     await unregisterStudentCourses(student.id, coursesToUnregister);
     await registerStudentCourses(student.id, electiveCoursesToRegister);
     await registerStudentCoursesCompulsories(user.dep_id, student.id, semester, isPostgrad);
+    await updateStudentRegistration(student.id, new Date().toISOString());
 
     return redirect("/my-courses");
   }

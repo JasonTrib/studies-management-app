@@ -71,3 +71,12 @@ export function getStudentFromUserId(userId: User["id"]) {
     },
   });
 }
+
+export function updateStudentRegistration(id: Student["id"], registrationDate: string) {
+  return prisma.student.update({
+    where: { id },
+    data: {
+      latest_registration: registrationDate,
+    },
+  });
+}

@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { getMonth, getYear } from "date-fns";
 import ActionButton from "~/components/buttons/ActionButton";
 import Container from "~/components/Container";
@@ -63,6 +63,7 @@ type LoaderDataT = {
   studentSemester: number;
   isPostgrad: boolean;
   diagnostic?: string;
+  showButton: boolean;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -81,8 +82,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       fullname: profile?.fullname,
       gender: profile?.gender,
     },
-    coursesAvailable: [],
+    coursesPool: [],
     coursesDrafted: [],
+    courseIdsAvailable: [],
+    studentSemester: 0,
+    isPostgrad: false,
+    showButton: true,
   };
 
   const dateNow = new Date();
@@ -94,15 +99,29 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const isRegistrationPeriod = isFallRegistration || isSpringRegistration;
 
   if (!isRegistrationPeriod) {
-    return json({ ...returnScaffold, diagnostic: "⚠ Course registration is closed" });
+    return json({ ...returnScaffold, diagnostic: "Course registration is closed" });
   } else if (user.role !== USER_ROLE.STUDENT) {
-    return json({ ...returnScaffold, diagnostic: "⚠ Course registration is open for students" });
+    return json({
+      ...returnScaffold,
+      diagnostic: "Course registration is open for students only",
+      showButton: false,
+    });
   }
 
   const student = await getStudentFromUserId(user.id);
   if (!student) throw new Error();
   if (student.studies_status === "ALUM") {
-    return json({ ...returnScaffold, diagnostic: "⚠ Cannot register to courses" });
+    return json({ ...returnScaffold, diagnostic: "Cannot register to courses" });
+  }
+  if (student.latest_registration) {
+    const latestRegistrationDate = new Date(student.latest_registration);
+    if (
+      getYear(latestRegistrationDate) === getYear(dateNow) &&
+      ((getMonth(latestRegistrationDate) < 6 && getMonth(dateNow) < 6) ||
+        (getMonth(latestRegistrationDate) >= 6 && getMonth(dateNow) >= 6))
+    ) {
+      return json({ ...returnScaffold, diagnostic: "Already registered to courses" });
+    }
   }
   const isUndergrad = student.studies_status === "UNDERGRADUATE";
   const isPostgrad = student.studies_status === "POSTGRADUATE";
@@ -172,6 +191,7 @@ const CourseRegistrationIndexPage = () => {
     studentSemester,
     isPostgrad,
     diagnostic,
+    showButton,
   } = useLoaderData() as LoaderDataT;
   const transition = useTransition();
   const isBusy = transition.state !== "idle";
@@ -179,11 +199,21 @@ const CourseRegistrationIndexPage = () => {
   const showRegisterButton = coursesDrafted.length > 0 || hasNoOwedElectives;
   const isDisabled = isBusy || (courseIdsAvailable.length > 0 && !hasNoOwedElectives);
 
+  const MyCoursesButton = () => {
+    return (
+      <Link to="/my-courses">
+        <ActionButton variant="cancel" size="custom">
+          My courses
+        </ActionButton>
+      </Link>
+    );
+  };
+
   return (
     <Page breadcrumbs={breadcrumbData} wide>
       <>
         {diagnostic ? (
-          <Container title={diagnostic} />
+          <Container title={diagnostic} Button={showButton ? <MyCoursesButton /> : undefined} />
         ) : (
           <>
             {coursesPool.length > 0 && (

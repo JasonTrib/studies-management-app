@@ -3,7 +3,7 @@ import type { FC, ReactNode } from "react";
 type ActionButtonT = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "danger" | "cancel";
   fullwidth?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "custom";
   children: ReactNode;
 };
 
