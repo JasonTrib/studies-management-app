@@ -1,7 +1,8 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { getMonth, getYear } from "date-fns";
+import ActionButton from "~/components/buttons/ActionButton";
 import Container from "~/components/Container";
 import CourseRegistration from "~/components/CourseRegistration";
 import Page from "~/components/layout/Page";
@@ -172,6 +173,11 @@ const CourseRegistrationIndexPage = () => {
     isPostgrad,
     diagnostic,
   } = useLoaderData() as LoaderDataT;
+  const transition = useTransition();
+  const isBusy = transition.state !== "idle";
+  const hasNoOwedElectives = coursesDrafted.length === 0 && courseIdsAvailable.length === 0;
+  const showRegisterButton = coursesDrafted.length > 0 || hasNoOwedElectives;
+  const isDisabled = isBusy || (courseIdsAvailable.length > 0 && !hasNoOwedElectives);
 
   return (
     <Page breadcrumbs={breadcrumbData} wide>
@@ -180,24 +186,51 @@ const CourseRegistrationIndexPage = () => {
           <Container title={diagnostic} />
         ) : (
           <>
-            <CourseRegistration
-              variant="pool"
-              title="Courses pool"
-              coursesPool={coursesPool}
-              coursesDrafted={coursesDrafted}
-              available={courseIdsAvailable}
-              semester={studentSemester}
-              isPostgrad={isPostgrad}
-            />
-            <CourseRegistration
-              variant="drafted"
-              title="Drafted courses"
-              coursesPool={coursesPool}
-              coursesDrafted={coursesDrafted}
-              available={courseIdsAvailable}
-              semester={studentSemester}
-              isPostgrad={isPostgrad}
-            />
+            {coursesPool.length > 0 && (
+              <CourseRegistration
+                variant="pool"
+                title="Courses pool"
+                courses={coursesPool}
+                available={courseIdsAvailable}
+              />
+            )}
+            {coursesDrafted.length > 0 && (
+              <CourseRegistration
+                variant="drafted"
+                title="Drafted courses"
+                courses={coursesDrafted}
+                available={courseIdsAvailable}
+              />
+            )}
+            {showRegisterButton && (
+              <div className="draft-submit">
+                <Form method="post" action={`edit`}>
+                  <input type="hidden" id="_action" name="_action" value="register" />
+                  <input
+                    type="hidden"
+                    id="coursesPool"
+                    name="coursesPool"
+                    value={JSON.stringify(coursesPool.map((course) => course.id))}
+                  />
+                  <input
+                    type="hidden"
+                    id="coursesToRegister"
+                    name="coursesToRegister"
+                    value={JSON.stringify(coursesDrafted.map((course) => course.id))}
+                  />
+                  <input
+                    type="hidden"
+                    id="studentSemester"
+                    name="studentSemester"
+                    value={studentSemester}
+                  />
+                  <input type="hidden" id="isPostgrad" name="isPostgrad" value={`${isPostgrad}`} />
+                  <ActionButton variant="primary" type="submit" fullwidth disabled={isDisabled}>
+                    REGISTER
+                  </ActionButton>
+                </Form>
+              </div>
+            )}
           </>
         )}
       </>

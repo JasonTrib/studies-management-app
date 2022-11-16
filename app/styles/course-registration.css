@@ -46,9 +46,10 @@
   height: 24px;
   width: 24px;
 }
-.course-registration-container .content .draft-submit {
+
+.draft-submit {
   width: 240px;
-  margin: 36px auto 12px;
+  margin: 32px auto 16px;
 }
 
 /*# sourceMappingURL=course-registration.css.map */
