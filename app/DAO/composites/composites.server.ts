@@ -2,11 +2,11 @@ import type { Course, Department, Gender, Professor, Student, User } from "@pris
 import { getAllAnnouncements } from "../announcementDAO.server";
 import {
   getAllCoursesShort,
+  getCompulsoryCoursesRegistration,
   getCourse,
   getCourses,
   getCoursesCount,
-  getCoursesForPostgradRegistration,
-  getCoursesForUndergradRegistration,
+  getCoursesRegistration,
   getPostgradCourses,
   getUndergradCourses,
 } from "../courseDAO.server";
@@ -25,6 +25,7 @@ import {
   getProfessorCoursesWithProfile,
 } from "../professorCourseDAO.server";
 import {
+  createAndRegisterStudentCourses,
   getAllStudentCoursesEnrolled,
   getStudentCourseAnnouncements,
   getStudentCourseAnnouncementsCount,
@@ -35,6 +36,7 @@ import {
   getStudentCoursesFollowingCountGivenCourse,
   getStudentCoursesRegisteredCount,
   getStudentCoursesRegisteredCountGivenCourse,
+  registerStudentCourses,
 } from "../studentCourseDAO.server";
 import {
   getAllUsersExceptSuperadminsShort,
@@ -547,12 +549,13 @@ export async function getPostgradCurriculumCourses(depId: Department["code_id"])
   return postgradCurriculumData;
 }
 
-export async function getStudentCoursesForUndergradRegistration(
+export async function getStudentCoursesRegistration(
   depId: Department["code_id"],
   studentId: Student["id"],
   semester: number,
+  isPostgrad: boolean,
 ) {
-  const courses = await getCoursesForUndergradRegistration(depId, semester);
+  const courses = await getCoursesRegistration(depId, semester, isPostgrad);
   const studentCourses = await getStudentCourses(studentId);
   const profCourses = await getAllProfessorCoursesLectured();
 
@@ -578,33 +581,15 @@ export async function getStudentCoursesForUndergradRegistration(
   return coursesExtended;
 }
 
-export async function getStudentCoursesForPostgradRegistration(
+export async function registerStudentCoursesCompulsories(
   depId: Department["code_id"],
   studentId: Student["id"],
   semester: number,
+  isPostgrad: boolean,
 ) {
-  const courses = await getCoursesForPostgradRegistration(depId, semester);
-  const studentCourses = await getStudentCourses(studentId);
-  const profCourses = await getAllProfessorCoursesLectured();
+  const compulsories = await getCompulsoryCoursesRegistration(depId, semester, isPostgrad);
+  const compulsoriesIds = compulsories.map((compulsory) => compulsory.id);
 
-  const coursesExtended = courses
-    .map((course) => {
-      const matchingCourse = studentCourses.find(
-        (studCourse) => course.id === studCourse.course_id,
-      );
-      const professors = profCourses.filter((profCourse) => course.id === profCourse.course_id);
-
-      return {
-        ...course,
-        professors: professors.map((prof) => ({
-          id: prof.professor.id,
-          fullname: prof.professor.user.profile?.fullname,
-        })),
-        grade: matchingCourse?.grade || null,
-        isDrafted: matchingCourse?.is_drafted || false,
-      };
-    })
-    .filter((x) => x);
-
-  return coursesExtended;
+  await createAndRegisterStudentCourses(studentId, compulsoriesIds);
+  await registerStudentCourses(studentId, compulsoriesIds, false);
 }

@@ -1,5 +1,5 @@
-import { prisma } from "~/db.server";
 import type { Announcement, Course, Department } from "@prisma/client";
+import { prisma } from "~/db.server";
 export type { Course as CourseModelT } from "@prisma/client";
 
 export function getAllCourses() {
@@ -122,15 +122,16 @@ export function getCourseIdFromAnnouncement(annId: Announcement["id"]) {
   });
 }
 
-export function getCoursesForUndergradRegistration(
+export function getCoursesRegistration(
   depId: Department["code_id"],
   semester: Course["semester"],
+  isPostgrad: boolean,
 ) {
   return prisma.course.findMany({
     where: {
       dep_id: depId,
       is_elective: true,
-      is_postgraduate: false,
+      is_postgraduate: isPostgrad,
       semester: {
         lte: semester,
       },
@@ -141,21 +142,19 @@ export function getCoursesForUndergradRegistration(
   });
 }
 
-export function getCoursesForPostgradRegistration(
+export function getCompulsoryCoursesRegistration(
   depId: Department["code_id"],
   semester: Course["semester"],
+  isPostgrad: boolean,
 ) {
   return prisma.course.findMany({
     where: {
       dep_id: depId,
-      is_elective: true,
-      is_postgraduate: true,
+      is_elective: false,
+      is_postgraduate: isPostgrad,
       semester: {
         lte: semester,
       },
-    },
-    orderBy: {
-      semester: "asc",
     },
   });
 }

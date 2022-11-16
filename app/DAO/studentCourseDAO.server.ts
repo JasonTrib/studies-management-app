@@ -232,6 +232,53 @@ export function undraftStudentCourse(studentId: Student["id"], courseId: Course[
   });
 }
 
+export function unregisterStudentCourses(studentId: Student["id"], coursesIds: number[]) {
+  return prisma.studentCourse.updateMany({
+    where: {
+      student_id: studentId,
+      course_id: {
+        in: coursesIds,
+      },
+    },
+    data: {
+      is_enrolled: false,
+    },
+  });
+}
+
+export function registerStudentCourses(
+  studentId: Student["id"],
+  coursesIds: number[],
+  isFollowing = true,
+) {
+  return prisma.studentCourse.updateMany({
+    where: {
+      student_id: studentId,
+      course_id: {
+        in: coursesIds,
+      },
+    },
+    data: {
+      is_enrolled: true,
+      is_following: isFollowing,
+      is_drafted: false,
+    },
+  });
+}
+
+export function createAndRegisterStudentCourses(studentId: Student["id"], coursesIds: number[]) {
+  return prisma.studentCourse.createMany({
+    data: coursesIds.map((courseId) => ({
+      student_id: studentId,
+      course_id: courseId,
+      is_enrolled: true,
+      is_following: true,
+      is_drafted: false,
+    })),
+    skipDuplicates: true,
+  });
+}
+
 // includes the "has_seen" field, useful for differenciating seen/unseen announcements
 function getStudentCourseAnnouncementsGenerous(studentId: Student["id"], courseId: Course["id"]) {
   return prisma.studentCourse.findMany({

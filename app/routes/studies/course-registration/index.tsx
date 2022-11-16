@@ -5,10 +5,7 @@ import { getMonth, getYear } from "date-fns";
 import Container from "~/components/Container";
 import CourseRegistration from "~/components/CourseRegistration";
 import Page from "~/components/layout/Page";
-import {
-  getStudentCoursesForPostgradRegistration,
-  getStudentCoursesForUndergradRegistration,
-} from "~/DAO/composites/composites.server";
+import { getStudentCoursesRegistration } from "~/DAO/composites/composites.server";
 import { getProfile } from "~/DAO/profileDAO.server";
 import type { StudentModelT } from "~/DAO/studentDAO.server";
 import { getStudentFromUserId } from "~/DAO/studentDAO.server";
@@ -59,9 +56,11 @@ const calcStudentSemester = (enrollmentYear: StudentModelT["enrollment_year"], d
 type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_studies_registration>>;
   userRole: UserModelT["role"];
-  coursesPool: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>>;
-  coursesDrafted: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>>;
+  coursesPool: Awaited<ReturnType<typeof getStudentCoursesRegistration>>;
+  coursesDrafted: Awaited<ReturnType<typeof getStudentCoursesRegistration>>;
   courseIdsAvailable: number[];
+  studentSemester: number;
+  isPostgrad: boolean;
   diagnostic?: string;
 };
 
@@ -124,20 +123,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return json({ ...returnScaffold, diagnostic });
   }
 
-  let studentCourses: Awaited<ReturnType<typeof getStudentCoursesForUndergradRegistration>> = [];
-  if (isUndergrad) {
-    studentCourses = await getStudentCoursesForUndergradRegistration(
-      user.dep_id,
-      student.id,
-      studentSemester,
-    );
-  } else if (isPostgrad) {
-    studentCourses = await getStudentCoursesForPostgradRegistration(
-      user.dep_id,
-      student.id,
-      studentSemester,
-    );
-  }
+  const studentCourses = await getStudentCoursesRegistration(
+    user.dep_id,
+    student.id,
+    studentSemester,
+    isPostgrad,
+  );
 
   studentCourses.forEach((x) => {
     coursesPerSemester[x.semester - 1].electives += 1;
@@ -167,11 +158,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     coursesPool,
     coursesDrafted,
     courseIdsAvailable,
+    studentSemester,
+    isPostgrad,
   });
 };
 const CourseRegistrationIndexPage = () => {
-  const { breadcrumbData, coursesPool, coursesDrafted, courseIdsAvailable, diagnostic } =
-    useLoaderData() as LoaderDataT;
+  const {
+    breadcrumbData,
+    coursesPool,
+    coursesDrafted,
+    courseIdsAvailable,
+    studentSemester,
+    isPostgrad,
+    diagnostic,
+  } = useLoaderData() as LoaderDataT;
 
   return (
     <Page breadcrumbs={breadcrumbData} wide>
@@ -181,16 +181,22 @@ const CourseRegistrationIndexPage = () => {
         ) : (
           <>
             <CourseRegistration
-              title="Courses pool"
-              courses={coursesPool}
-              available={courseIdsAvailable}
               variant="pool"
+              title="Courses pool"
+              coursesPool={coursesPool}
+              coursesDrafted={coursesDrafted}
+              available={courseIdsAvailable}
+              semester={studentSemester}
+              isPostgrad={isPostgrad}
             />
             <CourseRegistration
-              title="Drafted courses"
-              courses={coursesDrafted}
-              available={courseIdsAvailable}
               variant="drafted"
+              title="Drafted courses"
+              coursesPool={coursesPool}
+              coursesDrafted={coursesDrafted}
+              available={courseIdsAvailable}
+              semester={studentSemester}
+              isPostgrad={isPostgrad}
             />
           </>
         )}
