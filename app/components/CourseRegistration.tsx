@@ -1,5 +1,6 @@
-import { Form, useTransition } from "@remix-run/react";
+import { Form, Link, useTransition } from "@remix-run/react";
 import type { FC } from "react";
+import React from "react";
 import type { getStudentCoursesRegistration } from "~/DAO/composites/composites.server";
 import ActionButton from "./buttons/ActionButton";
 import RegistrationAction from "./RegistrationAction";
@@ -51,20 +52,29 @@ const CourseRegistration: FC<CourseRegistrationT> = ({
                 </colgroup>
                 <thead>
                   <tr>
-                    <th className="text-start">Title</th>
-                    <th className="text-start">Instructors</th>
-                    <th className="text-start">Semester</th>
-                    <th className="text-start"></th>
+                    <th>Title</th>
+                    <th>Instructors</th>
+                    <th>Semester</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   {courses.map((course) => (
                     <tr key={course.id}>
                       <td className="text-start">{course.title}</td>
-                      <td className="text-start">
-                        {course.professors.map((prof) => prof.fullname)}
+                      <td className="instructors text-start">
+                        {course.professors.length > 0 && (
+                          <span className="link-simple">
+                            {course.professors.map((prof, i) => (
+                              <React.Fragment key={prof.id}>
+                                <Link to={`/users/professors/${prof.id}`}>{prof.fullname}</Link>
+                                {i < course.professors.length - 1 && " - "}
+                              </React.Fragment>
+                            ))}
+                          </span>
+                        )}
                       </td>
-                      <td>{course.semester}</td>
+                      <td className="semester">{course.semester}</td>
                       <td className="action-cell">
                         {(variant === "drafted" || available.find((x) => x === course.id)) && (
                           <RegistrationAction
