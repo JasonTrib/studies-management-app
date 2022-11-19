@@ -67,7 +67,6 @@ export const action: ActionFunction = async ({ request, params }) => {
       semester: parseInt(form.data.semester),
       is_elective: form.data.isElective === "on" ? true : false,
       is_postgraduate: form.data.isPostgraduate === "on" ? true : false,
-      is_public: form.data.isPublic === "on" ? true : false,
     };
 
     await editCourse(data);

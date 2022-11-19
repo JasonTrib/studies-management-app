@@ -68,13 +68,6 @@ const CourseForm: FC<CourseFormType> = ({
           disabled={disabled}
           error={errors?.isPostgraduate}
         />
-        <FormCheckbox
-          text="Public"
-          label="isPublic"
-          defaultChecked={defaultData?.is_public}
-          disabled={disabled}
-          error={errors?.isPublic}
-        />
       </div>
       <div className="form-submit">
         <input type="hidden" id="dep" name="dep" value={dep} />
