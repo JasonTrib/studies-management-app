@@ -206,15 +206,16 @@ export async function getCoursesAsStudentExtended(
   );
 
   const coursesExtended = courses.map((course) => {
-    const studentCourseMatch = studentCourses.filter(
+    const studentCourseMatch = studentCourses.find(
       (studentCourse) => studentCourse.course_id === course.id,
-    )[0];
+    );
     const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
 
     return {
       ...course,
       isEnrolled: studentCourseMatch?.is_enrolled || false,
       isFollowing: studentCourseMatch?.is_following || false,
+      grade: studentCourseMatch?.grade,
       professors: professors.map((prof) => ({
         id: prof.professor.id,
         fullname: prof.professor.user.profile?.fullname,
@@ -238,9 +239,9 @@ export async function getCoursesAsProfessorExtended(
   );
 
   const coursesExtended = courses.map((course) => {
-    const profCourseMatch = professorCourses.filter(
+    const profCourseMatch = professorCourses.find(
       (profCourse) => profCourse.course_id === course.id,
-    )[0];
+    );
     const professors = profCourses.filter((profCourse) => profCourse.course_id === course.id);
 
     return {

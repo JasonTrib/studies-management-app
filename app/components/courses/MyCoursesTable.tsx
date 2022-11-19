@@ -16,9 +16,10 @@ type MyCoursesTableT = {
     isFollowing: boolean;
   })[];
   userRole?: UserModelT["role"];
+  showHasPassed?: boolean;
 };
 
-const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole }) => {
+const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole, showHasPassed }) => {
   return (
     <table>
       <colgroup>
@@ -29,7 +30,7 @@ const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole }) => {
       </colgroup>
       <thead>
         <tr>
-          <th>Course</th>
+          <th>Title</th>
           <th>Instructors</th>
           <th>Semester</th>
           {userRole === USER_ROLE.STUDENT && <th>Grade</th>}
@@ -45,6 +46,8 @@ const MyCoursesTable: FC<MyCoursesTableT> = ({ data = [], userRole }) => {
             professors={x.professors}
             semester={x.semester}
             grade={x.grade}
+            showHasPassed={showHasPassed}
+            hasPassed={!!x.grade && x.grade >= 5}
           />
         ))}
       </tbody>

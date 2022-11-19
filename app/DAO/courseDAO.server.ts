@@ -19,6 +19,9 @@ export function getCourses(depId: Course["dep_id"]) {
     where: {
       dep_id: depId,
     },
+    orderBy: {
+      semester: "asc",
+    },
   });
 }
 

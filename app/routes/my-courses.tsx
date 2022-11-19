@@ -110,7 +110,7 @@ const MyCoursesPage = () => {
     <AppLayout userInfo={userInfo}>
       <Page wide breadcrumbs={breadcrumbData} Actions={headingActions()}>
         <Table data={coursesRegistered} noResultsMsg={noResultsMsg} userRole={userInfo.role}>
-          <MyCoursesTable />
+          <MyCoursesTable showHasPassed />
         </Table>
       </Page>
     </AppLayout>

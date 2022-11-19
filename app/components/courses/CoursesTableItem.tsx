@@ -3,6 +3,7 @@ import type { FC } from "react";
 import React, { useState } from "react";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import GradIcon from "~/components/icons/GradIcon";
+import CompletedIcon from "../icons/CompletedIcon";
 
 type CoursesTableItemT = {
   courseId: CourseModelT["id"];
@@ -17,6 +18,8 @@ type CoursesTableItemT = {
   isEnrolled?: boolean;
   isLecturing?: boolean;
   grade?: number | null;
+  hasPassed?: boolean;
+  showHasPassed?: boolean;
 };
 
 const CoursesTableItem: FC<CoursesTableItemT> = ({
@@ -29,6 +32,8 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
   isEnrolled,
   isLecturing,
   grade,
+  hasPassed,
+  showHasPassed,
 }) => {
   const [checked, setChecked] = useState(isFollowing);
   const handleChange = () => setChecked((prev) => !prev);
@@ -37,8 +42,11 @@ const CoursesTableItem: FC<CoursesTableItemT> = ({
     <tr>
       <td>
         <div className="course link">
-          <Link to={`/courses/${courseId}`}>{title}</Link>
+          {showHasPassed && hasPassed && (
+            <CompletedIcon className="icon" width={20} height={20} fill="limegreen" />
+          )}
           {isPostgraduate && <GradIcon className="icon" width={20} height={20} />}
+          <Link to={`/courses/${courseId}`}>{title}</Link>
         </div>
       </td>
       <td className="instructors">

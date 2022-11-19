@@ -79,6 +79,11 @@ export function getProfessorCoursesLecturing(profId: Professor["id"]) {
     include: {
       course: true,
     },
+    orderBy: {
+      course: {
+        semester: "asc",
+      },
+    },
   });
 }
 

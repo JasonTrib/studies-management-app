@@ -32,6 +32,11 @@ export function getStudentCoursesEnrolled(studentId: Student["id"]) {
     include: {
       course: true,
     },
+    orderBy: {
+      course: {
+        semester: "asc",
+      },
+    },
   });
 }
 

@@ -9,15 +9,23 @@ type CoursesTableT = {
     isEnrolled?: boolean;
     isLecturing?: boolean;
     isFollowing: boolean;
+    grade?: number | null;
     professors?: {
       id: number;
       fullname: string;
     }[];
   })[];
   userRole?: UserModelT["role"];
+  showHasPassed?: boolean;
+  isPostgraduate?: boolean;
 };
 
-const CoursesTable: FC<CoursesTableT> = ({ data = [], userRole }) => {
+const CoursesTable: FC<CoursesTableT> = ({
+  data = [],
+  userRole,
+  showHasPassed,
+  isPostgraduate,
+}) => {
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   return (
@@ -35,7 +43,7 @@ const CoursesTable: FC<CoursesTableT> = ({ data = [], userRole }) => {
       </colgroup>
       <thead>
         <tr>
-          <th>Course</th>
+          <th>{isPostgraduate ? "Postgraduate courses" : "Undergraduate courses"}</th>
           <th>Instructors</th>
           <th>Semester</th>
           {!isPriviledged && <th>Following</th>}
@@ -55,6 +63,8 @@ const CoursesTable: FC<CoursesTableT> = ({ data = [], userRole }) => {
             isFollowing={x.isFollowing}
             isLecturing={x.isLecturing}
             isEnrolled={x.isEnrolled}
+            showHasPassed={showHasPassed}
+            hasPassed={!!x.grade && x.grade >= 5}
           />
         ))}
       </tbody>

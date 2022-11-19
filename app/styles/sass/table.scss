@@ -76,10 +76,10 @@ table {
 
   .course {
     display: flex;
+    fill: var(--color-text);
 
     .icon {
-      margin-left: 4px;
-      fill: var(--color-text);
+      margin-right: 4px;
     }
   }
 

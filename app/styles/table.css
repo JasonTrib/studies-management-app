@@ -61,10 +61,10 @@ table .cell-checkbox .checkbox-large {
 }
 table .course {
   display: flex;
+  fill: var(--color-text);
 }
 table .course .icon {
-  margin-left: 4px;
-  fill: var(--color-text);
+  margin-right: 4px;
 }
 table .username {
   display: flex;
