@@ -12,6 +12,6 @@ export const courseSchema = z.object({
     .string()
     .trim()
     .regex(/^[1-8]$/, "Invalid semester"),
-  isElective: z.string().regex(/on/).optional(),
+  isCompulsory: z.string().regex(/on/).optional(),
   isPostgraduate: z.string().regex(/on/).optional(),
 });

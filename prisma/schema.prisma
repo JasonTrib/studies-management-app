@@ -127,8 +127,8 @@ model Course {
   title           String   @unique
   description     String?  @db.VarChar(2000)
   semester        Int
-  is_elective     Boolean
-  is_postgraduate Boolean
+  is_compulsory   Boolean  @default(false)
+  is_postgraduate Boolean  @default(false)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 

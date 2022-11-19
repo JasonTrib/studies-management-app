@@ -228,7 +228,7 @@ async function upsertCourses() {
         title: courses[i].title,
         description: courses[i].description,
         semester: courses[i].semester,
-        is_elective: courses[i].isElective,
+        is_compulsory: courses[i].isCompulsory,
         is_postgraduate: courses[i].isPostgraduate,
       },
     });
@@ -407,7 +407,7 @@ async function createCourses() {
         title: courses[i].title,
         description: courses[i].description,
         semester: courses[i].semester,
-        is_elective: courses[i].isElective,
+        is_compulsory: courses[i].isCompulsory,
         is_postgraduate: courses[i].isPostgraduate,
       },
     });

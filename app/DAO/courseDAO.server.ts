@@ -91,7 +91,7 @@ export type courseDataT = {
   title: string;
   description?: string;
   semester: number;
-  is_elective: boolean;
+  is_compulsory: boolean;
   is_postgraduate: boolean;
 };
 
@@ -102,7 +102,7 @@ export function createCourse(data: courseDataT) {
       title: data.title,
       description: data.description,
       semester: data.semester,
-      is_elective: data.is_elective,
+      is_compulsory: data.is_compulsory,
       is_postgraduate: data.is_postgraduate,
     },
   });
@@ -131,7 +131,7 @@ export function getCoursesRegistration(
   return prisma.course.findMany({
     where: {
       dep_id: depId,
-      is_elective: true,
+      is_compulsory: false,
       is_postgraduate: isPostgrad,
       semester: {
         lte: semester,
@@ -151,7 +151,7 @@ export function getCompulsoryCoursesRegistration(
   return prisma.course.findMany({
     where: {
       dep_id: depId,
-      is_elective: false,
+      is_compulsory: true,
       is_postgraduate: isPostgrad,
       semester: {
         lte: semester,
@@ -169,7 +169,7 @@ export function editCourse(data: Omit<courseDataT, "dep_id">) {
       title: data.title,
       description: data.description,
       semester: data.semester,
-      is_elective: data.is_elective,
+      is_compulsory: data.is_compulsory,
       is_postgraduate: data.is_postgraduate,
       updated_at: new Date().toISOString(),
     },

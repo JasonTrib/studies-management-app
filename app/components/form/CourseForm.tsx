@@ -55,11 +55,11 @@ const CourseForm: FC<CourseFormType> = ({
           error={errors?.semester}
         />
         <FormCheckbox
-          text="Elective"
-          label="isElective"
-          defaultChecked={defaultData?.is_elective}
+          text="Compulsory"
+          label="isCompulsory"
+          defaultChecked={defaultData?.is_compulsory}
           disabled={disabled}
-          error={errors?.isElective}
+          error={errors?.isCompulsory}
         />
         <FormCheckbox
           text="Postgraduate"

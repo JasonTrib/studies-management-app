@@ -50,7 +50,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     title: form.data.title,
     description: form.data.description,
     semester: parseInt(form.data.semester),
-    is_elective: form.data.isElective === "on" ? true : false,
+    is_compulsory: form.data.isCompulsory === "on" ? true : false,
     is_postgraduate: form.data.isPostgraduate === "on" ? true : false,
   };
 

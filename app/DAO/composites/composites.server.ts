@@ -526,9 +526,9 @@ export async function getUndergradCurriculumCourses(depId: Department["code_id"]
   const scaffold = [...Array(8)].map(() => ({ semester: { compulsories: 0, electives: 0 } }));
 
   courses.forEach((course) =>
-    course.is_elective
-      ? (scaffold[course.semester - 1].semester.electives += 1)
-      : (scaffold[course.semester - 1].semester.compulsories += 1),
+    course.is_compulsory
+      ? (scaffold[course.semester - 1].semester.compulsories += 1)
+      : (scaffold[course.semester - 1].semester.electives += 1),
   );
   const undergradCurriculumData = [...scaffold];
 
@@ -541,9 +541,9 @@ export async function getPostgradCurriculumCourses(depId: Department["code_id"])
   const scaffold = [...Array(4)].map(() => ({ semester: { compulsories: 0, electives: 0 } }));
 
   courses.forEach((course) =>
-    course.is_elective
-      ? (scaffold[course.semester - 1].semester.electives += 1)
-      : (scaffold[course.semester - 1].semester.compulsories += 1),
+    course.is_compulsory
+      ? (scaffold[course.semester - 1].semester.compulsories += 1)
+      : (scaffold[course.semester - 1].semester.electives += 1),
   );
   const postgradCurriculumData = [...scaffold];
 
