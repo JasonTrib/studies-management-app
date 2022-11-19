@@ -114,7 +114,7 @@ const Curriculum: FC<CurriculumT> = ({
                 <thead>
                   <tr>
                     {coursesData.map((_, i) => (
-                      <th key={i}>{i + 1}</th>
+                      <th key={uuidv4()}>{i + 1}</th>
                     ))}
                   </tr>
                 </thead>
