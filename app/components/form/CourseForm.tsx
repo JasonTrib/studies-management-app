@@ -3,7 +3,7 @@ import type { FC } from "react";
 import type { z } from "zod";
 import type { CourseModelT } from "~/DAO/courseDAO.server";
 import type { SchemaErrorsT } from "~/validations/formValidation.server";
-import type { courseSchema } from "~/validations/schemas/courseSchema.server";
+import type { courseSchema } from "~/validations/schemas/courseSchemas.server";
 import ActionButton from "../buttons/ActionButton";
 import FormCheckbox from "./FormCheckbox";
 import FormInput from "./FormInput";

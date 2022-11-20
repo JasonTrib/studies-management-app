@@ -21,7 +21,7 @@ import formStyles from "~/styles/form.css";
 import { createUserSession, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
-import { initSchema } from "~/validations/schemas/miscSchema.server";
+import { initSchema } from "~/validations/schemas/miscSchemas.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: formStyles }];

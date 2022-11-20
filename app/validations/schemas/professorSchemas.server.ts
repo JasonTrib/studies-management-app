@@ -1,14 +1,11 @@
 import { z } from "zod";
+import { passwordField, usernameField } from "../common/schemasCommon.server";
 
 export const newProfessorSchema = z
   .object({
-    dep: z.enum(["IT", "GEO"]),
-    username: z
-      .string()
-      .trim()
-      .min(3, "Username must be at least 3 characters long")
-      .regex(/^[\w]*$/, "Invalid input"),
-    password: z.string().min(4, "Password must be at least 4 characters long"),
+    dep: z.string(),
+    username: usernameField,
+    password: passwordField,
     confirmPassword: z.string(),
     title: z.enum([
       "Lecturer",

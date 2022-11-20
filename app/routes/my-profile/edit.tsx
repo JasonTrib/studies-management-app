@@ -21,14 +21,14 @@ import { bc_myprofile_edit } from "~/utils/breadcrumbs";
 import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import { profileSchema } from "~/validations/schemas/profileSchema.server";
-import { editPasswordSchema } from "~/validations/schemas/userSchema.server";
+import { editProfileSchema } from "~/validations/schemas/profileSchemas.server";
+import { editPasswordSchema } from "~/validations/schemas/miscSchemas.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
-type Schema1T = z.infer<typeof profileSchema>;
+type Schema1T = z.infer<typeof editProfileSchema>;
 type Schema2T = z.infer<typeof editPasswordSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const body = Object.fromEntries(formData);
 
   if (body["_action"] === "updateProfile") {
-    const form = validateFormData<Schema1T>(body, profileSchema);
+    const form = validateFormData<Schema1T>(body, editProfileSchema);
     if (!_.isEmpty(form.errors) || form.data === null) {
       return json(form, { status: 400 });
     }

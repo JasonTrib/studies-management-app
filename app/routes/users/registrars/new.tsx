@@ -16,7 +16,7 @@ import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
-import { newRegistrarSchema } from "~/validations/schemas/registrarShema.server";
+import { newRegistrarSchema } from "~/validations/schemas/registrarShemas.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];

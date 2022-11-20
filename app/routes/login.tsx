@@ -10,7 +10,7 @@ import styles from "~/styles/form.css";
 import { createUserSession, getUserId, login } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { extractAndValidateFormData } from "~/validations/formValidation.server";
-import { loginSchema } from "~/validations/schemas/userSchema.server";
+import { loginSchema } from "~/validations/schemas/miscSchemas.server";
 
 type SchemaT = z.infer<typeof loginSchema>;
 

@@ -29,7 +29,7 @@ import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import { courseSchema } from "~/validations/schemas/courseSchema.server";
+import { courseSchema } from "~/validations/schemas/courseSchemas.server";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 
 export const links: LinksFunction = () => {
