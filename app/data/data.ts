@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import type { UserModelT } from "~/DAO/userDAO.server";
 
 export const USER_ROLE: {
@@ -36,8 +35,7 @@ export const gradingPeriodScaffold = {
   },
   resit: {
     startMonth: 8,
-    // endMonth: 9,
-    endMonth: 11,
+    endMonth: 9,
   },
 };
 export type gradingPeriodT = typeof gradingPeriodScaffold;
