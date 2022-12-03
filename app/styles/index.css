@@ -163,6 +163,7 @@
 .app-container .content-main .page .page-heading .title-container .actions {
   display: flex;
   align-items: center;
+  column-gap: 8px;
 }
 .app-container .content-main .page .page-heading .title-container .actions .svg-link {
   height: 24px;

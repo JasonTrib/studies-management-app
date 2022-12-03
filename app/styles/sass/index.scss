@@ -193,6 +193,7 @@ $sidebar-shadow: 0 0 12px var(--color-shadow-light), 4px -2px 4px 0px black;
           .actions {
             display: flex;
             align-items: center;
+            column-gap: 8px;
 
             .svg-link {
               height: 24px;

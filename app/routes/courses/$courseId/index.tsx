@@ -1,6 +1,6 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useMatches } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
@@ -24,8 +24,9 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
 import { bc_courses_id } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/utils";
+import { getIsCourseGradingOpen, paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
+import GradeCourseButton from "~/components/buttons/GradeCourseButton";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
@@ -78,6 +79,7 @@ type LoaderDataT = {
   userRole: Exclude<Awaited<ReturnType<typeof requireUser>>, null>["role"];
   isFollowingCourse: boolean;
   canModAnns: boolean;
+  canGradeCourse: boolean;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -93,21 +95,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   let announcements;
   let canModAnns = false;
   let isFollowingCourse = false;
+  let canGradeCourse = false;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
     case USER_ROLE.REGISTRAR:
       canModAnns = true;
       isFollowingCourse = true;
+      canGradeCourse = getIsCourseGradingOpen(course.semester, new Date());
       announcements = await getAnnouncementsOfCourse(courseId);
       break;
     case USER_ROLE.PROFESSOR:
       const prof = await getProfessorId(user.id);
       if (!prof) throw new Error();
 
-      canModAnns = await getIsProfessorLecturingCourse(prof.id, courseId);
-      if (canModAnns) {
+      const isLecturing = await getIsProfessorLecturingCourse(prof.id, courseId);
+      if (isLecturing) {
+        canModAnns = true;
         isFollowingCourse = true;
+        canGradeCourse = getIsCourseGradingOpen(course.semester, new Date());
       } else {
+        canModAnns = false;
+        canGradeCourse = false;
         isFollowingCourse = await getIsProfessorFollowingCourse(prof.id, courseId);
       }
       if (isFollowingCourse) {
@@ -136,22 +144,37 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     isFollowingCourse,
     userRole: user.role,
     canModAnns,
+    canGradeCourse,
   });
 };
 
 const CourseDetailsPage = () => {
-  const { breadcrumbData, course, announcements, isFollowingCourse, userRole, canModAnns } =
-    useLoaderData() as LoaderDataT;
+  const {
+    breadcrumbData,
+    course,
+    announcements,
+    isFollowingCourse,
+    userRole,
+    canModAnns,
+    canGradeCourse,
+  } = useLoaderData() as LoaderDataT;
+  const matches = useMatches();
+  const courseId = paramToInt(matches[0].params["courseId"]);
   const isPriviledged = userRole === USER_ROLE.REGISTRAR || userRole === USER_ROLE.SUPERADMIN;
 
   const headingActions = (): JSX.Element | null => {
-    return isPriviledged ? (
-      <span className="svg-link">
-        <Link to={`edit`}>
-          <CogIcon />
-        </Link>
-      </span>
-    ) : null;
+    return (
+      <>
+        {canGradeCourse && courseId !== null && <GradeCourseButton courseId={courseId} />}
+        {isPriviledged && (
+          <span className="svg-link">
+            <Link to={`edit`}>
+              <CogIcon />
+            </Link>
+          </span>
+        )}
+      </>
+    );
   };
 
   return (
