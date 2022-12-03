@@ -1,8 +1,9 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { getMonth, getYear } from "date-fns";
 import ActionButton from "~/components/buttons/ActionButton";
+import { MyCoursesButton } from "~/components/buttons/MyCoursesButton";
 import Container from "~/components/Container";
 import CourseRegistration from "~/components/CourseRegistration";
 import Page from "~/components/layout/Page";
@@ -198,16 +199,6 @@ const CourseRegistrationIndexPage = () => {
   const hasNoOwedElectives = coursesDrafted.length === 0 && courseIdsAvailable.length === 0;
   const showRegisterButton = coursesDrafted.length > 0 || hasNoOwedElectives;
   const isDisabled = isBusy || (courseIdsAvailable.length > 0 && !hasNoOwedElectives);
-
-  const MyCoursesButton = () => {
-    return (
-      <Link to="/my-courses">
-        <ActionButton variant="cancel" size="custom">
-          My courses
-        </ActionButton>
-      </Link>
-    );
-  };
 
   return (
     <Page breadcrumbs={breadcrumbData} wide>
