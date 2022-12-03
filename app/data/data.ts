@@ -38,4 +38,3 @@ export const gradingPeriodScaffold = {
     endMonth: 9,
   },
 };
-export type gradingPeriodT = typeof gradingPeriodScaffold;

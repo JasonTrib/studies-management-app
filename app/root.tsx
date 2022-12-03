@@ -5,14 +5,6 @@ import { getDepartmentsCount } from "~/DAO/departmentDAO.server";
 import { links as IndexLinks } from "~/routes/index";
 import errorStyles from "~/styles/error.css";
 import styles from "~/styles/global.css";
-// import {
-//   logUserDAO,
-//   logCourseDAO,
-//   logAnnouncementDAO,
-//   logStudentDAO,
-//   logProfessorDAO,
-//   logURegistrarDAO,
-// } from "./debug/logDAO.server";
 export { CatchBoundary } from "~/components/CatchBoundary";
 export { ErrorBoundary } from "~/components/ErrorBoundary";
 
@@ -37,13 +29,6 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  // logUserDAO();
-  // logCourseDAO();
-  // logAnnouncementDAO();
-  // logStudentDAO();
-  // logProfessorDAO();
-  // logURegistrarDAO();
-
   const departments = await getDepartmentsCount();
   const path = new URL(request.url).pathname;
   const onInitPage = path.match(/^\/initialization/);

@@ -2,8 +2,8 @@ import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/n
 import { json } from "@remix-run/node";
 import { Link, useLoaderData, useMatches } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import Box from "~/components/Box";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
+import GradeCourseButton from "~/components/buttons/GradeCourseButton";
 import Container from "~/components/Container";
 import Course, { links as CourseLinks } from "~/components/courses/Course";
 import CogIcon from "~/components/icons/CogIcon";
@@ -24,9 +24,8 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
 import { bc_courses_id } from "~/utils/breadcrumbs";
-import { getIsCourseGradingOpen, paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
-import GradeCourseButton from "~/components/buttons/GradeCourseButton";
+import { getIsCourseGradingOpen, paramToInt } from "~/utils/utils";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
@@ -209,7 +208,6 @@ const CourseDetailsPage = () => {
           />
         )}
       </>
-      <Box height={250} />
     </Page>
   );
 };

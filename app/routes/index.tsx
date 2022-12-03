@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
-import Box, { links as BoxLinks } from "~/components/Box";
+import { links as BoxLinks } from "~/components/Box";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import Container, { links as ContainerLinks } from "~/components/Container";
 import CoursesList from "~/components/courses/CoursesList";
@@ -126,7 +126,6 @@ export default function Index() {
           </Container>
         </>
         <>
-          <Box height={250} />
           {!isPriviledged && (
             <Container
               title="My courses"
