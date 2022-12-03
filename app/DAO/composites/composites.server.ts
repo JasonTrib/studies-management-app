@@ -34,6 +34,7 @@ import {
   getStudentCoursesFollowing,
   getStudentCoursesFollowingCount,
   getStudentCoursesFollowingCountGivenCourse,
+  getStudentCoursesForGrading,
   getStudentCoursesRegisteredCount,
   getStudentCoursesRegisteredCountGivenCourse,
   registerStudentCourses,
@@ -593,4 +594,28 @@ export async function registerStudentCoursesCompulsories(
 
   await createAndRegisterStudentCourses(studentId, compulsoriesIds);
   await registerStudentCourses(studentId, compulsoriesIds, false);
+}
+
+export async function getStudentsForGrading(courseId: Course["id"]) {
+  const studentCourses = await getStudentCoursesForGrading(courseId);
+
+  const students = studentCourses.map((studentCourse) => {
+    const showProfile = !!studentCourse.student.user.profile?.is_public;
+
+    return {
+      enrollmentYear: studentCourse.student.enrollment_year,
+      grade: studentCourse.grade,
+      semester: studentCourse.course.semester,
+      studentId: studentCourse.student_id,
+      userId: studentCourse.student.user_id,
+      username: studentCourse.student.user.username,
+      latestGrading: studentCourse.latest_grading,
+      isPublic: studentCourse.student.user.profile?.is_public,
+      email: showProfile ? studentCourse.student.user.profile?.email : null,
+      fullname: showProfile ? studentCourse.student.user.profile?.fullname : null,
+      gender: showProfile ? studentCourse.student.user.profile?.gender : null,
+    };
+  });
+
+  return students;
 }

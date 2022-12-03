@@ -99,6 +99,18 @@ export const bc_courses_id_anns_new = async (path: string) => {
   return crumbBuilder(pathSegs, textSegs);
 };
 
+export const bc_courses_id_grading = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Courses", isLink: true },
+    { text: (await getCourse(parseInt(pathSegs[1])))?.title || "", isLink: true },
+    { text: "Grading", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
 export const bc_users = async (path: string) => {
   const pathSegs = getPathSegs(path);
 

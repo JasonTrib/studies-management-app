@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import type { UserModelT } from "~/DAO/userDAO.server";
 
 export const USER_ROLE: {
@@ -23,3 +24,20 @@ export const registrationPeriodScaffold = {
   },
 };
 export type registrationPeriodT = typeof registrationPeriodScaffold;
+
+export const gradingPeriodScaffold = {
+  fallSemester: {
+    startMonth: 1,
+    endMonth: 2,
+  },
+  springSemester: {
+    startMonth: 5,
+    endMonth: 6,
+  },
+  resit: {
+    startMonth: 8,
+    // endMonth: 9,
+    endMonth: 11,
+  },
+};
+export type gradingPeriodT = typeof gradingPeriodScaffold;

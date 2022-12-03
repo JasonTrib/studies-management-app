@@ -96,12 +96,13 @@ model Student {
 }
 
 model StudentCourse {
-  student_id   Int
-  course_id    Int
-  grade        Float?
-  is_enrolled  Boolean
-  is_following Boolean
-  is_drafted   Boolean
+  student_id     Int
+  course_id      Int
+  grade          Int?
+  is_enrolled    Boolean
+  is_following   Boolean
+  is_drafted     Boolean
+  latest_grading DateTime?
 
   student Student @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)

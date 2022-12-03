@@ -31,3 +31,8 @@ export const editPasswordSchema = z
     message: "Passwords do not match",
     path: ["confirmNewPassword"],
   });
+
+export const gradingSchema = z.record(
+  z.string().regex(/^\d+$/),
+  z.string().regex(/^0*(?:[0-9]|10)$|^$/),
+);

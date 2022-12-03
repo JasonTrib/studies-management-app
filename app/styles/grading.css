@@ -1,0 +1,54 @@
+.grading-container {
+  display: block;
+  background-color: white;
+  box-shadow: 0 0 12px var(--color-shadow-light);
+  margin-bottom: 16px;
+}
+.grading-container table {
+  margin-bottom: 0;
+}
+.grading-container table td {
+  text-align: center;
+}
+.grading-container table td.action-cell {
+  padding: 0;
+  /* Chrome, Safari, Edge, Opera */
+  /* Firefox */
+}
+.grading-container table td.action-cell input {
+  font-size: 16px;
+  text-align: center;
+  color: var(--color-text-dark);
+  border: none;
+  outline: none;
+  background-color: hsl(60deg, 100%, 90%);
+  height: 36px;
+  width: 60px;
+  padding: 0;
+  margin: 0;
+}
+.grading-container table td.action-cell input::placeholder {
+  color: var(--color-text-lighter);
+  opacity: 1;
+  font-style: italic;
+}
+.grading-container table td.action-cell input::-webkit-outer-spin-button,
+.grading-container table td.action-cell input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.grading-container table td.action-cell input[type=number] {
+  -moz-appearance: textfield;
+}
+.grading-container .text-start {
+  text-align: start;
+}
+.grading-container .content {
+  padding: 12px;
+}
+.grading-container .form-submit {
+  width: 240px;
+  margin: 24px auto 8px;
+}
+
+/*# sourceMappingURL=grading.css.map */

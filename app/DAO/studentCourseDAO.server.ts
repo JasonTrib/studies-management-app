@@ -40,6 +40,46 @@ export function getStudentCoursesEnrolled(studentId: Student["id"]) {
   });
 }
 
+export function getStudentCoursesForGrading(courseId: Course["id"]) {
+  return prisma.studentCourse.findMany({
+    where: {
+      course_id: courseId,
+      is_enrolled: true,
+    },
+    include: {
+      student: {
+        select: {
+          user_id: true,
+          enrollment_year: true,
+          user: {
+            select: {
+              username: true,
+              profile: {
+                select: {
+                  email: true,
+                  fullname: true,
+                  gender: true,
+                  is_public: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      course: {
+        select: {
+          semester: true,
+        },
+      },
+    },
+    orderBy: {
+      student: {
+        user_id: "asc",
+      },
+    },
+  });
+}
+
 export function getStudentCoursesFollowing(studentId: Student["id"]) {
   return prisma.studentCourse.findMany({
     where: {
@@ -281,6 +321,23 @@ export function createAndRegisterStudentCourses(studentId: Student["id"], course
       is_drafted: false,
     })),
     skipDuplicates: true,
+  });
+}
+
+export function gradeStudentCourse(
+  courseId: Course["id"],
+  studentId: Student["id"],
+  grade: number,
+) {
+  return prisma.studentCourse.updateMany({
+    where: {
+      course_id: courseId,
+      student_id: studentId,
+    },
+    data: {
+      grade: grade,
+      latest_grading: new Date().toISOString(),
+    },
   });
 }
 
