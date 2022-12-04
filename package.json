@@ -11,7 +11,7 @@
     "start": "remix-serve build",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
-    "sass": "sass --watch app/styles/sass:app/styles"
+    "sass": "sass --watch --no-source-map app/styles/sass:app/styles"
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
