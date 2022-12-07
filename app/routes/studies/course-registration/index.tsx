@@ -172,7 +172,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         ? course.id
         : null,
     )
-    .filter((x) => x) as number[];
+    .filter(Boolean) as number[];
 
   return json({
     ...returnScaffold,

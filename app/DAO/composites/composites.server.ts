@@ -516,7 +516,7 @@ export async function getOtherDepartmentsExtended(depId: Department["code_id"]) 
             users: users.filter((user) => user.dep_id === dep.code_id).length,
           },
     )
-    .filter((x) => x);
+    .filter(Boolean);
 
   return otherDepartmentsExtended;
 }
@@ -578,7 +578,7 @@ export async function getStudentCoursesRegistration(
         isDrafted: matchingCourse?.is_drafted || false,
       };
     })
-    .filter((x) => x);
+    .filter(Boolean);
 
   return coursesExtended;
 }

@@ -3,11 +3,11 @@ import { getCourse } from "~/DAO/courseDAO.server";
 import { getDepartment } from "~/DAO/departmentDAO.server";
 import { getUser } from "~/DAO/userDAO.server";
 
-const getPathSegs = (path: string) => path.split("/").filter((x) => x);
+const getPathSegs = (path: string) => path.split("/").filter(Boolean);
 const calcPath = (pathSegs: string[], idx: number) =>
   [...Array(idx)]
     .map((_, i) => (pathSegs[i] ? `/${pathSegs[i]}` : null))
-    .filter((x) => x)
+    .filter(Boolean)
     .join("");
 const crumbBuilder = (pathSegs: string[], textSegs: { text: string; isLink: boolean }[]) =>
   textSegs.map((textSeg, i) => ({
