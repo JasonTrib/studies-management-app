@@ -619,3 +619,9 @@ export async function getStudentsForGrading(courseId: Course["id"]) {
 
   return students;
 }
+
+export async function getDepartmentsList() {
+  const departments = await getDepartments();
+
+  return departments.map((dep) => ({ depId: dep.code_id, depTitle: dep.title }));
+}

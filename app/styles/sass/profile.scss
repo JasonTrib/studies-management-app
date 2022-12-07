@@ -82,6 +82,61 @@
         &:nth-child(4n - 1) {
           background-color: hsl(0deg 0% 95%);
         }
+
+        .select-department-form {
+          display: flex;
+
+          .field {
+            padding: 0;
+
+            .field-input {
+              height: 24px;
+              font-size: 14px;
+              color: var(--color-text-light);
+              outline: none;
+              border-radius: 4px;
+              border-style: solid;
+              border-width: 1px;
+              border-color: var(--color-text-lighter);
+
+              &:focus {
+                border-color: var(--color-text-cyan);
+              }
+
+              &:disabled {
+                border-color: var(--color-text-disabled);
+                pointer-events: none;
+              }
+            }
+
+            .select {
+              height: 28px;
+            }
+          }
+
+          .form-submit {
+            button {
+              height: 28px;
+              width: 28px;
+              padding: 0;
+              border-radius: 1000px;
+              border: 0px solid transparent;
+              margin-left: 16px;
+              cursor: pointer;
+
+              &:hover {
+                background-color: hsl(210, 100%, 90%);
+                fill: var(--color-text-cyan);
+              }
+
+              &:disabled {
+                background-color: var(--color-bg-lightest);
+                fill: var(--color-text-lighter);
+                cursor: default;
+              }
+            }
+          }
+        }
       }
     }
   }

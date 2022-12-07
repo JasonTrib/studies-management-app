@@ -1,24 +1,42 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
+import FormSelect from "~/components/form/FormSelect";
 import AvatarIcon from "~/components/icons/AvatarIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
 import CloseIcon from "~/components/icons/CloseIcon";
 import CogIcon from "~/components/icons/CogIcon";
 import Page from "~/components/layout/Page";
 import {
+  getDepartmentsList,
   getProfessorUserExtended,
   getStudentUserExtended,
 } from "~/DAO/composites/composites.server";
 import type { UserModelT } from "~/DAO/userDAO.server";
-import { getRegistrarUserProfile } from "~/DAO/userDAO.server";
+import { getRegistrarUserProfile, updateSuperadminDepartment } from "~/DAO/userDAO.server";
 import { USER_ROLE } from "~/data/data";
 import profileStyles from "~/styles/profile.css";
 import { bc_myprofile } from "~/utils/breadcrumbs";
 import { formatDate } from "~/utils/dateUtils";
+import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: profileStyles }];
+};
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const user = await requireUser(request);
+  if (user === null) return logout(request);
+  preventUnlessHasAccess(user.role, USER_ROLE.SUPERADMIN);
+
+  const formData = await request.formData();
+  const body = Object.fromEntries(formData);
+  const depId = `${body.department}`;
+
+  await updateSuperadminDepartment(user.id, depId);
+
+  return null;
 };
 
 type LoaderDataT = {
@@ -27,15 +45,18 @@ type LoaderDataT = {
     Exclude<Awaited<ReturnType<typeof getProfessorUserExtended>>, null> &
     Exclude<Awaited<ReturnType<typeof getStudentUserExtended>>, null>;
   userRole: UserModelT["role"];
+  departments: Awaited<ReturnType<typeof getDepartmentsList>>;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
 
+  let departments;
   let userExtended;
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
+      departments = await getDepartmentsList();
     case USER_ROLE.REGISTRAR:
       userExtended = await getRegistrarUserProfile(user.id);
       break;
@@ -53,11 +74,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_myprofile(path);
 
-  return { breadcrumbData, user: userExtended, userRole: user.role };
+  return { breadcrumbData, user: userExtended, userRole: user.role, departments };
 };
 
 const ProfileIndexPage = () => {
-  const { breadcrumbData, user, userRole } = useLoaderData() as LoaderDataT;
+  const { breadcrumbData, user, userRole, departments } = useLoaderData() as LoaderDataT;
+  const fetcher = useFetcher();
+  const isBusy = fetcher.state !== "idle";
+  const [selectedDepId, setSelectedDepId] = useState(user.dep_id);
+  const isAdmin = userRole === "SUPERADMIN";
   const isReg = userRole === "REGISTRAR";
   const isProf = userRole === "PROFESSOR";
   const isStud = userRole === "STUDENT";
@@ -66,6 +91,10 @@ const ProfileIndexPage = () => {
   const gender = user.profile?.gender;
   if (gender === "M") avatarColor = "gender-male";
   if (gender === "F") avatarColor = "gender-female";
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDepId(e.currentTarget.value);
+  };
 
   const headingActions = (): JSX.Element | null => {
     return (
@@ -93,7 +122,29 @@ const ProfileIndexPage = () => {
           <div className="profile-info-section section-separator">
             <div className="info-list">
               <div className="field font-300">Department</div>
-              <div className="field">{user.department?.title}</div>
+              {isAdmin ? (
+                <div className="field">
+                  <fetcher.Form method="post" action="?index" className="select-department-form">
+                    <FormSelect
+                      label="department"
+                      optionsText={departments.map((dep) => dep.depTitle)}
+                      values={departments.map((dep) => dep.depId)}
+                      defaultValue={user.dep_id}
+                      disabled={isBusy}
+                      handleChange={handleChange}
+                    />
+                    {selectedDepId !== user.dep_id && (
+                      <div className="form-submit">
+                        <button type="submit" disabled={isBusy}>
+                          <CheckIcon width={20} height={20} />
+                        </button>
+                      </div>
+                    )}
+                  </fetcher.Form>
+                </div>
+              ) : (
+                <div className="field">{user.department?.title}</div>
+              )}
               {isReg && (
                 <>
                   <div className="field font-300">Title</div>

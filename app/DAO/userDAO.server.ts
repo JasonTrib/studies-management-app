@@ -170,6 +170,7 @@ export function getRegistrarUserProfile(id: User["id"]) {
       id: true,
       username: true,
       role: true,
+      dep_id: true,
       department: {
         select: {
           title: true,
@@ -203,6 +204,7 @@ export function getProfessorUserProfile(id: User["id"]) {
       id: true,
       username: true,
       role: true,
+      dep_id: true,
       department: {
         select: {
           title: true,
@@ -236,6 +238,7 @@ export function getStudentUserProfile(id: User["id"]) {
       id: true,
       username: true,
       role: true,
+      dep_id: true,
       department: {
         select: {
           title: true,
@@ -428,6 +431,15 @@ export function updateUserPassword(username: User["username"], password: Passwor
           hash: password,
         },
       },
+    },
+  });
+}
+
+export function updateSuperadminDepartment(id: User["id"], depId: Department["code_id"]) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      dep_id: depId,
     },
   });
 }

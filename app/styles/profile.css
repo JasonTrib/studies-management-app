@@ -70,6 +70,50 @@
 .profile-container .profile-info-section .info-list .field:nth-child(4n), .profile-container .profile-info-section .info-list .field:nth-child(4n-1) {
   background-color: hsl(0deg, 0%, 95%);
 }
+.profile-container .profile-info-section .info-list .field .select-department-form {
+  display: flex;
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .field {
+  padding: 0;
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .field .field-input {
+  height: 24px;
+  font-size: 14px;
+  color: var(--color-text-light);
+  outline: none;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-text-lighter);
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .field .field-input:focus {
+  border-color: var(--color-text-cyan);
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .field .field-input:disabled {
+  border-color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .field .select {
+  height: 28px;
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .form-submit button {
+  height: 28px;
+  width: 28px;
+  padding: 0;
+  border-radius: 1000px;
+  border: 0px solid transparent;
+  margin-left: 16px;
+  cursor: pointer;
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .form-submit button:hover {
+  background-color: hsl(210deg, 100%, 90%);
+  fill: var(--color-text-cyan);
+}
+.profile-container .profile-info-section .info-list .field .select-department-form .form-submit button:disabled {
+  background-color: var(--color-bg-lightest);
+  fill: var(--color-text-lighter);
+  cursor: default;
+}
 
 .about-me-section {
   background-color: white;
