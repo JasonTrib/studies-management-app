@@ -131,6 +131,18 @@ export const bc_users_id_profile = async (path: string) => {
   return crumbBuilder(pathSegs, textSegs);
 };
 
+export const bc_users_id_edit = async (path: string) => {
+  const pathSegs = getPathSegs(path);
+
+  const textSegs = [
+    { text: "Users", isLink: true },
+    { text: (await getUser(parseInt(pathSegs[1])))?.username || "", isLink: true },
+    { text: "Edit", isLink: true },
+  ];
+
+  return crumbBuilder(pathSegs, textSegs);
+};
+
 export const bc_users_regs = async (path: string) => {
   const pathSegs = getPathSegs(path);
 

@@ -12,6 +12,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   const activeUser = await requireUser(request);
   if (activeUser === null) return logout(request);
 
+  const formData = await request.formData();
+  const body = Object.fromEntries(formData);
+  const redirectTo = `${body["redirectTo"]}` || "/users";
+
   const user = await getUser(userId);
   if (user == null) throw new Response("Not Found", { status: 404 });
 
@@ -32,5 +36,5 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await deleteUser(userId);
 
-  return redirect("/users");
+  return redirect(redirectTo);
 };

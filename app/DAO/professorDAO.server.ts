@@ -29,6 +29,14 @@ export function getProfessors(depId: Department["code_id"]) {
   });
 }
 
+export function getProfessorFromUserId(userId: User["id"]) {
+  return prisma.professor.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+}
+
 export function getProfessorsProfile(depId: Department["code_id"]) {
   return prisma.professor.findMany({
     where: {
@@ -67,6 +75,15 @@ export function getProfessorId(userId: User["id"]) {
     },
     select: {
       id: true,
+    },
+  });
+}
+
+export function updateProfessor(userId: User["id"], title: Professor["title"]) {
+  return prisma.professor.update({
+    where: { user_id: userId },
+    data: {
+      title: title,
     },
   });
 }

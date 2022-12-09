@@ -80,3 +80,18 @@ export function updateStudentRegistration(id: Student["id"], registrationDate: s
     },
   });
 }
+
+export type updateStudentDataT = {
+  enrollmentYear: Student["enrollment_year"];
+  studiesStatus: Student["studies_status"];
+};
+
+export function updateStudent(userId: User["id"], data: updateStudentDataT) {
+  return prisma.student.update({
+    where: { user_id: userId },
+    data: {
+      enrollment_year: data.enrollmentYear,
+      studies_status: data.studiesStatus,
+    },
+  });
+}

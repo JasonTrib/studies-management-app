@@ -13,3 +13,8 @@ export const newRegistrarSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export const editRegistrarSchema = z.object({
+  title: z.string(),
+  redirectTo: z.string(),
+});
