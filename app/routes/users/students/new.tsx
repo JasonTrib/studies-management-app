@@ -11,7 +11,7 @@ import Page from "~/components/layout/Page";
 import type { studentUserDataT } from "~/DAO/userDAO.server";
 import { getUserOnUsername } from "~/DAO/userDAO.server";
 import { createStudent } from "~/DAO/userDAO.server";
-import { USER_ROLE } from "~/data/data";
+import { STUDENT_STUDIES_STATUSES, USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_users_studs_new } from "~/utils/breadcrumbs";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
@@ -126,7 +126,7 @@ const StudentNewPage = () => {
               <FormSelect
                 text="Studies status"
                 label="studiesStatus"
-                values={["UNDERGRADUATE", "POSTGRADUATE", "ALUM"]}
+                values={STUDENT_STUDIES_STATUSES}
                 defaultValue={"UNDERGRADUATE"}
                 disabled={isBusy}
                 error={actionData?.errors?.studiesStatus}

@@ -11,7 +11,7 @@ import Page from "~/components/layout/Page";
 import type { professorUserDataT } from "~/DAO/userDAO.server";
 import { getUserOnUsername } from "~/DAO/userDAO.server";
 import { createProfessor } from "~/DAO/userDAO.server";
-import { USER_ROLE } from "~/data/data";
+import { PROFESSOR_TITLES, USER_ROLE } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_users_profs_new } from "~/utils/breadcrumbs";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
@@ -117,13 +117,7 @@ const ProfessorsNewPage = () => {
               <FormSelect
                 text="Title"
                 label="title"
-                values={[
-                  "Lecturer",
-                  "Assistant Professor",
-                  "Associate Professor",
-                  "Professor",
-                  "Emeritus Professor",
-                ]}
+                values={PROFESSOR_TITLES}
                 defaultValue={"Professor"}
                 disabled={isBusy}
                 error={actionData?.errors?.title}

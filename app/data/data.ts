@@ -9,6 +9,16 @@ export const USER_ROLE: {
   STUDENT: "STUDENT",
 };
 
+export const PROFESSOR_TITLES = [
+  "Lecturer",
+  "Assistant Professor",
+  "Associate Professor",
+  "Professor",
+  "Emeritus Professor",
+];
+
+export const STUDENT_STUDIES_STATUSES = ["UNDERGRADUATE", "POSTGRADUATE", "ALUM"];
+
 export type studiesCoursesDataT = { semester: { compulsories: number; electives: number } }[];
 export type curriculumDataT = { semester: { electives: number } }[];
 
