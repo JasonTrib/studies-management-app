@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import RegisterToCourseButton from "~/components/buttons/RegisterToCourseButton";
 import { links as ContainerLinks } from "~/components/Container";
@@ -71,7 +70,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_mycourses(path);
 
-  return json({
+  return {
     breadcrumbData,
     coursesRegistered,
     canRegisterToCourse,
@@ -81,7 +80,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       fullname: profile?.fullname,
       gender: profile?.gender,
     },
-  });
+  };
 };
 
 const MyCoursesPage = () => {

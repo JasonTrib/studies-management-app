@@ -1,5 +1,4 @@
 import type { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, useLoaderData, useMatches } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import FollowCourseButton from "~/components/buttons/FollowCourseButton";
@@ -136,7 +135,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_courses_id(path);
 
-  return json({
+  return {
     breadcrumbData,
     course,
     announcements,
@@ -144,7 +143,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     userRole: user.role,
     canModAnns,
     canGradeCourse,
-  });
+  };
 };
 
 const CourseDetailsPage = () => {

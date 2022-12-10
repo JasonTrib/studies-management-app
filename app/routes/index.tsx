@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import { links as BoxLinks } from "~/components/Box";
@@ -88,7 +87,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   const profile = await getProfile(user.id);
 
-  return json({
+  return {
     announcements,
     coursesRegistered,
     canStudentRegister,
@@ -98,7 +97,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       fullname: profile?.fullname,
       gender: profile?.gender,
     },
-  });
+  };
 };
 
 export default function Index() {

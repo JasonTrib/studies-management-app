@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import ActionButton from "~/components/buttons/ActionButton";
 import Container from "~/components/Container";
@@ -79,12 +78,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     { studentsGraded: [], studentsPendingGrading: [] },
   );
 
-  return json({
+  return {
     breadcrumbData,
     studentsGraded,
     studentsPendingGrading,
     isCourseGradingOpen,
-  });
+  };
 };
 
 const GradingIndexPage = () => {

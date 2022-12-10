@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import ActionButton from "~/components/buttons/ActionButton";
@@ -48,13 +47,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_deps_id(path);
 
-  return json({
+  return {
     breadcrumbData,
     department,
     otherDepartments,
     userRole: user.role,
     isSameDepartment,
-  });
+  };
 };
 
 const DepartmentDetailsPage = () => {

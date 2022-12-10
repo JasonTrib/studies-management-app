@@ -45,7 +45,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUserId(request);
   if (user !== null) return redirect("/");
 
-  return json({ redirectTo });
+  return { redirectTo };
 };
 
 type ActionDataT =

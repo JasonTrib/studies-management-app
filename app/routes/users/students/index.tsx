@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import NewButton from "~/components/buttons/NewButton";
 import Page from "~/components/layout/Page";
@@ -29,7 +28,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const breadcrumbData = await bc_users_studs(path);
   const studentUsers = await getStudentUsersExtended(user.dep_id, user.id);
 
-  return json({ breadcrumbData, studentUsers, userRole: user.role });
+  return { breadcrumbData, studentUsers, userRole: user.role };
 };
 
 const StudentIndexPage = () => {

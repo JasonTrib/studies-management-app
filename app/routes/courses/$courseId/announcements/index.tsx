@@ -1,5 +1,5 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import NewAnnouncementButton from "~/components/buttons/NewAnnouncementButton";
@@ -15,8 +15,8 @@ import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import modalStyles from "~/styles/modal.css";
 import { bc_courses_id_anns } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
+import { paramToInt } from "~/utils/utils";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: modalStyles }, ...CourseLinks()];
@@ -65,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_courses_id_anns(path);
 
-  return json({ breadcrumbData, announcements, canModAnns });
+  return { breadcrumbData, announcements, canModAnns };
 };
 
 const CourseAnnouncementsIndexPage = () => {

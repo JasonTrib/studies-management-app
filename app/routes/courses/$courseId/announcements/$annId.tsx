@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
@@ -17,8 +16,8 @@ import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentId } from "~/DAO/studentDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { bc_courses_id_anns_id } from "~/utils/breadcrumbs";
-import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
+import { paramToInt } from "~/utils/utils";
 
 type LoaderDataT = {
   breadcrumbData: Awaited<ReturnType<typeof bc_courses_id_anns_id>>;
@@ -72,7 +71,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_courses_id_anns_id(path);
 
-  return json({ announcement, canDeleteAnn, breadcrumbData });
+  return { announcement, canDeleteAnn, breadcrumbData };
 };
 
 const AnnouncementDetailsPage = () => {

@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { getMonth, getYear } from "date-fns";
 import ActionButton from "~/components/buttons/ActionButton";
@@ -100,19 +99,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const isRegistrationPeriod = isFallRegistration || isSpringRegistration;
 
   if (!isRegistrationPeriod) {
-    return json({ ...returnScaffold, diagnostic: "Course registration is closed" });
+    return { ...returnScaffold, diagnostic: "Course registration is closed" };
   } else if (user.role !== USER_ROLE.STUDENT) {
-    return json({
+    return {
       ...returnScaffold,
       diagnostic: "Course registration is open for students only",
       showButton: false,
-    });
+    };
   }
 
   const student = await getStudentFromUserId(user.id);
   if (!student) throw new Error();
   if (student.studies_status === "ALUM") {
-    return json({ ...returnScaffold, diagnostic: "Cannot register to courses" });
+    return { ...returnScaffold, diagnostic: "Cannot register to courses" };
   }
   if (student.latest_registration) {
     const latestRegistrationDate = new Date(student.latest_registration);
@@ -121,7 +120,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       ((getMonth(latestRegistrationDate) < 6 && getMonth(dateNow) < 6) ||
         (getMonth(latestRegistrationDate) >= 6 && getMonth(dateNow) >= 6))
     ) {
-      return json({ ...returnScaffold, diagnostic: "Already registered to courses" });
+      return { ...returnScaffold, diagnostic: "Already registered to courses" };
     }
   }
   const isUndergrad = student.studies_status === "UNDERGRADUATE";
@@ -141,7 +140,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const { studentSemester, diagnostic } = calcStudentSemester(student.enrollment_year, dateNow);
   if (diagnostic) {
-    return json({ ...returnScaffold, diagnostic });
+    return { ...returnScaffold, diagnostic };
   }
 
   const studentCourses = await getStudentCoursesRegistration(
@@ -174,14 +173,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     )
     .filter(Boolean) as number[];
 
-  return json({
+  return {
     ...returnScaffold,
     coursesPool,
     coursesDrafted,
     courseIdsAvailable,
     studentSemester,
     isPostgrad,
-  });
+  };
 };
 const CourseRegistrationIndexPage = () => {
   const {

@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AnnouncementsList from "~/components/announcements/AnnouncementsList";
 import Container, { links as ContainerLinks } from "~/components/Container";
@@ -58,7 +57,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const path = new URL(request.url).pathname;
   const breadcrumbData = await bc_anns(path);
 
-  return json({ breadcrumbData, announcements });
+  return { breadcrumbData, announcements };
 };
 
 const AnnouncementsIndexPage = () => {
