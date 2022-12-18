@@ -15,7 +15,7 @@ export const announcements: {
   {
     id: 2,
     title: "Exam results",
-    body: "The exam results will be announced Monday 23/2.",
+    body: "The exam results will be announced Monday 23/3.",
     courseId: 1,
   },
   {
@@ -27,8 +27,8 @@ export const announcements: {
   {
     id: 4,
     title: "Seminar invitation",
-    body: "On 2/11 our univercity will welcome Dr Peter Smith who will give a presentation on 'The performance variability and evaluation of cloud services'.",
-    courseId: 4,
+    body: "On 2/11 our univercity will welcome Dr Peter Smith who will give a presentation on 'Development and Implementation of Efficient Algorithms for Handling Large Volumes of Data'.",
+    courseId: 35,
   },
   {
     id: 5,
@@ -45,7 +45,7 @@ export const announcements: {
   {
     id: 7,
     title: "Grades",
-    body: "Grades have been submitted, if you want to go over a review of your grade, contact me before 11/7.",
+    body: "Grades have been submitted, if you want to go over a review of your grade, contact me before 21/10.",
     courseId: 7,
   },
 ];

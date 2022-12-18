@@ -3,12 +3,12 @@ import type { StudiesCurriculum } from "@prisma/client";
 const undergrad_curriculum = [
   { semester: { electives: 0 } },
   { semester: { electives: 0 } },
-  { semester: { electives: 2 } },
-  { semester: { electives: 2 } },
-  { semester: { electives: 2 } },
-  { semester: { electives: 3 } },
-  { semester: { electives: 3 } },
-  { semester: { electives: 4 } },
+  { semester: { electives: 0 } },
+  { semester: { electives: 1 } },
+  { semester: { electives: 1 } },
+  { semester: { electives: 1 } },
+  { semester: { electives: 1 } },
+  { semester: { electives: 0 } },
 ];
 
 const postgrad_curriculum = [

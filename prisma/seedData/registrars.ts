@@ -6,5 +6,6 @@ export const registrars: {
   userId: User["id"];
 }[] = [
   { id: 1, title: "IT Secretary", userId: 2 },
-  { id: 2, title: "GEO Secretary", userId: 3 },
+  { id: 2, title: "IT Secretary 2", userId: 3 },
+  // { id: 2, title: "GEO Secretary", userId: 3 },
 ];
