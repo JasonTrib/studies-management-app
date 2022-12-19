@@ -170,7 +170,7 @@ const ProfileEditPage = () => {
                   error={actionData?.errors?.phone}
                 />
                 <FormTextarea
-                  text="Info"
+                  text="About me"
                   label="info"
                   defaultValue={profile.info || undefined}
                   disabled={isBusy}
