@@ -1,53 +1,40 @@
 import type { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { announcements } from "./seedData/announcements";
+import { courses } from "./seedData/courses";
 import { departments } from "./seedData/departments";
-import { users } from "./seedData/users";
+import { professorCourses } from "./seedData/professorCourses";
+import { professors } from "./seedData/professors";
 import { profiles } from "./seedData/profiles";
 import { registrars } from "./seedData/registrars";
-import { professors } from "./seedData/professors";
-import { students } from "./seedData/students";
-import { courses } from "./seedData/courses";
-import { announcements } from "./seedData/announcements";
-import { professorCourses } from "./seedData/professorCourses";
 import { studentCourses } from "./seedData/studentCourses";
-import bcrypt from "bcryptjs";
+import { students } from "./seedData/students";
 import { studiesCurriculums } from "./seedData/studiesCurriculums";
+import { users } from "./seedData/users";
+
+const CLEANSE_DATA = false;
 
 const prisma = new PrismaClient();
-
-const UPSERT = false;
 
 async function main() {
   if (process.env.NODE_ENV !== "development")
     throw "[ABORTED] Attempted to seed outside of development environment!";
 
-  if (UPSERT) {
-    await upsertDepartments();
-    await upsertStudiesCurriculum();
-    await upsertUsers();
-    await upsertProfiles();
-    await upsertRegistrars();
-    await upsertProfessors();
-    await upsertStudents();
-    await upsertCourses();
-    await upsertAnnouncements();
-    await upsertProfessorCourses();
-    await upsertStudentCourses();
-  } else {
+  if (CLEANSE_DATA) {
     await prisma.department.deleteMany({});
-
-    await createDepartments();
-    await createStudiesCurriculum();
-    await createUsers();
-    await createProfiles();
-    await createRegistrars();
-    await createProfessors();
-    await createStudents();
-    await createCourses();
-    await createAnnouncements();
-    await createProfessorCourses();
-    await createStudentCourses();
   }
+  await upsertDepartments();
+  await upsertUsers();
+  await upsertProfiles();
+  await upsertRegistrars();
+  await upsertProfessors();
+  await upsertStudents();
+  await upsertCourses();
+  await upsertAnnouncements();
+  await upsertProfessorCourses();
+  await upsertStudentCourses();
+  await upsertStudiesCurriculum();
 }
 
 main()
@@ -59,364 +46,285 @@ main()
     await prisma.$disconnect();
   });
 
-async function upsertUsers() {
-  for (let i = 0; i < users.length; i++) {
-    await prisma.user.upsert({
-      where: {
-        id: users[i].id,
-      },
-      update: {},
-      create: {
-        id: users[i].id,
-        dep_id: users[i].depId,
-        role: users[i].role,
-        username: users[i].username,
-        password: {
-          create: {
-            hash: await bcrypt.hash(users[i].password, 10),
+function upsertUsers() {
+  return Promise.all(
+    users.map(async (user) =>
+      prisma.user.upsert({
+        where: {
+          id: user.id,
+        },
+        update: {
+          dep_id: user.depId,
+          role: user.role,
+          username: user.username,
+          password: {
+            create: {
+              hash: await bcrypt.hash(user.password, 10),
+            },
           },
         },
-      },
-    });
-  }
+        create: {
+          id: user.id,
+          dep_id: user.depId,
+          role: user.role,
+          username: user.username,
+          password: {
+            create: {
+              hash: await bcrypt.hash(user.password, 10),
+            },
+          },
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertProfiles() {
-  for (let i = 0; i < profiles.length; i++) {
-    await prisma.profile.upsert({
-      where: {
-        id: profiles[i].id,
-      },
-      update: {},
-      create: {
-        id: profiles[i].id,
-        user_id: profiles[i].userId,
-        fullname: profiles[i].fullname,
-        email: profiles[i].email,
-        gender: profiles[i].gender,
-        phone: profiles[i].phone,
-        is_public: profiles[i].isPublic,
-      },
-    });
-  }
+  return Promise.all(
+    profiles.map((profile) =>
+      prisma.profile.upsert({
+        where: {
+          id: profile.id,
+        },
+        update: {
+          user_id: profile.userId,
+          fullname: profile.fullname,
+          email: profile.email,
+          gender: profile.gender,
+          phone: profile.phone,
+          is_public: profile.isPublic,
+        },
+        create: {
+          id: profile.id,
+          user_id: profile.userId,
+          fullname: profile.fullname,
+          email: profile.email,
+          gender: profile.gender,
+          phone: profile.phone,
+          is_public: profile.isPublic,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertDepartments() {
-  for (let i = 0; i < departments.length; i++) {
-    await prisma.department.upsert({
-      where: {
-        code_id: departments[i].codeId,
-      },
-      update: {},
-      create: {
-        code_id: departments[i].codeId,
-        title: departments[i].title,
-        description: departments[i].description,
-        address: departments[i].address,
-        email: departments[i].email,
-        telephone: departments[i].telephone,
-        foundation_date: departments[i].foundationDate,
-      },
-    });
-  }
+  return Promise.all(
+    departments.map((department) =>
+      prisma.department.upsert({
+        where: {
+          code_id: department.codeId,
+        },
+        update: {
+          title: department.title,
+          description: department.description,
+          address: department.address,
+          email: department.email,
+          telephone: department.telephone,
+          foundation_date: department.foundationDate,
+        },
+        create: {
+          code_id: department.codeId,
+          title: department.title,
+          description: department.description,
+          address: department.address,
+          email: department.email,
+          telephone: department.telephone,
+          foundation_date: department.foundationDate,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertRegistrars() {
-  for (let i = 0; i < registrars.length; i++) {
-    await prisma.registrar.upsert({
-      where: {
-        id: registrars[i].id,
-      },
-      update: {},
-      create: {
-        id: registrars[i].id,
-        title: registrars[i].title,
-        user_id: registrars[i].userId,
-      },
-    });
-  }
+  return Promise.all(
+    registrars.map((registrar) =>
+      prisma.registrar.upsert({
+        where: {
+          id: registrar.id,
+        },
+        update: {
+          title: registrar.title,
+          user_id: registrar.userId,
+        },
+        create: {
+          id: registrar.id,
+          title: registrar.title,
+          user_id: registrar.userId,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertProfessors() {
-  for (let i = 0; i < professors.length; i++) {
-    await prisma.professor.upsert({
-      where: {
-        id: professors[i].id,
-      },
-      update: {},
-      create: {
-        id: professors[i].id,
-        title: professors[i].title,
-        user_id: professors[i].userId,
-      },
-    });
-  }
+  return Promise.all(
+    professors.map((professor) =>
+      prisma.professor.upsert({
+        where: {
+          id: professor.id,
+        },
+        update: {
+          title: professor.title,
+          user_id: professor.userId,
+        },
+        create: {
+          id: professor.id,
+          title: professor.title,
+          user_id: professor.userId,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertStudents() {
-  for (let i = 0; i < students.length; i++) {
-    await prisma.student.upsert({
-      where: {
-        id: students[i].id,
-      },
-      update: {},
-      create: {
-        id: students[i].id,
-        enrollment_year: students[i].enrollment_year,
-        studies_status: students[i].studies_status,
-        user_id: students[i].userId,
-      },
-    });
-  }
+  return Promise.all(
+    students.map((student) =>
+      prisma.student.upsert({
+        where: {
+          id: student.id,
+        },
+        update: {
+          enrollment_year: student.enrollment_year,
+          studies_status: student.studies_status,
+          user_id: student.userId,
+        },
+        create: {
+          id: student.id,
+          enrollment_year: student.enrollment_year,
+          studies_status: student.studies_status,
+          user_id: student.userId,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertStudentCourses() {
-  for (let i = 0; i < studentCourses.length; i++) {
-    await prisma.studentCourse.upsert({
-      where: {
-        student_id_course_id: {
-          student_id: studentCourses[i].studentId,
-          course_id: studentCourses[i].courseId,
+  return Promise.all(
+    studentCourses.map((studentCourse) =>
+      prisma.studentCourse.upsert({
+        where: {
+          student_id_course_id: {
+            student_id: studentCourse.studentId,
+            course_id: studentCourse.courseId,
+          },
         },
-      },
-      update: {},
-      create: {
-        student_id: studentCourses[i].studentId,
-        course_id: studentCourses[i].courseId,
-        grade: studentCourses[i].grade,
-        is_enrolled: studentCourses[i].isEnrolled,
-        is_following: studentCourses[i].isFollowing,
-        is_drafted: studentCourses[i].isDrafted,
-      },
-    });
-  }
+        update: {
+          grade: studentCourse.grade,
+          is_enrolled: studentCourse.isEnrolled,
+          is_following: studentCourse.isFollowing,
+          is_drafted: studentCourse.isDrafted,
+        },
+        create: {
+          student_id: studentCourse.studentId,
+          course_id: studentCourse.courseId,
+          grade: studentCourse.grade,
+          is_enrolled: studentCourse.isEnrolled,
+          is_following: studentCourse.isFollowing,
+          is_drafted: studentCourse.isDrafted,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertProfessorCourses() {
-  for (let i = 0; i < professorCourses.length; i++) {
-    await prisma.professorCourse.upsert({
-      where: {
-        prof_id_course_id: {
-          prof_id: professorCourses[i].profId,
-          course_id: professorCourses[i].courseId,
+  return Promise.all(
+    professorCourses.map((professorCourse) =>
+      prisma.professorCourse.upsert({
+        where: {
+          prof_id_course_id: {
+            prof_id: professorCourse.profId,
+            course_id: professorCourse.courseId,
+          },
         },
-      },
-      update: {},
-      create: {
-        prof_id: professorCourses[i].profId,
-        course_id: professorCourses[i].courseId,
-        is_lecturing: professorCourses[i].isLecturing,
-        is_following: professorCourses[i].isFollowing,
-      },
-    });
-  }
+        update: {
+          is_lecturing: professorCourse.isLecturing,
+          is_following: professorCourse.isFollowing,
+        },
+        create: {
+          prof_id: professorCourse.profId,
+          course_id: professorCourse.courseId,
+          is_lecturing: professorCourse.isLecturing,
+          is_following: professorCourse.isFollowing,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertCourses() {
-  for (let i = 0; i < courses.length; i++) {
-    await prisma.course.upsert({
-      where: {
-        id: courses[i].id,
-      },
-      update: {},
-      create: {
-        id: courses[i].id,
-        dep_id: courses[i].depId,
-        title: courses[i].title,
-        description: courses[i].description,
-        semester: courses[i].semester,
-        is_compulsory: courses[i].isCompulsory,
-        is_postgraduate: courses[i].isPostgraduate,
-      },
-    });
-  }
+  return Promise.all(
+    courses.map((course) =>
+      prisma.course.upsert({
+        where: {
+          id: course.id,
+        },
+        update: {
+          dep_id: course.depId,
+          title: course.title,
+          description: course.description,
+          semester: course.semester,
+          is_compulsory: course.isCompulsory,
+          is_postgraduate: course.isPostgraduate,
+        },
+        create: {
+          id: course.id,
+          dep_id: course.depId,
+          title: course.title,
+          description: course.description,
+          semester: course.semester,
+          is_compulsory: course.isCompulsory,
+          is_postgraduate: course.isPostgraduate,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertAnnouncements() {
-  for (let i = 0; i < announcements.length; i++) {
-    await prisma.announcement.upsert({
-      where: {
-        id: announcements[i].id,
-      },
-      update: {},
-      create: {
-        id: announcements[i].id,
-        title: announcements[i].title,
-        body: announcements[i].body,
-        course_id: announcements[i].courseId,
-      },
-    });
-  }
+  return Promise.all(
+    announcements.map((announcement) =>
+      prisma.announcement.upsert({
+        where: {
+          id: announcement.id,
+        },
+        update: {
+          title: announcement.title,
+          body: announcement.body,
+          course_id: announcement.courseId,
+        },
+        create: {
+          id: announcement.id,
+          title: announcement.title,
+          body: announcement.body,
+          course_id: announcement.courseId,
+        },
+      }),
+    ),
+  );
 }
 
 async function upsertStudiesCurriculum() {
-  for (let i = 0; i < studiesCurriculums.length; i++) {
-    await prisma.studiesCurriculum.upsert({
-      where: { dep_id: studiesCurriculums[i].depId },
-      update: {},
-      create: {
-        dep_id: studiesCurriculums[i].depId,
-        undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
-        postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
-        registration_periods: studiesCurriculums[i].registrationPeriods as Prisma.JsonObject,
-      },
-    });
-  }
-}
-
-async function createUsers() {
-  for (let i = 0; i < users.length; i++) {
-    await prisma.user.create({
-      data: {
-        id: users[i].id,
-        dep_id: users[i].depId,
-        role: users[i].role,
-        username: users[i].username,
-        password: {
-          create: {
-            hash: await bcrypt.hash(users[i].password, 10),
-          },
+  return Promise.all(
+    studiesCurriculums.map((studiesCurriculum) =>
+      prisma.studiesCurriculum.upsert({
+        where: { dep_id: studiesCurriculum.depId },
+        update: {
+          undergrad: studiesCurriculum.undergrad as Prisma.JsonArray,
+          postgrad: studiesCurriculum.postgrad as Prisma.JsonArray,
+          registration_periods: studiesCurriculum.registrationPeriods as Prisma.JsonObject,
         },
-      },
-    });
-  }
-}
-
-async function createProfiles() {
-  for (let i = 0; i < profiles.length; i++) {
-    await prisma.profile.create({
-      data: {
-        id: profiles[i].id,
-        user_id: profiles[i].userId,
-        fullname: profiles[i].fullname,
-        email: profiles[i].email,
-        gender: profiles[i].gender,
-        phone: profiles[i].phone,
-        is_public: profiles[i].isPublic,
-      },
-    });
-  }
-}
-
-async function createDepartments() {
-  for (let i = 0; i < departments.length; i++) {
-    await prisma.department.create({
-      data: {
-        code_id: departments[i].codeId,
-        title: departments[i].title,
-        description: departments[i].description,
-        address: departments[i].address,
-        email: departments[i].email,
-        telephone: departments[i].telephone,
-        foundation_date: departments[i].foundationDate,
-      },
-    });
-  }
-}
-
-async function createRegistrars() {
-  for (let i = 0; i < registrars.length; i++) {
-    await prisma.registrar.create({
-      data: {
-        id: registrars[i].id,
-        title: registrars[i].title,
-        user_id: registrars[i].userId,
-      },
-    });
-  }
-}
-
-async function createProfessors() {
-  for (let i = 0; i < professors.length; i++) {
-    await prisma.professor.create({
-      data: {
-        id: professors[i].id,
-        title: professors[i].title,
-        user_id: professors[i].userId,
-      },
-    });
-  }
-}
-
-async function createStudents() {
-  for (let i = 0; i < students.length; i++) {
-    await prisma.student.create({
-      data: {
-        id: students[i].id,
-        enrollment_year: students[i].enrollment_year,
-        studies_status: students[i].studies_status,
-        user_id: students[i].userId,
-      },
-    });
-  }
-}
-
-async function createStudentCourses() {
-  for (let i = 0; i < studentCourses.length; i++) {
-    await prisma.studentCourse.create({
-      data: {
-        student_id: studentCourses[i].studentId,
-        course_id: studentCourses[i].courseId,
-        grade: studentCourses[i].grade,
-        is_enrolled: studentCourses[i].isEnrolled,
-        is_following: studentCourses[i].isFollowing,
-        is_drafted: studentCourses[i].isDrafted,
-      },
-    });
-  }
-}
-
-async function createProfessorCourses() {
-  for (let i = 0; i < professorCourses.length; i++) {
-    await prisma.professorCourse.create({
-      data: {
-        prof_id: professorCourses[i].profId,
-        course_id: professorCourses[i].courseId,
-        is_lecturing: professorCourses[i].isLecturing,
-        is_following: professorCourses[i].isFollowing,
-      },
-    });
-  }
-}
-
-async function createCourses() {
-  for (let i = 0; i < courses.length; i++) {
-    await prisma.course.create({
-      data: {
-        id: courses[i].id,
-        dep_id: courses[i].depId,
-        title: courses[i].title,
-        description: courses[i].description,
-        semester: courses[i].semester,
-        is_compulsory: courses[i].isCompulsory,
-        is_postgraduate: courses[i].isPostgraduate,
-      },
-    });
-  }
-}
-
-async function createAnnouncements() {
-  for (let i = 0; i < announcements.length; i++) {
-    await prisma.announcement.create({
-      data: {
-        id: announcements[i].id,
-        title: announcements[i].title,
-        body: announcements[i].body,
-        course_id: announcements[i].courseId,
-      },
-    });
-  }
-}
-
-async function createStudiesCurriculum() {
-  for (let i = 0; i < studiesCurriculums.length; i++) {
-    await prisma.studiesCurriculum.create({
-      data: {
-        dep_id: studiesCurriculums[i].depId,
-        undergrad: studiesCurriculums[i].undergrad as Prisma.JsonArray,
-        postgrad: studiesCurriculums[i].postgrad as Prisma.JsonArray,
-        registration_periods: studiesCurriculums[i].registrationPeriods as Prisma.JsonObject,
-      },
-    });
-  }
+        create: {
+          dep_id: studiesCurriculum.depId,
+          undergrad: studiesCurriculum.undergrad as Prisma.JsonArray,
+          postgrad: studiesCurriculum.postgrad as Prisma.JsonArray,
+          registration_periods: studiesCurriculum.registrationPeriods as Prisma.JsonObject,
+        },
+      }),
+    ),
+  );
 }
