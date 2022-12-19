@@ -10,7 +10,6 @@ import { courses } from "./seedData/courses";
 import { announcements } from "./seedData/announcements";
 import { professorCourses } from "./seedData/professorCourses";
 import { studentCourses } from "./seedData/studentCourses";
-import { userAnnouncements } from "./seedData/userAnnnouncements";
 import bcrypt from "bcryptjs";
 import { studiesCurriculums } from "./seedData/studiesCurriculums";
 
@@ -34,7 +33,6 @@ async function main() {
     await upsertAnnouncements();
     await upsertProfessorCourses();
     await upsertStudentCourses();
-    await upsertUserAnnouncements();
   } else {
     await prisma.department.deleteMany({});
 
@@ -49,7 +47,6 @@ async function main() {
     await createAnnouncements();
     await createProfessorCourses();
     await createStudentCourses();
-    await createUserAnnouncements();
   }
 }
 
@@ -252,22 +249,6 @@ async function upsertAnnouncements() {
   }
 }
 
-async function upsertUserAnnouncements() {
-  for (let i = 0; i < userAnnouncements.length; i++) {
-    await prisma.userAnnouncement.upsert({
-      where: { id: userAnnouncements[i].id },
-      update: {},
-      create: {
-        id: userAnnouncements[i].id,
-        user_id: userAnnouncements[i].userId,
-        announcement_id: userAnnouncements[i].annId,
-        has_posted: userAnnouncements[i].hasPosted,
-        has_seen: userAnnouncements[i].hasSeen,
-      },
-    });
-  }
-}
-
 async function upsertStudiesCurriculum() {
   for (let i = 0; i < studiesCurriculums.length; i++) {
     await prisma.studiesCurriculum.upsert({
@@ -422,20 +403,6 @@ async function createAnnouncements() {
         title: announcements[i].title,
         body: announcements[i].body,
         course_id: announcements[i].courseId,
-      },
-    });
-  }
-}
-
-async function createUserAnnouncements() {
-  for (let i = 0; i < userAnnouncements.length; i++) {
-    await prisma.userAnnouncement.create({
-      data: {
-        id: userAnnouncements[i].id,
-        user_id: userAnnouncements[i].userId,
-        announcement_id: userAnnouncements[i].annId,
-        has_posted: userAnnouncements[i].hasPosted,
-        has_seen: userAnnouncements[i].hasSeen,
       },
     });
   }
