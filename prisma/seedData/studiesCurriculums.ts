@@ -20,12 +20,12 @@ const postgrad_curriculum = [
 
 export const registration_periods = {
   fallSemester: {
-    startDate: new Date(`${new Date().getFullYear()}-10-09`).toISOString(),
-    endDate: new Date(`${new Date().getFullYear()}-10-22`).toISOString(),
+    startDate: new Date(`${new Date().getFullYear()}-10-10`).toISOString(),
+    endDate: new Date(`${new Date().getFullYear()}-10-30`).toISOString(),
   },
   springSemester: {
-    startDate: new Date(`${new Date().getFullYear()}-3-12`).toISOString(),
-    endDate: new Date(`${new Date().getFullYear()}-3-25`).toISOString(),
+    startDate: new Date(`${new Date().getFullYear()}-3-13`).toISOString(),
+    endDate: new Date(`${new Date().getFullYear()}-4-02`).toISOString(),
   },
 };
 

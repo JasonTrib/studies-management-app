@@ -167,7 +167,11 @@ export const it_courses: CourseT = [
     id: 13,
     depId: "IT",
     title: "Statistics",
-    description: "",
+    description:
+      "Statistics covers the mathematical principles and techniques used to analyze and interpret data. " +
+      "The course material includes topics such as probability theory, statistical distributions, hypothesis " +
+      "testing, regression analysis, and data visualization. This course can be applied in a variety of fields, " +
+      "including data science, machine learning, economics, and business.",
     semester: 4,
     isCompulsory: false,
     isPostgraduate: false,
@@ -176,7 +180,13 @@ export const it_courses: CourseT = [
     id: 14,
     depId: "IT",
     title: "Probabilities",
-    description: "",
+    description:
+      "Probabilities focuses on the mathematics of uncertainty and the ways in which probabilities can " +
+      "be used to model and analyze real-world situations. The course material includes topics such as probability " +
+      "theory, statistical distributions, and stochastic processes. This course is relevant to a wide range of " +
+      "fields, including computer science, data science, machine learning, economics, and finance, and has a " +
+      "significant impact on many aspects of modern society, including the development of new technologies and the " +
+      "making of informed decisions in various industries.",
     semester: 3,
     isCompulsory: true,
     isPostgraduate: false,
@@ -185,7 +195,8 @@ export const it_courses: CourseT = [
     id: 15,
     depId: "IT",
     title: "Linear Algebra",
-    description: "",
+    description:
+      "Linear Algebra is a branch of mathematics that deals with vector spaces and linear transformations between those spaces. It is a fundamental mathematical discipline that has a wide range of applications in various fields, including computer science, engineering, and physics. The course material of a Linear Algebra course typically includes topics such as vector algebra, matrix operations, systems of linear equations, eigenvalues and eigenvectors, and abstract vector spaces. Students taking this course will learn how to manipulate and analyze linear equations and matrices, and how to use these concepts to solve real-world problems. Linear algebra is an important subject that is essential for students interested in pursuing further studies in mathematics and related fields.",
     semester: 1,
     isCompulsory: true,
     isPostgraduate: false,
@@ -194,7 +205,8 @@ export const it_courses: CourseT = [
     id: 16,
     depId: "IT",
     title: "Optical Communications",
-    description: "",
+    description:
+      "Optical Communications is a course that focuses on the use of light waves to transmit information over long distances. This technology plays a crucial role in modern communication systems, including the internet and satellite networks. The course material for an Optical Communications course covers topics such as the principles of light propagation, fiber optic transmission, optoelectronic devices, wavelength division multiplexing, and error correction techniques.",
     semester: 6,
     isCompulsory: true,
     isPostgraduate: false,
@@ -203,7 +215,8 @@ export const it_courses: CourseT = [
     id: 17,
     depId: "IT",
     title: "Computer Simulations",
-    description: "",
+    description:
+      "Computer Simulations is a course that teaches students how to use computers to model and analyze complex systems. This subject is widely applicable in various fields, including engineering, science, economics, and business. The course material for a Computer Simulations course includes topics such as modeling methodologies, numerical techniques, programming concepts, and visualization techniques.",
     semester: 7,
     isCompulsory: true,
     isPostgraduate: false,
@@ -212,7 +225,8 @@ export const it_courses: CourseT = [
     id: 18,
     depId: "IT",
     title: "Digital Signal Processing",
-    description: "",
+    description:
+      "Digital Signal Processing is a field of study that focuses on the analysis and manipulation of digital signals using mathematical and computational techniques. Digital signals are used to represent and transmit information in a variety of applications, including audio, video, and communication systems. Students who study Digital Signal Processing will learn about topics such as discrete-time signals and systems, Fourier analysis, filter design, and signal processing algorithms.",
     semester: 7,
     isCompulsory: false,
     isPostgraduate: false,
@@ -221,7 +235,8 @@ export const it_courses: CourseT = [
     id: 19,
     depId: "IT",
     title: "Machine Learning",
-    description: "",
+    description:
+      "Machine learning is a field of computer science that involves the development of algorithms and models that enable computers to learn and improve their performance on a specific task without explicit programming. These techniques are widely used in a variety of applications, including image and speech recognition, natural language processing, and predictive analytics. Machine learning requires a strong foundation in mathematics and computer science and has significant practical applications in many areas.",
     semester: 5,
     isCompulsory: false,
     isPostgraduate: false,
@@ -230,7 +245,8 @@ export const it_courses: CourseT = [
     id: 20,
     depId: "IT",
     title: "Robotics",
-    description: "",
+    description:
+      "Robotics is a field that deals with the design, construction, operation, and application of robots. Robots are automated machines that can be programmed to perform a variety of tasks, including manufacturing, assembly, transportation, inspection, and surgery. Robotics combines principles from engineering, computer science, and neuroscience to develop intelligent machines that can interact with the physical world.",
     semester: 6,
     isCompulsory: false,
     isPostgraduate: false,
@@ -239,7 +255,8 @@ export const it_courses: CourseT = [
     id: 21,
     depId: "IT",
     title: "Electronics",
-    description: "",
+    description:
+      "Electronics is a field that deals with the design, construction, and operation of electronic devices and systems. Electronics involves the use of electrical circuits to process and transmit information, control systems, and power devices. It is an essential field in modern technology and has applications in a wide range of industries, including telecommunications, computing, transportation, and medicine.",
     semester: 1,
     isCompulsory: true,
     isPostgraduate: false,
@@ -248,7 +265,8 @@ export const it_courses: CourseT = [
     id: 22,
     depId: "IT",
     title: "Wireless Sensor Networking",
-    description: "",
+    description:
+      "Wireless sensor networking involves the use of small, wireless devices called sensors that are deployed to monitor various conditions or phenomena and transmit the data they collect back to a central location for analysis. These networks can be used in a wide range of applications, including environmental monitoring, industrial automation, and security systems.",
     semester: 8,
     isCompulsory: true,
     isPostgraduate: false,
@@ -257,7 +275,8 @@ export const it_courses: CourseT = [
     id: 23,
     depId: "IT",
     title: "Human-Computer Interaction",
-    description: "",
+    description:
+      "Human-computer interaction (HCI) refers to the study of how people interact with computers and technology. It encompasses the design and evaluation of user interfaces, as well as the development of new technologies that improve the user experience. HCI is an interdisciplinary field that combines elements of computer science, psychology, and design.",
     semester: 5,
     isCompulsory: false,
     isPostgraduate: false,
@@ -266,7 +285,8 @@ export const it_courses: CourseT = [
     id: 24,
     depId: "IT",
     title: "Data Mining",
-    description: "",
+    description:
+      "Data mining is the process of analyzing large sets of data to discover patterns and trends. It involves using specialized algorithms and software to search for and extract insights from data, and is often used in business, science, and other fields to make informed decisions and predictions. Data mining can be applied to various types of data, including text, images, and numerical data.",
     semester: 8,
     isCompulsory: true,
     isPostgraduate: false,
@@ -275,7 +295,8 @@ export const it_courses: CourseT = [
     id: 25,
     depId: "IT",
     title: "Information Systems Security",
-    description: "",
+    description:
+      "Information systems security refers to the practice of protecting computer systems, networks, and the data they store from unauthorized access or attacks. It involves the use of various technologies, policies, and procedures to secure systems and protect against threats such as malware, hackers, and data breaches. Information systems security is critical for businesses, organizations, and individuals to ensure the confidentiality, integrity, and availability of their systems and data.",
     semester: 8,
     isCompulsory: true,
     isPostgraduate: false,
@@ -284,7 +305,8 @@ export const it_courses: CourseT = [
     id: 26,
     depId: "IT",
     title: "Computer Architecture",
-    description: "",
+    description:
+      "Computer architecture refers to the design and organization of computer systems. It encompasses the hardware components of a computer, such as the processor, memory, and input/output devices, as well as the relationships between these components and the way they interact. Computer architecture also includes the design of the instruction set, which defines the operations that the processor can perform, and the system architecture, which defines how the hardware components work together to perform those operations. Understanding computer architecture is important for designing and optimizing computer systems for specific tasks and environments.",
     semester: 3,
     isCompulsory: true,
     isPostgraduate: false,
@@ -293,7 +315,8 @@ export const it_courses: CourseT = [
     id: 27,
     depId: "IT",
     title: "Computer Graphics",
-    description: "",
+    description:
+      "Computer graphics is the field of study that deals with generating and manipulating images and video using computers. It involves using specialized software and algorithms to create and display visual content, such as 2D and 3D graphics, animation, and visual effects. Computer graphics is used in a wide range of applications, including video games, movies, scientific visualization, and user interface design.",
     semester: 7,
     isCompulsory: false,
     isPostgraduate: false,
@@ -302,7 +325,8 @@ export const it_courses: CourseT = [
     id: 28,
     depId: "IT",
     title: "Web Technologies",
-    description: "",
+    description:
+      "Web technologies refer to the tools, languages, and frameworks that are used to build and maintain websites and web-based applications. They include HTML, CSS, and JavaScript for building the front-end user interface, as well as server-side technologies such as PHP, Ruby, and Java for building the back-end logic and functionality. Web technologies also include database systems, cloud computing platforms, and content management systems, which are used to store, manage, and deliver web content and data. Web technologies are constantly evolving and are critical for building and maintaining modern, interactive, and responsive websites and web-based applications.",
     semester: 4,
     isCompulsory: true,
     isPostgraduate: false,
@@ -311,7 +335,8 @@ export const it_courses: CourseT = [
     id: 29,
     depId: "IT",
     title: "Distributed Systems",
-    description: "",
+    description:
+      "Distributed systems are computer systems that consist of multiple interconnected computers that work together to perform a common task or service. These systems are designed to be distributed across multiple locations, often connected via a network, and are designed to be fault-tolerant and scalable. Distributed systems are used in a variety of applications, including cloud computing, distributed databases, and distributed file systems. They require specialized algorithms and protocols to ensure coordination and communication between the distributed components, and to handle issues such as fault tolerance and data consistency.",
     semester: 5,
     isCompulsory: true,
     isPostgraduate: false,
@@ -320,7 +345,8 @@ export const it_courses: CourseT = [
     id: 30,
     depId: "IT",
     title: "Network Programming",
-    description: "",
+    description:
+      "Network programming refers to the use of programming languages and APIs to build applications that communicate over a network. It involves developing client-server applications, using protocols such as HTTP, TCP, and UDP to exchange data and communicate with other systems. Network programming also includes the development of distributed systems, which are systems that consist of multiple interconnected computers working together to perform a common task or service.",
     semester: 5,
     isCompulsory: true,
     isPostgraduate: false,
@@ -329,7 +355,8 @@ export const it_courses: CourseT = [
     id: 31,
     depId: "IT",
     title: "Mobile Application Development",
-    description: "",
+    description:
+      "The course 'Mobile Application Development' is concerned with the process of creating software applications for mobile devices, such as smartphones and tablets. It covers topics such as mobile platform development environments, mobile user interface design, and mobile application development frameworks. The course also covers topics such as mobile security, device hardware and sensors, and the development of mobile web applications. The goal of the course is to provide students with the knowledge and skills needed to design and develop mobile apps for various platforms.",
     semester: 5,
     isCompulsory: false,
     isPostgraduate: false,
@@ -338,7 +365,8 @@ export const it_courses: CourseT = [
     id: 32,
     depId: "IT",
     title: "Compiler Design",
-    description: "",
+    description:
+      "Compiler design is the field of study that deals with the creation of compilers, which are software programs that translate source code written in a high-level programming language into machine code that can be executed by a computer. Compiler design involves the analysis of source code, the design of data structures and algorithms to represent and manipulate the code, and the generation of machine code that implements the source code. ",
     semester: 4,
     isCompulsory: false,
     isPostgraduate: false,
@@ -347,7 +375,8 @@ export const it_courses: CourseT = [
     id: 33,
     depId: "IT",
     title: "Telecommunication Systems",
-    description: "",
+    description:
+      "Telecommunication systems are networks of devices and infrastructure that are used to transmit information over distances using various communication technologies, such as telephone lines, radio waves, and satellite systems. They enable the transmission of voice, data, and multimedia content.",
     semester: 5,
     isCompulsory: true,
     isPostgraduate: false,
