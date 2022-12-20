@@ -1,5 +1,19 @@
 import type { Course } from "@prisma/client";
 
+const generateGeoCourses = (startingIdx: number, num: number) => {
+  return [...Array(num)].map((_, idx) => {
+    return {
+      id: startingIdx + idx,
+      depId: "GEO",
+      title: `Geo Course ${idx + 1}`,
+      description: null,
+      semester: 4,
+      isCompulsory: false,
+      isPostgraduate: false,
+    };
+  });
+};
+
 type CourseT = {
   id: Course["id"];
   depId: Course["dep_id"];
@@ -393,18 +407,124 @@ export const geo_courses: CourseT = [
   {
     id: 100,
     depId: "GEO",
+    title: "Physical Geography",
+    description: null,
+    semester: 1,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 101,
+    depId: "GEO",
+    title: "Historical Geography",
+    description: null,
+    semester: 1,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 102,
+    depId: "GEO",
+    title: "Economics Facts for Geographers",
+    description: null,
+    semester: 1,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 103,
+    depId: "GEO",
+    title: "Introduction to Computer Science",
+    description: null,
+    semester: 1,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 104,
+    depId: "GEO",
+    title: "Introduction to Anthropogeography",
+    description: null,
+    semester: 1,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 105,
+    depId: "GEO",
+    title: "Foreign Language I",
+    description: null,
+    semester: 1,
+    isCompulsory: false,
+    isPostgraduate: false,
+  },
+  {
+    id: 106,
+    depId: "GEO",
+    title: "Statistical Analysis for Geographers",
+    description: null,
+    semester: 2,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 107,
+    depId: "GEO",
+    title: "Social Geography",
+    description: null,
+    semester: 2,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 108,
+    depId: "GEO",
+    title: "Introduction to Cartography",
+    description: null,
+    semester: 2,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 109,
+    depId: "GEO",
+    title: "Environment and Man",
+    description: null,
+    semester: 2,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 110,
+    depId: "GEO",
+    title: "Academic Skills and Scientific Literature",
+    description: null,
+    semester: 2,
+    isCompulsory: true,
+    isPostgraduate: false,
+  },
+  {
+    id: 111,
+    depId: "GEO",
+    title: "Foreign Language II",
+    description: null,
+    semester: 2,
+    isCompulsory: false,
+    isPostgraduate: false,
+  },
+  {
+    id: 112,
+    depId: "GEO",
     title: "Meteorology - Climatology",
     description:
       "The course is a study of the theory and practice of weather analysis and forecasting, surface and upper " +
       "air analysis, fronts and wave cyclones, satellite meteorology, sounding analysis, thermodynamic diagram, " +
       "cross sections, forecasting, NMC models, MOS, radar meteorology, severe weather.",
-    semester: 1,
+    semester: 3,
     isCompulsory: true,
     isPostgraduate: false,
   },
+  ...generateGeoCourses(113, 35),
 ];
 
-export const courses: CourseT = [
-  ...it_courses,
-  // ...geo_courses
-];
+export const courses: CourseT = [...it_courses, ...geo_courses];

@@ -17,7 +17,7 @@ export const departments: {
       "\n\nThe world-wide market favors executives that have mastered internet- and web-based technologies to support the design and development of complex information systems and advanced services. The Department's graduates are furnished with a complete set of scientific and technical skills directly related to the application fields of computer science and are therefore able to meet the modern job description requirements. The Department encourages students to develop innovative services with open-source platforms through their thesis within R&D projects and/or contribute to the University's e-service ecosystem. ",
     address: "Omirou 9, Tavros 177 78, Athens Greece",
     email: "it@email.com",
-    telephone: "2100000000",
+    telephone: "2100000001",
     foundationDate: new Date("2006"),
   },
   {
@@ -28,16 +28,18 @@ export const departments: {
       "\n\nThe mission of the Department of Geography is (i) to promote the science of Geography, (ii) to provide high quality studies, at the undergraduate and postgraduate level, combining the scientific principles and theories of the Science of Geography with an understanding of the problems of requirements and needs of society, (iii) the development of basic and applied research in the fields of Geography at an international level (iv) the assurance of the appropriate academic environment for students, researchers and staff to make the most of their potential.",
     address: "Thiseos 70, Kallithea 176 76, Athens Greece",
     email: "geo@email.com",
-    telephone: "2100000001",
+    telephone: "2100000002",
     foundationDate: new Date("1999"),
   },
   {
     codeId: "NSD",
     title: "Nutritional Sciences & Dietetics",
-    description: null,
-    address: null,
-    email: null,
-    telephone: null,
+    description:
+      "The department of 'Department of Dietetics' was founded in 1992 and the first students were enrolled in 1994. In 1999, the Department was renamed the 'Department of Dietetics - Nutrition Science'. Since the academic year 2000-2001, a full-time and part-time Master's Program has also been in operation. " +
+      "\n\nIt is the oldest University Department in the country in the scientific area of the Science of Nutrition and Dietetics. In addition to education, the members of the Department have significant research activity and international collaborations, factors that have made the Department one of the best in its field at a European and international level.",
+    address: "Thiseos 70, Kallithea 176 76, Athens Greece",
+    email: "nsd@email.com",
+    telephone: "2100000003",
     foundationDate: new Date("1992"),
   },
 ];

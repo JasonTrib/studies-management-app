@@ -1,5 +1,24 @@
 import type { Department, Password, Role, User } from "@prisma/client";
 
+const generateGeoStudents = (startingIdx: number, num: number) => {
+  return [...Array(num)].map((_, idx) => {
+    let zeros = "00";
+    if (num / 100 > 1) {
+      zeros = zeros.slice(2);
+    } else if (num / 10 > 1) {
+      zeros = zeros.slice(1);
+    }
+
+    return {
+      id: startingIdx + idx,
+      depId: "GEO",
+      username: `geo00${zeros}${idx + 1}`,
+      password: process.env.SEED_USER_PASSWORD || "password",
+      role: "STUDENT" as const,
+    };
+  });
+};
+
 type UserT = {
   id: User["id"];
   depId: Department["code_id"];
@@ -318,7 +337,7 @@ export const it_student_users: UserT = [
   },
 ];
 
-export const geo_users: UserT = [
+export const geo_registrar_users: UserT = [
   {
     id: 200,
     depId: "GEO",
@@ -326,32 +345,102 @@ export const geo_users: UserT = [
     password: process.env.SEED_USER_PASSWORD || "password",
     role: "REGISTRAR",
   },
+];
+
+export const geo_professor_users: UserT = [
   {
-    id: 0,
+    id: 210,
     depId: "GEO",
     username: "geop1",
     password: process.env.SEED_USER_PASSWORD || "password",
     role: "PROFESSOR",
   },
   {
-    id: 0,
+    id: 211,
     depId: "GEO",
-    username: "geo18001",
+    username: "geop2",
     password: process.env.SEED_USER_PASSWORD || "password",
-    role: "STUDENT",
+    role: "PROFESSOR",
   },
   {
-    id: 0,
+    id: 212,
     depId: "GEO",
-    username: "geo20001",
+    username: "geop3",
     password: process.env.SEED_USER_PASSWORD || "password",
-    role: "STUDENT",
+    role: "PROFESSOR",
+  },
+  {
+    id: 213,
+    depId: "GEO",
+    username: "geop4",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 214,
+    depId: "GEO",
+    username: "geop5",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 215,
+    depId: "GEO",
+    username: "geop6",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 216,
+    depId: "GEO",
+    username: "geop7",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 217,
+    depId: "GEO",
+    username: "geop8",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 218,
+    depId: "GEO",
+    username: "geop9",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 219,
+    depId: "GEO",
+    username: "geop10",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 220,
+    depId: "GEO",
+    username: "geop11",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
+  },
+  {
+    id: 221,
+    depId: "GEO",
+    username: "geop12",
+    password: process.env.SEED_USER_PASSWORD || "password",
+    role: "PROFESSOR",
   },
 ];
+
+export const geo_student_users: UserT = [...generateGeoStudents(300, 172)];
 
 export const users: UserT = [
   ...it_registrar_users,
   ...it_professor_users,
   ...it_student_users,
-  // ...geo_users
+  ...geo_registrar_users,
+  ...geo_professor_users,
+  ...geo_student_users,
 ];

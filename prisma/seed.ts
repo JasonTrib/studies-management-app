@@ -58,7 +58,7 @@ function upsertUsers() {
           role: user.role,
           username: user.username,
           password: {
-            create: {
+            update: {
               hash: await bcrypt.hash(user.password, 10),
             },
           },

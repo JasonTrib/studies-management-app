@@ -21,14 +21,4 @@ export const it_professors: ProfessorsT = [
   { id: 12, title: "Assistant Professor", userId: 21 },
 ];
 
-export const geo_professors: ProfessorsT = [
-  { id: 100, title: "Professor", userId: 0 },
-  { id: 101, title: "Professor", userId: 0 },
-  { id: 102, title: "Associate Professor", userId: 0 },
-  { id: 103, title: "Professor", userId: 0 },
-];
-
-export const professors: ProfessorsT = [
-  ...it_professors,
-  // ...geo_professors
-];
+export const professors: ProfessorsT = [...it_professors];

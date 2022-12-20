@@ -178,16 +178,4 @@ export const it_students: StudentT = [
   },
 ];
 
-export const geo_students: StudentT = [
-  {
-    id: 100,
-    studies_status: "ALUM",
-    enrollment_year: 2010,
-    userId: 0,
-  },
-];
-
-export const students: StudentT = [
-  ...it_students,
-  //  ...geo_students
-];
+export const students: StudentT = [...it_students];
