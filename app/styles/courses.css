@@ -6,6 +6,9 @@
   color: var(--color-text-light);
   font-size: 13px;
 }
+.courses-list-item .professors .anonymous {
+  font-style: italic;
+}
 .courses-list-item .semester {
   color: var(--color-text-lighter);
   font-size: 11px;
@@ -53,6 +56,9 @@
 }
 .course-container .content .footer .data .instructor {
   color: var(--color-text-cyan-dark);
+}
+.course-container .content .footer .data .instructor .anonymous {
+  font-style: italic;
 }
 .course-container .content .footer .data .dot-separator {
   margin: 0 8px;

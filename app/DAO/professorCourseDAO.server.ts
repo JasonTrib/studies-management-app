@@ -332,30 +332,3 @@ export function unregisterProfessorFromCourse(profId: Professor["id"], courseId:
     },
   });
 }
-
-// includes the "has_seen" field, useful for differenciating seen/unseen announcements
-function getProfessorCourseAnnouncementsGenerous(profId: Professor["id"], courseId: Course["id"]) {
-  return prisma.professorCourse.findMany({
-    where: {
-      prof_id: profId,
-      course_id: courseId,
-      is_following: true,
-    },
-    select: {
-      course: {
-        select: {
-          announcements: true,
-        },
-      },
-      professor: {
-        select: {
-          user: {
-            select: {
-              userAnnouncements: true,
-            },
-          },
-        },
-      },
-    },
-  });
-}

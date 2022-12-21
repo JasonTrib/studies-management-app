@@ -89,6 +89,9 @@ table .instructors {
   font-size: 14px;
   color: var(--color-text-cyan-dark);
 }
+table .instructors .anonymous {
+  font-style: italic;
+}
 table .semester {
   font-style: italic;
 }

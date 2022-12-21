@@ -33,7 +33,9 @@ const CoursesListItem: FC<CoursesListItemT> = ({
           <span className="professors mr-12 link-simple">
             {professors.map((prof, i) => (
               <React.Fragment key={prof.id}>
-                <Link to={`users/professors/${prof.id}`}>{prof.fullname}</Link>
+                <Link to={`users/professors/${prof.id}`}>
+                  {prof.fullname || <span className="anonymous">Anonymous</span>}
+                </Link>
                 {i < professors.length - 1 && " - "}
               </React.Fragment>
             ))}

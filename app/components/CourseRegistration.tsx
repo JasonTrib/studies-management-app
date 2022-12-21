@@ -52,7 +52,9 @@ const CourseRegistration: FC<CourseRegistrationT> = ({ variant, title, courses, 
                         <span className="link-simple">
                           {course.professors.map((prof, i) => (
                             <React.Fragment key={prof.id}>
-                              <Link to={`/users/professors/${prof.id}`}>{prof.fullname}</Link>
+                              <Link to={`/users/professors/${prof.id}`}>
+                                {prof.fullname || <span className="anonymous">Anonymous</span>}
+                              </Link>
                               {i < course.professors.length - 1 && " - "}
                             </React.Fragment>
                           ))}
