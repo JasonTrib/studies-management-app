@@ -41,6 +41,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!announcement || announcement.course_id !== courseId) {
     throw new Response("Not Found", { status: 404 });
   }
+  if (announcement.course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   let isFollowing: boolean;
   let canDeleteAnn = false;

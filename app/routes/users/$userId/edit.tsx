@@ -52,6 +52,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const activeUser = await requireUser(request);
   if (activeUser === null) return logout(request);
+  if (activeUser.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   let form;
   let redirectTo;
@@ -124,6 +125,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const activeUser = await requireUser(request);
   if (activeUser === null) return logout(request);
+  if (activeUser.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   const userOptions = {
     enrollmentYear: NaN,

@@ -50,6 +50,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
 
+  const course = await getCourse(courseId);
+  if (!course) throw new Response("Not found", { status: 404 });
+  if (course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
+
   const formData = await request.formData();
   const body = Object.fromEntries(formData);
 
@@ -119,6 +123,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const course = await getCourse(courseId);
   if (!course) throw new Response("Not Found", { status: 404 });
+  if (course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   const professorsLecturing = await getProfessorUserShortExtended(courseId);
   const professors = await getProfessors(user.dep_id);

@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { deleteCourse } from "~/DAO/courseDAO.server";
+import { deleteCourse, getCourse } from "~/DAO/courseDAO.server";
 import { USER_ROLE } from "~/data/data";
 import { paramToInt } from "~/utils/utils";
 import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
@@ -13,6 +13,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
+
+  const course = await getCourse(courseId);
+  if (!course) throw new Response("Not found", { status: 404 });
+  if (course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   await deleteCourse(courseId);
 

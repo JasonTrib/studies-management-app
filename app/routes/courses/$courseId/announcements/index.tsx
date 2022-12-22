@@ -8,6 +8,7 @@ import { links as CourseLinks } from "~/components/courses/Course";
 import Page from "~/components/layout/Page";
 import { getAnnouncementsOfCourse } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
+import { getCourse } from "~/DAO/courseDAO.server";
 import { getProfessorCourseFollowing } from "~/DAO/professorCourseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
 import { getStudentCourseFollowing } from "~/DAO/studentCourseDAO.server";
@@ -34,6 +35,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
+
+  let course = await getCourse(courseId);
+  if (!course) throw new Response("Not Found", { status: 404 });
+  if (course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   let announcements;
   let canModAnns = false;

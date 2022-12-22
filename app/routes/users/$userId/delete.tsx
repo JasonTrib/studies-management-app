@@ -18,6 +18,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await getUser(userId);
   if (user == null) throw new Response("Not Found", { status: 404 });
+  if (activeUser.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   switch (activeUser.role) {
     case USER_ROLE.SUPERADMIN:

@@ -89,6 +89,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let course = await getCourseExtended(courseId);
   if (!course) throw new Response("Not Found", { status: 404 });
+  if (course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   let announcements;
   let canModAnns = false;

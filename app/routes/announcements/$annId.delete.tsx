@@ -1,6 +1,6 @@
 import type { ActionFunction, LinksFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { deleteAnnouncement } from "~/DAO/announcementDAO.server";
+import { deleteAnnouncement, getAnnouncement } from "~/DAO/announcementDAO.server";
 import { getIsProfessorLecturingCourse } from "~/DAO/composites/composites.server";
 import { getCourseIdFromAnnouncement } from "~/DAO/courseDAO.server";
 import { getProfessorId } from "~/DAO/professorDAO.server";
@@ -22,6 +22,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await requireUser(request);
   if (user === null) return logout(request);
+
+  const announcement = await getAnnouncement(annId);
+  if (!announcement) throw new Response("Not Found", { status: 404 });
+  if (announcement.course.dep_id !== user.dep_id) throw new Response("Forbidden", { status: 403 });
 
   switch (user.role) {
     case USER_ROLE.SUPERADMIN:
