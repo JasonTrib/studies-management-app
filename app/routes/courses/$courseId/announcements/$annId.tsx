@@ -1,4 +1,5 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import Announcement, { links as AnnouncementLinks } from "~/components/announcements/Announcement";
@@ -55,7 +56,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!prof) throw new Error();
 
       isFollowing = await getIsProfessorFollowingCourse(prof.id, announcement.course_id);
-      if (!isFollowing) throw new Response("Forbidden", { status: 403 });
+      if (!isFollowing) return redirect(`/courses/${courseId}`);
 
       canDeleteAnn = await getIsProfessorLecturingCourse(prof.id, announcement.course_id);
       break;
@@ -64,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       if (!student) throw new Error();
 
       isFollowing = await getIsStudentFollowingCourse(student.id, announcement.course_id);
-      if (!isFollowing) throw new Response("Forbidden", { status: 403 });
+      if (!isFollowing) return redirect(`/courses/${courseId}`);
       break;
     default:
       throw new Response("Unauthorized", { status: 401 });
