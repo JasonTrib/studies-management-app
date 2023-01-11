@@ -15,7 +15,7 @@ export const titleField = z
   .trim()
   .min(1, "Title must be provided")
   .regex(titleFieldRegex, "Invalid input");
-export const emailField = z.string().email().or(z.string().optional());
+export const emailField = z.string().email().or(z.string().regex(/^$/));
 export const telephoneField = z
   .string()
   .trim()
