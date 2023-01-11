@@ -340,30 +340,3 @@ export function gradeStudentCourse(
     },
   });
 }
-
-// includes the "has_seen" field, useful for differenciating seen/unseen announcements
-function getStudentCourseAnnouncementsGenerous(studentId: Student["id"], courseId: Course["id"]) {
-  return prisma.studentCourse.findMany({
-    where: {
-      student_id: studentId,
-      course_id: courseId,
-      is_following: true,
-    },
-    select: {
-      course: {
-        select: {
-          announcements: true,
-        },
-      },
-      student: {
-        select: {
-          user: {
-            select: {
-              userAnnouncements: true,
-            },
-          },
-        },
-      },
-    },
-  });
-}

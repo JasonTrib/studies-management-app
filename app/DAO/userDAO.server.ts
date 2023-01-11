@@ -266,19 +266,6 @@ export function getStudentUserProfile(id: User["id"]) {
   });
 }
 
-export function getUserAnnouncements(id: User["id"]) {
-  return prisma.user.findUnique({
-    where: { id },
-    select: {
-      userAnnouncements: {
-        include: {
-          announcement: true,
-        },
-      },
-    },
-  });
-}
-
 export function getProfessors(depId: Department["code_id"]) {
   return prisma.user.findMany({
     where: {
