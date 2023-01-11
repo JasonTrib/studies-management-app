@@ -150,11 +150,11 @@ model Announcement {
 }
 
 model StudiesCurriculum {
+  dep_id               String @id @db.VarChar(4)
   undergrad            Json
   postgrad             Json
   registration_periods Json
 
-  dep_id     String     @unique
   department Department @relation(fields: [dep_id], references: [code_id], onDelete: Cascade, onUpdate: Cascade)
 }
 

@@ -7,7 +7,7 @@ export function getStudiesCurriculums() {
 }
 
 export function getStudiesCurriculum(depId: Department["code_id"]) {
-  return prisma.studiesCurriculum.findFirst({ where: { dep_id: depId } });
+  return prisma.studiesCurriculum.findUnique({ where: { dep_id: depId } });
 }
 
 export function updateUndergradStudiesCurriculum(
