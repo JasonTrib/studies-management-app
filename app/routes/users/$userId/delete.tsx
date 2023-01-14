@@ -6,6 +6,7 @@ import { paramToInt } from "~/utils/utils";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "DELETE") throw new Response("Method Not Allowed", { status: 405 });
   const userId = paramToInt(params.userId);
   if (userId == null) throw new Response("Not Found", { status: 404 });
 

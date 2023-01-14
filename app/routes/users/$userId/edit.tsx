@@ -45,6 +45,7 @@ type Schema2T = z.infer<typeof editProfessorSchema>;
 type Schema3T = z.infer<typeof editStudentSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const userId = paramToInt(params.userId);
   if (userId == null) throw new Response("Not Found", { status: 404 });
   const user = await getUser(userId);
@@ -197,7 +198,7 @@ const UserEditPage = () => {
         <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
         {selected === options[0] && (
           <div className="form-container">
-            <Form method="post" action="#" className="form" autoComplete="off">
+            <Form method="put" action="#" className="form" autoComplete="off">
               <div className="form-fields">
                 {isStud && (
                   <>
@@ -278,7 +279,7 @@ const UserEditPage = () => {
           Are you sure you want to <b>permanently</b> delete this user?
         </div>
         <div className="modal-actions">
-          <Form method="post" action={`/users/${user.id}/delete`} autoComplete="off">
+          <Form method="delete" action={`/users/${user.id}/delete`} autoComplete="off">
             <input type="hidden" id="redirectTo" name="redirectTo" value={deleteRedirectTo} />
             <ActionButton type="submit" disabled={isBusy} variant="danger" fullwidth>
               DELETE

@@ -101,7 +101,7 @@ const AnnouncementDetailsPage = () => {
             <div className="modal-heading">Are you sure you want to delete this announcement?</div>
             <div className="modal-actions">
               <Form
-                method="post"
+                method="delete"
                 action={`/announcements/${announcement.id}/delete`}
                 autoComplete="off"
               >

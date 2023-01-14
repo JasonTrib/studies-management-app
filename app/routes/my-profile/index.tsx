@@ -26,6 +26,7 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.SUPERADMIN);
@@ -124,7 +125,7 @@ const ProfileIndexPage = () => {
               <div className="field font-300">Department</div>
               {isAdmin ? (
                 <div className="field">
-                  <fetcher.Form method="post" action="?index" className="select-department-form">
+                  <fetcher.Form method="put" action="?index" className="select-department-form">
                     <FormSelect
                       label="department"
                       optionsText={departments.map((dep) => dep.depTitle)}

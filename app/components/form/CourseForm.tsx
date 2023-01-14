@@ -12,6 +12,7 @@ import FormTextarea from "./FormTextarea";
 type SchemaT = z.infer<typeof courseSchema>;
 
 type CourseFormType = {
+  method: "post" | "put";
   action: string;
   _action?: string;
   dep: string;
@@ -21,6 +22,7 @@ type CourseFormType = {
 };
 
 const CourseForm: FC<CourseFormType> = ({
+  method,
   action,
   _action,
   dep,
@@ -29,7 +31,7 @@ const CourseForm: FC<CourseFormType> = ({
   errors,
 }) => {
   return (
-    <Form method="post" action={action} className="form" autoComplete="off">
+    <Form method={method} action={action} className="form" autoComplete="off">
       <div className="form-fields">
         <FormInput
           text="Title"

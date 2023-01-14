@@ -27,6 +27,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof newStudentSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);

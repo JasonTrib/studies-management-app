@@ -14,6 +14,7 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "DELETE") throw new Response("Method Not Allowed", { status: 405 });
   const annId = paramToInt(params.annId);
   if (annId == null) throw new Response("Not Found", { status: 404 });
 

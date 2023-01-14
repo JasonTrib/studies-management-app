@@ -99,7 +99,7 @@ const GradingIndexPage = () => {
         {isCourseGradingOpen ? (
           showGradingContainer ? (
             <div className="grading-container">
-              <fetcher.Form method="post" action={`edit`}>
+              <fetcher.Form method="put" action={`edit`}>
                 <div className="content">
                   <div className="body">
                     <table>

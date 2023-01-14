@@ -28,6 +28,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof newAnnouncementSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const courseId = paramToInt(params.courseId);
   if (courseId == null) throw new Response("Not Found", { status: 404 });
 

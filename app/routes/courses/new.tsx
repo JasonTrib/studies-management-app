@@ -24,6 +24,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof courseSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);
@@ -87,6 +88,7 @@ const CoursesNewPage = () => {
       <div className="form-layout">
         <div className="form-container">
           <CourseForm
+            method="post"
             action={`/courses/new`}
             dep={dep}
             disabled={isBusy}

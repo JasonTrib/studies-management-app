@@ -19,6 +19,7 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const form = await extractAndValidateFormData<SchemaT>(request, loginSchema);
 
   if (!_.isEmpty(form.errors) || form.data === null) {

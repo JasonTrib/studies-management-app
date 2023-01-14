@@ -57,7 +57,7 @@ const AnnouncementsListItem: FC<AnnouncementsListItemT> = ({
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
           <div className="modal-heading">Are you sure you want to delete this announcement?</div>
           <div className="modal-actions">
-            <Form method="post" action={`/announcements/${annId}/delete`} autoComplete="off">
+            <Form method="delete" action={`/announcements/${annId}/delete`} autoComplete="off">
               <input type="hidden" id="redirectTo" name="redirectTo" value={landingRoute} />
               <ActionButton type="submit" disabled={isBusy} variant="danger" fullwidth>
                 DELETE

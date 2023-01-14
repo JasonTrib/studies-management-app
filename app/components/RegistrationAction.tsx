@@ -12,7 +12,7 @@ type RegistrationActionT = {
 const RegistrationAction: FC<RegistrationActionT> = ({ isDisabled, courseId, action }) => {
   return (
     <div className="action-box">
-      <Form method="post" action={`edit`}>
+      <Form method="put" action={`edit`}>
         <input type="hidden" id="courseId" name="courseId" value={courseId} />
         <input type="hidden" id="_action" name="_action" value={action} />
         <ActionButton

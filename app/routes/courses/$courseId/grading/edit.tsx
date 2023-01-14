@@ -13,6 +13,7 @@ import { gradingSchema } from "~/validations/schemas/miscSchemas.server";
 type SchemaT = z.infer<typeof gradingSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const courseId = paramToInt(params.courseId);
   if (courseId == null) throw new Response("Not Found", { status: 404 });
 

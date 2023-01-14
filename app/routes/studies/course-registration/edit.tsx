@@ -13,6 +13,7 @@ import { logout, requireUser } from "~/utils/session.server";
 import { paramToInt } from "~/utils/utils";
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
   switch (user.role) {

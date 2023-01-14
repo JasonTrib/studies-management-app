@@ -161,7 +161,7 @@ const DepartmentDetailsPage = () => {
             </div>
             <div className="modal-actions">
               <Form
-                method="post"
+                method="delete"
                 action={`/departments/${department.code_id}/delete`}
                 autoComplete="off"
               >

@@ -34,6 +34,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof newDepartmentSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
 

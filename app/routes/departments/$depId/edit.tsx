@@ -30,6 +30,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof editDepartmentSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const depId = params.depId;
   if (depId == null) throw new Response("Not Found", { status: 404 });
 
@@ -111,7 +112,7 @@ const DepartmentsEditPage = () => {
     <Page wide breadcrumbs={breadcrumbData}>
       <div className="form-layout">
         <div className="form-container">
-          <Form method="post" action={"#"} className="form" autoComplete="off">
+          <Form method="put" action={"#"} className="form" autoComplete="off">
             <div className="form-fields">
               <FormInput
                 text="Title"

@@ -155,7 +155,7 @@ const StudiesIndexPage = () => {
           showAction={isPriviledged}
         />
         <div className="registration-periods-container">
-          <Form method="post" action={`edit`}>
+          <Form method="put" action={`edit`}>
             <div className="heading">
               <h3>Registration periods</h3>
               <div className="actions">

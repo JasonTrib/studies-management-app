@@ -31,6 +31,7 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const formData = await request.formData();
   const action = formData.get("_action");
   const courseId = paramToInt(params.courseId);

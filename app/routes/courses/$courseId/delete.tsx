@@ -7,6 +7,7 @@ import { preventUnlessHasAccess } from "~/utils/permissionUtils.server";
 import { logout, requireUser } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "DELETE") throw new Response("Method Not Allowed", { status: 405 });
   const courseId = paramToInt(params.courseId);
   if (courseId == null) throw new Response("Not Found", { status: 404 });
 

@@ -50,7 +50,7 @@ const Curriculum: FC<CurriculumT> = ({
 
   return (
     <div className="curriculum-container">
-      <Form method="post" action={`edit`}>
+      <Form method="put" action={`edit`}>
         <div className="heading">
           <h3>{title}</h3>
           <div className="actions">

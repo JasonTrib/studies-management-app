@@ -43,6 +43,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof courseSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const courseId = paramToInt(params.courseId);
   if (courseId == null) throw new Response("Not Found", { status: 404 });
 
@@ -170,6 +171,7 @@ const CourseEditPage = () => {
         {selected === options[0] && (
           <div className="form-container">
             <CourseForm
+              method="put"
               action={`/courses/${course.id}/edit`}
               _action="editCourse"
               dep={dep}
@@ -186,7 +188,7 @@ const CourseEditPage = () => {
                 <ProfessorsTableShort openModal={openModal2} />
               </Table>
               <div className="select-profs">
-                <Form method="post" action={`#`} autoComplete="off">
+                <Form method="put" action={`#`} autoComplete="off">
                   <div className="form-fields">
                     <FormSelect
                       text="Assign lecturer"
@@ -242,7 +244,7 @@ const CourseEditPage = () => {
           Are you sure you want to <b>permanently</b> delete this course?
         </div>
         <div className="modal-actions">
-          <Form method="post" action={`/courses/${course.id}/delete`} autoComplete="off">
+          <Form method="delete" action={`/courses/${course.id}/delete`} autoComplete="off">
             <ActionButton type="submit" disabled={isBusy} variant="danger" size="lg" fullwidth>
               DELETE
             </ActionButton>
@@ -257,7 +259,7 @@ const CourseEditPage = () => {
           Are you sure you want to unregister this professor from the course?
         </div>
         <div className="modal-actions">
-          <Form method="post" action={`/courses/${course.id}/edit`} autoComplete="off">
+          <Form method="put" action={`/courses/${course.id}/edit`} autoComplete="off">
             <input type="hidden" id="profId" name="profId" value={profIdRef.current || ""} />
             <ActionButton
               type="submit"

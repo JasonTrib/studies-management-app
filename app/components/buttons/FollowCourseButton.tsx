@@ -13,7 +13,7 @@ const FollowCourseButton: FC<FollowCourseButtonT> = ({ courseId, variant }) => {
   const isBusy = transition.state !== "idle";
 
   return (
-    <Form method="post" action={`/courses/${courseId}?index`}>
+    <Form method="put" action={`/courses/${courseId}?index`}>
       <input type="hidden" id="_action" name="_action" value={variant} />
       <ActionButton type="submit" disabled={isBusy} size="md">
         {_.startCase(variant)}

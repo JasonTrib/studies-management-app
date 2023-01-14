@@ -30,6 +30,7 @@ export const links: LinksFunction = () => {
 type SchemaT = z.infer<typeof initSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const form = await extractAndValidateFormData<SchemaT>(request, initSchema);
 
   if (!_.isEmpty(form.errors) || form.data === null) {

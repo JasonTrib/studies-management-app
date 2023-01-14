@@ -30,6 +30,7 @@ type Schema2T = z.infer<typeof postgradCurriculumSchema>;
 type Schema3T = z.infer<typeof registrationPeriodsSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
   preventUnlessHasAccess(user.role, USER_ROLE.REGISTRAR);

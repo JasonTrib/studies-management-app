@@ -32,6 +32,7 @@ type Schema1T = z.infer<typeof editProfileSchema>;
 type Schema2T = z.infer<typeof editPasswordSchema>;
 
 export const action: ActionFunction = async ({ request, params }) => {
+  if (request.method !== "PUT") throw new Response("Method Not Allowed", { status: 405 });
   const user = await requireUser(request);
   if (user === null) return logout(request);
 
@@ -133,7 +134,7 @@ const ProfileEditPage = () => {
         <div className="form-container">
           <FormTabs tabs={options} selected={selected} setSelected={setSelected} />
           {selected === options[0] && (
-            <Form method="post" action="#" className="form" autoComplete="off">
+            <Form method="put" action="#" className="form" autoComplete="off">
               <div className="form-fields">
                 <FormInput
                   text="Fullname"
@@ -196,7 +197,7 @@ const ProfileEditPage = () => {
             </Form>
           )}
           {selected === options[1] && (
-            <Form method="post" action="#" className="form" autoComplete="off">
+            <Form method="put" action="#" className="form" autoComplete="off">
               <div className="form-fields">
                 <FormInput
                   text="Username"

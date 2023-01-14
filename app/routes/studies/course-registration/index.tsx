@@ -224,7 +224,7 @@ const CourseRegistrationIndexPage = () => {
             )}
             {showRegisterButton && (
               <div className="draft-submit">
-                <Form method="post" action={`edit`}>
+                <Form method="put" action={`edit`}>
                   <input type="hidden" id="_action" name="_action" value="register" />
                   <input
                     type="hidden"
