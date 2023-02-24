@@ -27,17 +27,6 @@ export const links: LinksFunction = () => {
   ];
 };
 
-const coursesPerSemester = [
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-  { electives: 0, passed: 0, drafted: 0 },
-];
-
 const calcStudentSemester = (enrollmentYear: StudentModelT["enrollment_year"], dateNow: Date) => {
   if (
     getYear(dateNow) < enrollmentYear ||
@@ -150,6 +139,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     isPostgrad,
   );
 
+  const coursesPerSemester = [
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+    { electives: 0, passed: 0, drafted: 0 },
+  ]; // must be re-initialized inside action
   studentCourses.forEach((x) => {
     coursesPerSemester[x.semester - 1].electives += 1;
     if (x.grade && x.grade >= 5) {
