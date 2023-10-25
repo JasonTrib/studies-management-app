@@ -244,6 +244,10 @@
 .form-layout .form-tabs .tab-option:hover {
   color: var(--color-text-cyan-dark);
 }
+.form-layout .guest-login-form {
+  display: flex;
+  justify-content: center;
+}
 
 .bare-page-layout {
   min-height: inherit;

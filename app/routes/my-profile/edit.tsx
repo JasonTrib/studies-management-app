@@ -5,6 +5,9 @@ import bcrypt from "bcryptjs";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import type { z } from "zod";
+import type { profileDataT } from "~/DAO/profileDAO.server";
+import { getProfile, getProfileOnEmail, updateProfile } from "~/DAO/profileDAO.server";
+import { updateUserPassword } from "~/DAO/userDAO.server";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormCheckbox from "~/components/form/FormCheckbox";
 import FormInput from "~/components/form/FormInput";
@@ -12,17 +15,14 @@ import FormRadioGroup from "~/components/form/FormRadioGroup";
 import FormTabs from "~/components/form/FormTabs";
 import FormTextarea from "~/components/form/FormTextarea";
 import Page from "~/components/layout/Page";
-import type { profileDataT } from "~/DAO/profileDAO.server";
-import { getProfileOnEmail } from "~/DAO/profileDAO.server";
-import { getProfile, updateProfile } from "~/DAO/profileDAO.server";
-import { updateUserPassword } from "~/DAO/userDAO.server";
+import { GUEST_ID } from "~/data/data";
 import styles from "~/styles/form.css";
 import { bc_myprofile_edit } from "~/utils/breadcrumbs";
 import { login, logout, requireUser } from "~/utils/session.server";
 import type { FormValidationT } from "~/validations/formValidation.server";
 import { validateFormData } from "~/validations/formValidation.server";
-import { editProfileSchema } from "~/validations/schemas/profileSchemas.server";
 import { editPasswordSchema } from "~/validations/schemas/miscSchemas.server";
+import { editProfileSchema } from "~/validations/schemas/profileSchemas.server";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -252,7 +252,11 @@ const ProfileEditPage = () => {
                 </>
               ) : (
                 <div className="mb-28">
-                  <ActionButton onClick={handleClick} fullwidth>
+                  <ActionButton
+                    onClick={handleClick}
+                    disabled={profile.user_id === GUEST_ID}
+                    fullwidth
+                  >
                     Change password
                   </ActionButton>
                 </div>

@@ -6,10 +6,10 @@ import type { z } from "zod";
 import ActionButton from "~/components/buttons/ActionButton";
 import FormInput from "~/components/form/FormInput";
 import BarePage from "~/components/layout/BarePage";
+import { GUEST_ID } from "~/data/data";
 import styles from "~/styles/form.css";
 import { createUserSession, getUserId, login } from "~/utils/session.server";
-import type { FormValidationT } from "~/validations/formValidation.server";
-import { extractAndValidateFormData } from "~/validations/formValidation.server";
+import { validateFormData, type FormValidationT } from "~/validations/formValidation.server";
 import { loginSchema } from "~/validations/schemas/miscSchemas.server";
 
 type SchemaT = z.infer<typeof loginSchema>;
@@ -20,20 +20,28 @@ export const links: LinksFunction = () => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
-  const form = await extractAndValidateFormData<SchemaT>(request, loginSchema);
-
-  if (!_.isEmpty(form.errors) || form.data === null) {
-    return json(form, { status: 400 });
-  }
-
-  const user = await login(form.data);
-  if (!user) {
-    return json({ ...form, authError: "Invalid credentials" }, { status: 400 });
-  }
 
   const redirectTo = new URL(request.url).searchParams.get("redirectTo") || "/";
 
-  return createUserSession(`${user.id}`, redirectTo);
+  const formData = await request.formData();
+  const body = Object.fromEntries(formData);
+
+  if (body["_action"] === "userLogin") {
+    const form = validateFormData<SchemaT>(body, loginSchema);
+
+    if (!_.isEmpty(form.errors) || form.data === null) {
+      return json(form, { status: 400 });
+    }
+    const user = await login(form.data);
+    if (!user) {
+      return json({ ...form, authError: "Invalid credentials" }, { status: 400 });
+    }
+    return createUserSession(`${user.id}`, redirectTo);
+  } else if (body["_action"] === "guestLogin") {
+    return createUserSession(`${GUEST_ID}`, redirectTo);
+  }
+
+  return null;
 };
 
 export type LoaderDataT = {
@@ -87,11 +95,22 @@ const LoginPage = () => {
               <button className="form-reset" type="reset" disabled={isBusy}>
                 ✖
               </button>
-              <ActionButton type="submit" disabled={isBusy}>
+              <ActionButton type="submit" disabled={isBusy} name="_action" value={"userLogin"}>
                 SUBMIT
               </ActionButton>
               <div className="invalid">{actionData?.authError}</div>
             </div>
+          </Form>
+          <Form method="post" action={`/login?${redirectTo}`} className="guest-login-form">
+            <ActionButton
+              type="submit"
+              variant="cancel"
+              disabled={isBusy}
+              name="_action"
+              value={"guestLogin"}
+            >
+              Login as Guest
+            </ActionButton>
           </Form>
         </div>
       </div>

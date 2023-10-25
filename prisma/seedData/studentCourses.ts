@@ -808,4 +808,5 @@ export const studentCourses: StudentCoursesT = [
     isFollowing: true,
     isDrafted: false,
   },
+  ...generateRelations(29, 6, [32, 23, 5], 0.8),
 ];

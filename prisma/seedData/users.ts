@@ -19,7 +19,7 @@ const generateGeoStudents = (startingIdx: number, num: number) => {
   });
 };
 
-type UserT = {
+type UsersT = {
   id: User["id"];
   depId: Department["code_id"];
   username: User["username"];
@@ -27,7 +27,7 @@ type UserT = {
   role: Role;
 }[];
 
-export const it_registrar_users: UserT = [
+export const it_registrar_users: UsersT = [
   {
     id: 1,
     depId: "IT",
@@ -51,7 +51,7 @@ export const it_registrar_users: UserT = [
   },
 ];
 
-export const it_professor_users: UserT = [
+export const it_professor_users: UsersT = [
   {
     id: 10,
     depId: "IT",
@@ -138,7 +138,7 @@ export const it_professor_users: UserT = [
   },
 ];
 
-export const it_student_users: UserT = [
+export const it_student_users: UsersT = [
   {
     id: 100,
     depId: "IT",
@@ -337,7 +337,7 @@ export const it_student_users: UserT = [
   },
 ];
 
-export const geo_registrar_users: UserT = [
+export const geo_registrar_users: UsersT = [
   {
     id: 200,
     depId: "GEO",
@@ -347,7 +347,7 @@ export const geo_registrar_users: UserT = [
   },
 ];
 
-export const geo_professor_users: UserT = [
+export const geo_professor_users: UsersT = [
   {
     id: 210,
     depId: "GEO",
@@ -434,13 +434,22 @@ export const geo_professor_users: UserT = [
   },
 ];
 
-export const geo_student_users: UserT = [...generateGeoStudents(300, 172)];
+export const guest_user: UsersT[0] = {
+  id: 500,
+  depId: "IT",
+  username: "Guest",
+  password: process.env.SEED_USER_PASSWORD || "password",
+  role: "STUDENT",
+};
 
-export const users: UserT = [
+export const geo_student_users: UsersT = [...generateGeoStudents(300, 172)];
+
+export const users: UsersT = [
   ...it_registrar_users,
   ...it_professor_users,
   ...it_student_users,
   ...geo_registrar_users,
   ...geo_professor_users,
   ...geo_student_users,
+  guest_user,
 ];

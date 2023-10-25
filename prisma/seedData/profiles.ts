@@ -351,4 +351,11 @@ export const profiles: {
     gender: "M",
     isPublic: true,
   },
+  {
+    id: 44,
+    fullname: "Guest User",
+    email: null,
+    userId: 500,
+    isPublic: true,
+  },
 ];

@@ -48,3 +48,5 @@ export const gradingPeriodScaffold = {
     endMonth: 9,
   },
 };
+
+export const GUEST_ID = 500;

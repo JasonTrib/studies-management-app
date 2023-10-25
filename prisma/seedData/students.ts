@@ -1,13 +1,13 @@
 import type { Student, User } from "@prisma/client";
 
-type StudentT = {
+type StudentsT = {
   id: Student["id"];
   enrollment_year: Student["enrollment_year"];
   studies_status: Student["studies_status"];
   userId: User["id"];
 }[];
 
-export const it_students: StudentT = [
+export const it_students: StudentsT = [
   {
     id: 1,
     studies_status: "ALUM",
@@ -178,4 +178,11 @@ export const it_students: StudentT = [
   },
 ];
 
-export const students: StudentT = [...it_students];
+const guest: StudentsT[0] = {
+  id: 29,
+  studies_status: "UNDERGRADUATE",
+  enrollment_year: 2020,
+  userId: 500,
+};
+
+export const students: StudentsT = [...it_students, guest];

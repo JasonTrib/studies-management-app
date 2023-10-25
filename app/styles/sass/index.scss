@@ -301,6 +301,11 @@ $sidebar-shadow: 0 0 12px var(--color-shadow-light), 4px -2px 4px 0px black;
       }
     }
   }
+
+  .guest-login-form {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .bare-page-layout {
